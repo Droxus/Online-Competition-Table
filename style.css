@@ -1,3 +1,83 @@
-body {
+html {
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    display: flex;
+ }
+ 
+ body {
+    margin: 0;
+    min-height: 100%;
+    width: 100%;
+    height: 100%;   
+    padding: 0;
     background-color: rgb(255, 218, 148);
+}
+#signIn{
+    position:absolute;
+    font-family: arial;
+    font-size: 50px;
+    color: rgb(0, 0, 0);
+    width: 60%;
+    margin-left: 35%;
+    margin-top: 15%;
+}
+.dataEnterSqr {
+    background-color: rgb(240, 239, 209);
+    width: 600px;
+    height: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 250px;
+    position:relative;
+}
+#lblUsername{
+    position:absolute;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 42%;
+    font-size: 30px;
+    color: rgb(0, 0, 0);
+    font-family: arial;
+}
+#inptUsername{
+    position:absolute;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 50%;
+    height: 40px;
+}
+#lblPassword{
+    position:absolute;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 67%;
+    font-size: 30px;
+    color: rgb(0, 0, 0);
+    font-family: arial;
+}
+#inptPassword{
+    position:absolute;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 75%;
+    height: 40px;
+
+}
+#btnSignIn{
+    position:absolute;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 95%;
+    height: 25px;
+}
+#noacc{
+    position:absolute;
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 110%;
+    font-size: 18px;
+    color: rgb(87, 87, 87);
+    font-family: arial;
 }
