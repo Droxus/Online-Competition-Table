@@ -1,0 +1,32 @@
+{
+  "name": "online-competition-table",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack serve --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Droxus/Online-Competition-Table.git"
+  },
+  "author": "Droxus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Droxus/Online-Competition-Table/issues"
+  },
+  "homepage": "https://github.com/Droxus/Online-Competition-Table#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "firebase": "^9.6.6",
+    "firebaseui": "^6.0.0"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
+  }
+}
