@@ -7,6 +7,7 @@ html {
  }
  
  body {
+     position: fixed;
     margin: 0;
     min-height: 100%;
     width: 100%;
@@ -41,6 +42,7 @@ html {
     margin-right: auto;
     margin-top: 250px;
     position:relative;
+    border-radius: 100px;
 }
 #lblUsername{
     position:absolute;

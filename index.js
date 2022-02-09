@@ -1,3 +1,4 @@
+import './style.css';
 //  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
 
 
@@ -11,11 +12,11 @@ const hasaccLink = document.getElementById('hasaccLink')
 const noaccLink = document.getElementById('noaccLink')
 const inptUsername = document.getElementById('inptUsername')
 const inptPassword = document.getElementById('inptPassword')
-let password, login
+let password, email
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
 btnSignIn.addEventListener('click', onBtnSignIn)
-btnSignUp.addEventListener('click', onBtnSignIn)
+btnSignUp.addEventListener('click', onBtnSignUp)
 function onNoaccLink(event){
     signUp.forEach(element => element.style.opacity = "1")
     signIn.forEach(element => element.style.opacity = "0")
@@ -28,12 +29,13 @@ function onHasaccLink(event){
     signUp.forEach(element => element.style["pointer-events"] = "none")
     signIn.forEach(element => element.style["pointer-events"] = "visible")
 }
-function onBtnSignIn(event){
-login = inptUsername.value
-password = inptPassword.value
-console.log(login, password)
+
+function onSignIn(){
+
+console.log(email, password)
 clearMenuOfAuth()
 }
+
 
 //--- --- --- --- --- ---  Главная --- --- --- --- --- --- --- ---
 
@@ -48,7 +50,8 @@ function clearMenuOfAuth(){
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
 
 import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+
+import  'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import * as firebaseui from 'firebaseui'
 
@@ -64,3 +67,56 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 const ui = new firebaseui.auth.AuthUI(firebase.auth(app));
+// ui.start('#firebaseui-auth-container', {
+//     signInOptions: [
+//       firebase.auth.EmailAuthProvider.PROVIDER_ID
+//     ],
+//     // Other config options...
+//   });
+
+function onBtnSignUp(event){
+    email = inptUsername.value
+password = inptPassword.value
+firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in 
+    onSignIn()
+    var user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ..
+  });
+
+
+}
+function onBtnSignIn(event){
+    email = inptUsername.value
+    password = inptPassword.value
+    firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signed in
+      onSignIn()
+      var user = userCredential.user;
+      // ...
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    });
+}
+
+
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+      var uid = user.uid;
+      // ...
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
