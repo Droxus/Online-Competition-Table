@@ -1,7 +1,7 @@
 import './style.css';
 //  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
 
-
+const body = document.body
 const btnSignIn = document.getElementById('btnSignIn')
 const btnSignUp = document.getElementById('btnSignUp')
 const signIn = Array.from(document.getElementsByClassName('signIn'))
@@ -12,6 +12,7 @@ const hasaccLink = document.getElementById('hasaccLink')
 const noaccLink = document.getElementById('noaccLink')
 const inptUsername = document.getElementById('inptUsername')
 const inptPassword = document.getElementById('inptPassword')
+const mainBlock = document.getElementById('mainBlock')
 let password, email
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
@@ -30,21 +31,29 @@ function onHasaccLink(event){
     signIn.forEach(element => element.style["pointer-events"] = "visible")
 }
 
-function onSignIn(){
 
-console.log(email, password)
-clearMenuOfAuth()
-}
+
 
 
 //--- --- --- --- --- ---  Главная --- --- --- --- --- --- --- ---
 
-const body = document.body
+
 function clearMenuOfAuth(){
     dataEnterSqr.forEach(element => element.style.opacity = "0")
     dataEnterSqr.forEach(element => element.style["pointer-events"] = "none")
     body.style["background-color"] = "white"
 }
+
+function showMainPage(){
+    mainBlock.style.opacity = "1"
+    mainBlock.style["pointer-events"] = "visible"
+}
+
+function onSignIn(){
+    console.log(email, password)
+    clearMenuOfAuth()
+    showMainPage()
+    }
 
 
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
