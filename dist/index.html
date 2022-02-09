@@ -1,0 +1,48 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <title>Online-Competition-Table</title>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
+<script defer src="bundle.js"></script></head>
+<body>
+
+
+    <div class="mainBlock">
+    <div class="headerBlock">
+
+    </div>
+    <div class="leftBlock">
+        <label id="tileLbl" for="tileLbl"><b>Online Competition Table</b></label>
+        <!-- <div class="btnsBlock">
+            <button class="btnHome"><img src="img/home.png" alt="hame" width="42" height="42">Home</button>
+            <button class="btnHome"><img src="img/user.png" alt="hame" width="42" height="42">Account</button>
+            <button class="btnHome"><img src="img/line-bars.png" alt="hame" width="42" height="42">Data</button>
+            <button class="btnHome"><img src="img/menu.png" alt="hame" width="42" height="42">Table</button>
+            <button class="btnHome"><img src="img/dialogue.png" alt="hame" width="42" height="42">Chat</button>
+            <button class="btnHome"><img src="img/settings.png" alt="hame" width="42" height="42">Settings</button>
+        </div> -->
+
+    </div>
+    <div class="contentBlock">
+    
+    </div>
+</div>
+<div class="dataEnterSqr" >
+    <label class="signIn" id="isignIn" for="isignIn">Sign In</label>  
+    <label class="signUp" id="isignIn" for="isignIn">Sign Up</label> 
+    <label class="authMenu" id="lblUsername" for="Username">Username</label>
+    <input class="authMenu" id="inptUsername" type="text" name="nickname" autocomplete="on" maxlength="20" placeholder="Please enter your name"/>
+    <label class="authMenu" id="lblPassword" for="Password">Password</label>
+    <input class="authMenu" id="inptPassword" type="password" name="password" autocomplete="on" maxlength="20" placeholder="Please enter your password"/>
+    <button class="signIn" id="btnSignIn">Sign In</button>
+    <button class="signUp" id="btnSignUp">Sign Up</button>
+    <label class="signIn" id="noacc" for="noacc">Don't have an account?<a id="noaccLink" href="#">Sign Up</a></label> 
+    <label class="signUp" id="noacc" for="noacc">I have already an account!<a id="hasaccLink" href="#">Sign In</a></label>
+    </div>
+
+    <div id="firebaseui-auth-container"></div>
+</body>
+</html>
