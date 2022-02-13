@@ -22,9 +22,10 @@ const btnAbout = document.getElementById('btnAbout')
 const contentBlock = document.getElementById('contentBlock')
 const labelUnity = document.getElementById('labelUnity')
 const navigationPanel = document.getElementById('navigationPanel')
+const profile = document.getElementById('profile')
 
 
-const profileWidth = 100
+const profileWidth = 200
 const labelUnityWidth = 450
 let password, email, width, height
 noaccLink.addEventListener('click', onNoaccLink)
@@ -118,8 +119,9 @@ function checkAspectRatio(){
     navigationPanel.style["margin-top"] = 0
     navigationPanel.style["margin-left"] = 0
     labelUnity.style["border-right"] = '0px dashed black'
-
     navigationPanel.style.width = width - profileWidth
+    profile.style["margin-top"] = 0
+    profile.style["margin-left"] = width - profileWidth + 3
 
   } else {
     labelUnity.innerHTML = ` <div class="labelUnity" id="labelUnity">
@@ -132,7 +134,8 @@ function checkAspectRatio(){
     navigationPanel.style["margin-top"] = 0
     navigationPanel.style["margin-left"] = labelUnityWidth + 3
     navigationPanel.style.width = width - profileWidth - labelUnityWidth + 5
-
+    profile.style["margin-top"] = 0
+    profile.style["margin-left"] = width - profileWidth + 10
   }
 
 }
