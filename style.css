@@ -201,7 +201,8 @@ html {
     margin-top: 100px;
 }
 .labelUnity{
-    border-right: 2px dashed black;
+    /* border-right: 2px dashed black; */
+    border-right: none;
     width:  var(--labelUnity-width);
     height: 200px;
 }

@@ -20,7 +20,13 @@ const btnDataEnter = document.getElementById('btnDataEnter')
 const btnStatistics = document.getElementById('btnStatistics')
 const btnAbout = document.getElementById('btnAbout')
 const contentBlock = document.getElementById('contentBlock')
-let password, email
+const labelUnity = document.getElementById('labelUnity')
+const navigationPanel = document.getElementById('navigationPanel')
+
+
+const profileWidth = 100
+const labelUnityWidth = 450
+let password, email, width, height
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
 btnSignIn.addEventListener('click', onBtnSignIn)
@@ -30,7 +36,20 @@ btnMyTournaments.addEventListener('click', onbtnMyTournaments)
 btnDataEnter.addEventListener('click', onbtnDataEnter)
 btnStatistics.addEventListener('click', onbtnStatistics)
 btnAbout.addEventListener('click', onbtnAbout)
+width = window.innerWidth
+height = window.innerHeight
+function onresize() {
+    setInterval(function() {
+      if ((width != window.innerWidth) || (height !== window.innerHeight)){
+        width = window.innerWidth
+        height = window.innerHeight
+        checkAspectRatio()
+        console.log('resized')
+      }
+    }, 300)
+}
 
+window.addEventListener("resize", onresize);
 
 //  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
 
@@ -57,6 +76,7 @@ function clearMenuOfAuth(){
 function showMainPage(){
   mainBlock.style.opacity = "1"
   mainBlock.style["pointer-events"] = "visible"
+  onbtnHome()
 }
 function getNickName() {
   let login = email
@@ -91,7 +111,31 @@ function onbtnAbout(event){
   contentBlock.innerHTML = "<h1> You at About page now </h1>"
 }
 
+checkAspectRatio()
+function checkAspectRatio(){
+  if (height > width) {
+    labelUnity.innerHTML = ' '
+    navigationPanel.style["margin-top"] = 0
+    navigationPanel.style["margin-left"] = 0
+    labelUnity.style["border-right"] = '0px dashed black'
 
+    navigationPanel.style.width = width - profileWidth
+
+  } else {
+    labelUnity.innerHTML = ` <div class="labelUnity" id="labelUnity">
+    <label class="tileLbl" id="tileLbl1" for="tileLbl"><b>Online</b></label>
+    <label class="tileLbl" id="tileLbl2" for="tileLbl"><b>Competition</b></label>
+    <label class="tileLbl" id="tileLbl3" for="tileLbl"><b>Table</b></label>
+    <label class="tileLbl" id="tileLbl4" for="tileLbl">by Droxus corporation</label>
+</div>`
+    labelUnity.style["border-right"] = '2px dashed black'
+    navigationPanel.style["margin-top"] = 0
+    navigationPanel.style["margin-left"] = labelUnityWidth + 3
+    navigationPanel.style.width = width - profileWidth - labelUnityWidth + 5
+
+  }
+
+}
 
 
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
