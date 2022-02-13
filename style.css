@@ -6,6 +6,8 @@ html {
     padding: 0;
     display: flex;
     --headerHeight: 200px;
+    --labelUnity-width: 450px;
+    --profile-width: 200px;
  }
  
  body {
@@ -15,8 +17,23 @@ html {
     width: 100%;
     height: 100%;   
     padding: 0;
-    background-color: rgb(255, 218, 148);
+    background: linear-gradient(-45deg, #00ff00, #00eeff, #390cff, #e100ff);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+	height: 100vh;
 }
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
 .signUp{
     pointer-events: none;
     opacity: 0;
@@ -29,7 +46,7 @@ html {
     position:absolute;
     font-family: arial;
     font-size: 50px;
-    color: rgb(0, 0, 0);
+    color: rgb(94, 94, 94);
     width: 60%;
     margin-left: 35%;
     margin-top: 15%;
@@ -37,7 +54,7 @@ html {
 .dataEnterSqr {
     /* pointer-events: none;
     opacity: 0; */
-    background-color: rgb(240, 239, 209);
+    background-color: rgb(255, 255, 255);
     width: 600px;
     height: 800px;
     margin-left: auto;
@@ -45,6 +62,7 @@ html {
     margin-top: 250px;
     position:relative;
     border-radius: 100px;
+    
 }
 #lblUsername{
     position:absolute;
@@ -61,6 +79,11 @@ html {
     margin-left: 20%;
     margin-top: 50%;
     height: 40px;
+    font-size: 24px;
+    border: none;
+    border-bottom: 3px solid rgb(0, 174, 255);
+    outline-color: rgb(0, 174, 255);
+    border-radius: 4px;
 }
 #lblPassword{
     position:absolute;
@@ -77,21 +100,45 @@ html {
     margin-left: 20%;
     margin-top: 75%;
     height: 40px;
-
+    font-size: 24px;
+    border: none;
+    border-bottom: 3px solid rgb(0, 174, 255);
+    border-radius: 4px;
+    outline-color: rgb(0, 174, 255);
 }
 #btnSignIn{
     position:absolute;
     width: 60%;
     margin-left: 20%;
     margin-top: 95%;
-    height: 25px;
+    height: 36px;
+    border-radius: 18px;
+    background-color: #06b0ff;
+    border: 0px;
+    text-align: center;
+    display: inline-block;
+    color: white;
+    font-size: 18px;
+}
+#btnSignIn:hover{
+    background-color:  #0082be;
 }
 #btnSignUp{
     position:absolute;
     width: 60%;
     margin-left: 20%;
     margin-top: 95%;
-    height: 25px;
+    height: 36px;
+    border-radius: 18px;
+    background-color: #06b0ff;
+    border: 0px;
+    text-align: center;
+    display: inline-block;
+    color: white;
+    font-size: 18px;
+}
+#btnSignUp:hover{
+    background-color:  #0082be;
 }
 #noacc{
     position:absolute;
@@ -102,50 +149,61 @@ html {
     color: rgb(87, 87, 87);
     font-family: arial;
 }
-
-/* main */
-
 #mainBlock{
     pointer-events: none;
     opacity: 0;
 }
-
-.leftBlock{
-    
-    background-color: rgba(203, 255, 160, 0.575);
-    width: 12%;
-    height: 100%;
-    margin-top: var(--headerHeight);
-    position:fixed;
-
-}
 .headerBlock{
-    background-color: rgba(221, 185, 107, 0.582);
+    position:absolute;
+    border-bottom: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.925);
     width: 100%;
     height: var(--headerHeight); 
     margin-top: 0px;
     margin-left: 0px;
-    position:absolute;
     
 }
 .contentBlock{
-    background-color: rgb(106, 136, 0);
-    width: calc(100% - var(--marginLeft) - 3%);
-    height: calc(100% - var(--marginTop) - 3%);
-    margin-left: 15%;
-    margin-top: calc(var(--headerHeight) + 3%);
     position:absolute;
+    border: 2px solid black;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255, 0.925);
+    width: calc(100%  - 100px);
+    height: calc(100% - var(--headerHeight) - 100px);
+    margin-left: 50px;
+    margin-top: calc(var(--headerHeight) + 50px);
     --marginLeft: 15%;
-    --marginTop: calc(var(--headerHeight) + 3%);
 }
-#tileLbl{
+.tileLbl{
     position:absolute;
-    width: 350px;
-    font-size: 30px;
-    padding: 40px;
+    width: 200px;
+    font-size: 36px;
+    padding: 30px;
     margin: 10px auto;
     text-align: justify;
-    
+    color: rgb(3, 15, 85);
+}
+#tileLbl1{
+    margin-left: 10px;
+    margin-top: 20px;
+}
+#tileLbl4{
+    font-size: 16px;
+    margin-top: 120px;
+    margin-left: 10px;
+}
+#tileLbl2{
+    margin-left: 80px;
+    margin-top: 60px;
+}
+#tileLbl3{
+    margin-left: 250px;
+    margin-top: 100px;
+}
+.labelUnity{
+    border-right: 2px dashed black;
+    width:  var(--labelUnity-width);
+    height: 200px;
 }
 #underTitleLbl{
     position:absolute;
@@ -155,15 +213,58 @@ html {
     padding-left: 50px;
     margin: 10px auto;
     text-align: justify;
-    color: rgb(80, 79, 79);
+    color: rgb(20, 13, 13);
 }
-.btnHome{
-    width: 80%;
-    height: 50px;
-    margin-top: px;
-    margin-left: 10%;
-    font-size: 35px;
+.profile{
+    position: absolute;
+    margin-left: calc(100% - var(--profile-width));
+    margin-top: calc(-1 * var(--headerHeight));
+    border: 2px solid black;
+    width:  var(--profile-width);
+    height: calc(var(--headerHeight) / 2 - 2 * var(--padding-profile));
+    font-size: 24px;
+    padding: var(--padding-profile);
+    color: rgb(0, 0, 109);
+    font-weight:400;
+    --padding-profile: 15px;
 }
-.btnsBlock{
-    margin-top: 250px;
+.navigationPanel{
+    position: absolute;
+    border: 2px solid black;
+    margin-top: calc(-1 * var(--headerHeight));
+    margin-left: calc(var(--labelUnity-width) + 3px);
+    width: calc(100% - var(--labelUnity-width) - var(--profile-width) - 5px);
+    height: calc(var(--headerHeight) / 2);
+    padding: 0px;
+
+    list-style-type: none;
+    overflow: hidden;
+
+}
+li {
+    display: line;
+    float: left;
+    width: calc(100% / 5);
+    
+}
+li a {
+    display: block;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    text-align: center; 
+    height: 100%;
+    padding-top: 50px;
+    background-color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-weight:bold;
+}
+
+.dark1{
+    background-color: rgb(255, 255, 255);
+}
+.light1{
+    background-color: rgb(226, 226, 226);
+}
+li a:hover{
+    background-color: rgb(162, 183, 197);
 }

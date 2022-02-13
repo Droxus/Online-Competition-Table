@@ -1,5 +1,5 @@
 const path = require("path");
-
+const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -16,17 +16,24 @@ module.exports = {
     static: "./dist",
   },
   plugins: [
+    
+    new CopyPlugin({
+      patterns: [
+        { from: "img", to: "img" },
+        { from: "style.css", to: "." },
+      ],
+    }),
     new HtmlWebpackPlugin({
       title: "Output Management",
       template: "index.html",
     }),
   ],
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-    ],
-  },
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.css$/i,
+  //       use: ['style-loader', 'css-loader'],
+  //     },
+  //   ],
+  // },
 };

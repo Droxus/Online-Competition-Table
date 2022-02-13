@@ -1,5 +1,5 @@
-import './style.css';
-//  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
+// import './style.css';
+//  --- --- --- --- --- ---  Инициализация --- --- --- --- --- --- --- ---
 
 const body = document.body
 const btnSignIn = document.getElementById('btnSignIn')
@@ -13,11 +13,27 @@ const noaccLink = document.getElementById('noaccLink')
 const inptUsername = document.getElementById('inptUsername')
 const inptPassword = document.getElementById('inptPassword')
 const mainBlock = document.getElementById('mainBlock')
+const nickForLabel = document.getElementById('nickForLabel')
+const btnHome = document.getElementById('btnHome')
+const btnMyTournaments = document.getElementById('btnMyTournaments')
+const btnDataEnter = document.getElementById('btnDataEnter')
+const btnStatistics = document.getElementById('btnStatistics')
+const btnAbout = document.getElementById('btnAbout')
+const contentBlock = document.getElementById('contentBlock')
 let password, email
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
 btnSignIn.addEventListener('click', onBtnSignIn)
 btnSignUp.addEventListener('click', onBtnSignUp)
+btnHome.addEventListener('click', onbtnHome)
+btnMyTournaments.addEventListener('click', onbtnMyTournaments)
+btnDataEnter.addEventListener('click', onbtnDataEnter)
+btnStatistics.addEventListener('click', onbtnStatistics)
+btnAbout.addEventListener('click', onbtnAbout)
+
+
+//  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
+
 function onNoaccLink(event){
     signUp.forEach(element => element.style.opacity = "1")
     signIn.forEach(element => element.style.opacity = "0")
@@ -31,29 +47,51 @@ function onHasaccLink(event){
     signIn.forEach(element => element.style["pointer-events"] = "visible")
 }
 
+function clearMenuOfAuth(){
+  dataEnterSqr.forEach(element => element.style.opacity = "0")
+  dataEnterSqr.forEach(element => element.style["pointer-events"] = "none")
+  body.style["background-color"] = "white"
+  // body.style.background = "none"
+}
 
+function showMainPage(){
+  mainBlock.style.opacity = "1"
+  mainBlock.style["pointer-events"] = "visible"
+}
+function getNickName() {
+  let login = email
+  login = email.slice(0, email.indexOf('@')).toUpperCase() 
+  nickForLabel.innerHTML = login
+}
+function onSignIn(){
+  console.log(email, password)
+  getNickName()
+  password = null
+  clearMenuOfAuth()
+  showMainPage()
+  }
 
 
 
 //--- --- --- --- --- ---  Главная --- --- --- --- --- --- --- ---
 
-
-function clearMenuOfAuth(){
-    dataEnterSqr.forEach(element => element.style.opacity = "0")
-    dataEnterSqr.forEach(element => element.style["pointer-events"] = "none")
-    body.style["background-color"] = "white"
+function onbtnHome(event){
+  contentBlock.innerHTML = "<h1> You at Home page now </h1>"
+}
+function onbtnMyTournaments(event){
+  contentBlock.innerHTML = "<h1> You at My Tournaments page now </h1>"
+}
+function onbtnDataEnter(event){
+  contentBlock.innerHTML = "<h1> You at Data Enter page now </h1>"
+}
+function onbtnStatistics(event){
+  contentBlock.innerHTML = "<h1> You at Statistics page now </h1>"
+}
+function onbtnAbout(event){
+  contentBlock.innerHTML = "<h1> You at About page now </h1>"
 }
 
-function showMainPage(){
-    mainBlock.style.opacity = "1"
-    mainBlock.style["pointer-events"] = "visible"
-}
 
-function onSignIn(){
-    console.log(email, password)
-    clearMenuOfAuth()
-    showMainPage()
-    }
 
 
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
@@ -76,12 +114,6 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 const ui = new firebaseui.auth.AuthUI(firebase.auth(app));
-// ui.start('#firebaseui-auth-container', {
-//     signInOptions: [
-//       firebase.auth.EmailAuthProvider.PROVIDER_ID
-//     ],
-//     // Other config options...
-//   });
 
 function onBtnSignUp(event){
     email = inptUsername.value
@@ -116,7 +148,21 @@ function onBtnSignIn(event){
       var errorMessage = error.message;
     });
 }
-
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+  .then(() => {
+    // Existing and future Auth states are now persisted in the current
+    // session only. Closing the window would clear any existing state even
+    // if a user forgets to sign out.
+    // ...
+    // New sign-in will be persisted with session persistence.
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  })
+  .catch((error) => {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+  });
+  
 
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
