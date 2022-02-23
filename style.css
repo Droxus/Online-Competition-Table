@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@600&display=swap');
 html {
     margin: 0px;
     height: 100%;
@@ -8,6 +8,7 @@ html {
     --headerHeight: 200px;
     --labelUnity-width: 450px;
     --profile-width: 200px;
+    --height-NavPanel: calc(var(--headerHeight) / 3);
  }
  
  body {
@@ -17,23 +18,37 @@ html {
     width: 100%;
     height: 100%;   
     padding: 0;
-    background: linear-gradient(-45deg, #00ff00, #00eeff, #390cff, #e100ff);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
+    background: linear-gradient(90deg, #c6ffdd, #fbd786, #f7797d);
+	background-size: 200% 200%;
+	animation: gradient 10s ease infinite;
 	height: 100vh;
 }
 @keyframes gradient {
 	0% {
-		background-position: 0% 50%;
+		background-position: 50% 0%;
 	}
 	50% {
-		background-position: 100% 50%;
+		background-position: 100% 0%;
 	}
 	100% {
-		background-position: 0% 50%;
+		background-position: 50% 0%;
 	}
 }
-
+.btnsForm{
+    position:absolute;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 95%;
+    height: 36px;
+    border-radius: 18px;
+    background-color: #5a5a5a;
+    border: 0px;
+    text-align: center;
+    display: inline-block;
+    color: white;
+    font-size: 18px;
+    border: 2px solid #5a5a5a;
+}
 .signUp{
     pointer-events: none;
     opacity: 0;
@@ -46,15 +61,27 @@ html {
     position:absolute;
     font-family: arial;
     font-size: 50px;
-    color: rgb(94, 94, 94);
+    color: #5a5a5a;
     width: 60%;
     margin-left: 35%;
     margin-top: 15%;
 }
+.btnsForm:hover{
+    background-color: white;
+    color: #5a5a5a;
+}
+.btnsChangeForm{
+    background-color: white;
+    color: #5a5a5a;
+    margin-top: 107%;
+}
+.btnsChangeForm:hover{
+    background-color: #5a5a5a;
+    color: white;
+}
 .dataEnterSqr {
-    /* pointer-events: none;
-    opacity: 0; */
-    background-color: rgb(255, 255, 255);
+    border: solid 1px white;
+    background-color: rgba(255, 255, 255, 0.3);
     width: 600px;
     height: 800px;
     margin-left: auto;
@@ -62,92 +89,23 @@ html {
     margin-top: 250px;
     position:relative;
     border-radius: 100px;
-    
 }
-#lblUsername{
+.authMenu{
     position:absolute;
+    background: rgb(187, 24, 24);
+    border-radius: 50px;
+    border: #06b0ff;
+    background-color: rgb(187, 172, 87);
     width: 60%;
     margin-left: 20%;
-    margin-top: 42%;
-    font-size: 30px;
-    color: rgb(0, 0, 0);
-    font-family: arial;
+    height: 40px;
+    font-size: 24px;
 }
 #inptUsername{
-    position:absolute;
-    width: 60%;
-    margin-left: 20%;
     margin-top: 50%;
-    height: 40px;
-    font-size: 24px;
-    border: none;
-    border-bottom: 3px solid rgb(0, 174, 255);
-    outline-color: rgb(0, 174, 255);
-    border-radius: 4px;
-}
-#lblPassword{
-    position:absolute;
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 67%;
-    font-size: 30px;
-    color: rgb(0, 0, 0);
-    font-family: arial;
 }
 #inptPassword{
-    position:absolute;
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 75%;
-    height: 40px;
-    font-size: 24px;
-    border: none;
-    border-bottom: 3px solid rgb(0, 174, 255);
-    border-radius: 4px;
-    outline-color: rgb(0, 174, 255);
-}
-#btnSignIn{
-    position:absolute;
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 95%;
-    height: 36px;
-    border-radius: 18px;
-    background-color: #06b0ff;
-    border: 0px;
-    text-align: center;
-    display: inline-block;
-    color: white;
-    font-size: 18px;
-}
-#btnSignIn:hover{
-    background-color:  #0082be;
-}
-#btnSignUp{
-    position:absolute;
-    width: 60%;
-    margin-left: 20%;
-    margin-top: 95%;
-    height: 36px;
-    border-radius: 18px;
-    background-color: #06b0ff;
-    border: 0px;
-    text-align: center;
-    display: inline-block;
-    color: white;
-    font-size: 18px;
-}
-#btnSignUp:hover{
-    background-color:  #0082be;
-}
-#noacc{
-    position:absolute;
-    width: 50%;
-    margin-left: 25%;
-    margin-top: 110%;
-    font-size: 18px;
-    color: rgb(87, 87, 87);
-    font-family: arial;
+    margin-top: 70%;
 }
 #mainBlock{
     pointer-events: none;
@@ -155,19 +113,19 @@ html {
 }
 .headerBlock{
     position:absolute;
-    border-bottom: 2px solid black;
-    background-color: rgba(255, 255, 255, 0.925);
+    border-bottom: 1px solid rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.3);
     width: 100%;
     height: var(--headerHeight); 
     margin-top: 0px;
     margin-left: 0px;
-    
 }
 .contentBlock{
     position:absolute;
-    border: 2px solid black;
+    border: 1px solid white;
     border-radius: 20px;
-    background-color: rgb(255, 255, 255, 0.925);
+    background-color: rgb(255, 255, 255, 0.3);
+    opacity: 1;
     width: calc(100%  - 100px);
     height: calc(100% - var(--headerHeight) - 100px);
     margin-left: 50px;
@@ -199,12 +157,13 @@ html {
 #tileLbl3{
     margin-left: 250px;
     margin-top: 100px;
+    width: 100px;
 }
 .labelUnity{
     /* border-right: 2px dashed black; */
-    border-right: none;
     width:  var(--labelUnity-width);
     height: 200px;
+    font: small-caps bold 24px/1 sans-serif;
 }
 #underTitleLbl{
     position:absolute;
@@ -219,53 +178,56 @@ html {
 .profile{
     position: absolute;
     margin-left: calc(100% - var(--profile-width));
-    margin-top: calc(-1 * var(--headerHeight));
-    border: 2px solid black;
+    margin-top: calc(var(--headerHeight) - var(--height-Profile));
+    /* border: 2px solid black; */
     width:  var(--profile-width);
-    height: calc(var(--headerHeight) / 2 - 2 * var(--padding-profile));
+    height: var(--height-Profile);
     font-size: 24px;
-    padding: var(--padding-profile);
     color: rgb(0, 0, 109);
     font-weight:400;
-    --padding-profile: 15px;
+    --height-Profile: calc(var(--headerHeight) / 3);
+}
+#nickForLabel:hover{
+    color:black !important;
+}
+#profIcon{
+    margin-top: 10px;
+    width: 48px;
 }
 .navigationPanel{
     position: absolute;
-    border: 2px solid black;
-    margin-top: calc(-1 * var(--headerHeight));
     margin-left: calc(var(--labelUnity-width) + 3px);
     width: calc(100% - var(--labelUnity-width) - var(--profile-width) - 5px);
-    height: calc(var(--headerHeight) / 2);
     padding: 0px;
-
     list-style-type: none;
-    overflow: hidden;
-
 }
 li {
     display: line;
     float: left;
     width: calc(100% / 5);
-    
+    height:var(--height-NavPanel);
 }
 li a {
+    margin-top: calc(var(--headerHeight) - var(--height-NavPanel) - 47px);
     display: block;
     text-decoration: none;
-    color: rgb(0, 0, 0);
-    text-align: center; 
-    height: 100%;
-    padding-top: 50px;
-    background-color: rgb(255, 255, 255);
-    font-size: 16px;
-    font-weight:bold;
-}
-
-.dark1{
-    background-color: rgb(255, 255, 255);
-}
-.light1{
-    background-color: rgb(226, 226, 226);
+    color: rgb(255, 255, 255);
+    text-align: left;
+    padding-top: var(--height-NavPanel);
+    background-color: none;
+    font: 32px "Fira Sans", sans-serif;
+    font-weight:normal;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 li a:hover{
-    background-color: rgb(162, 183, 197);
+    color: black !important;
 }
+#nickForLabel{
+    /* font: small-caps lighter 24px/1 sans-serif; */
+    margin-left: 10px;
+    font: 27px "Fira Sans", sans-serif;
+    font-weight:normal;
+    color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
