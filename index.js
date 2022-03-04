@@ -27,8 +27,6 @@ const profile = document.getElementById('profile')
 const headerBlock = document.getElementById('headerBlock')
 const profIcon = document.getElementById('profIcon')
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile]
-let profileWidth = 200
-const labelUnityWidth = 450
 let password, email, width, height
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
@@ -78,6 +76,8 @@ function clearMenuOfAuth(){
 }
 
 function showMainPage(){
+  mainBlock.style.width = '100%'
+  mainBlock.style.height = '100%'
   mainBlock.style.opacity = "1"
   mainBlock.style["pointer-events"] = "visible"
   onbtnHome()
@@ -129,55 +129,80 @@ function onbtnAbout(event){
   btnAbout.style["border-bottom"] = '2px solid black'
   btnAbout.style.color = 'black'
 }
-function clearMenu(){
-  NavPanelBtns.forEach(element => element.style["border-bottom"] = '0px solid black')
-  NavPanelBtns.forEach(element => element.style.color = 'white')
-}
-checkAspectRatio()
-function checkAspectRatio(){
-  if (height > width) {
-    root.style.setProperty('--headerHeight', '100px')
-    root.style.setProperty('--profile-width', '150px')
-    NavPanelBtns.forEach(element => element.style["margin-top"] = 'calc(var(--headerHeight) - (var(--height-NavPanel) + 44px))')
-    NavPanelBtns.forEach(element => element.style.font = '24px "Fira Sans", sans-serif')
-    NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black')
-    labelUnity.innerHTML = ' '
-    profile.style["margin-left"] = 'calc(100% - var(--profile-width))'
-    profile.style["margin-top"] = 'calc(var(--headerHeight) - var(--height-Profile))'
-    profIcon.style["margin-top"] = '-10px'
-    profile["font-size"] = '18px' //?
-    profIcon.style.width = '36px'
-    navigationPanel.style["margin-left"] = '0px'
-    navigationPanel.style.width = 'calc(100% - var(--profile-width))'
 
-  } else {
-    root.style.setProperty('--headerHeight', '200px')
-    root.style.setProperty('--profile-width', '200px')
-    NavPanelBtns.forEach(element => element.style["margin-top"] = 'calc(var(--headerHeight) - (var(--height-NavPanel) + 54px))')
-    NavPanelBtns.forEach(element => element.style.font = '32px "Fira Sans", sans-serif')
-    NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black')
-    contentBlock.style["margin-top"] = 'calc(var(--headerHeight) + 50px)'  
-    navigationPanel.style["margin-left"] = 'calc(var(--labelUnity-width))'
-    navigationPanel.style.width = 'calc(100% - var(--profile-width) - var(--labelUnity-width))'
-    profile.style["margin-left"] = 'calc(100% - var(--profile-width))'
-    profile["font-size"] = '24px'
-    profile.style["margin-top"] = 'calc(var(--headerHeight) - var(--height-Profile))'
-    profIcon.style["margin-top"] = '10px'
-    profIcon.style.width = '48px'
-    labelUnity.innerHTML = ` <div class="labelUnity" id="labelUnity">
-    <label class="tileLbl" id="tileLbl1" for="tileLbl"><b>Online</b></label>
-    <label class="tileLbl" id="tileLbl2" for="tileLbl"><b>Competition</b></label>
-    <label class="tileLbl" id="tileLbl3" for="tileLbl"><b>Table</b></label>
-    <label class="tileLbl" id="tileLbl4" for="tileLbl">by Droxus corporation</label>
-</div>`
-  }
-}
 function onProfile() {
   contentBlock.innerHTML = "<h1> You at Profile page now </h1>"
   clearMenu()
-  profile.style["border-bottom"] = '2px solid black'
   profile.style.color = 'black'
+  profile.style["background-color"] = 'rgba(170, 170, 170, 0.2)'
 }
+
+function clearMenu(){
+  NavPanelBtns.forEach(element => element.style["border-bottom"] = '0px solid black')
+  NavPanelBtns.forEach(element => element.style.color = 'white')
+  profile.style["background-color"] = 'transparent'
+}
+checkAspectRatio()
+function checkAspectRatio(){
+
+if (width > 1100) {
+  root.style.setProperty('--headerHeight', '150px')
+  root.style.setProperty('--profile-width', '12%')
+  profile.style.setProperty('--height-Profile', '70px')
+  contentBlock.style.setProperty('--contentBlock-Top', 'calc(var(--headerHeight) + 2%)')
+  NavPanelBtns.forEach(element => element.style.font = '32px "Fira Sans", sans-serif')
+  NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black')
+  navigationPanel.style["margin-left"] = 'calc(var(--labelUnity-width))'
+  navigationPanel.style.width = 'calc(100% - var(--profile-width) - var(--labelUnity-width))'
+  profile["font-size"] = '24px'
+  profIcon.style["margin-top"] = '10px'
+  profIcon.style.width = '48px'
+  labelUnity.innerHTML = `
+  <label class="tileLbl" id="tileLbl1" for="tileLbl"><b>Online</b></label>
+  <label class="tileLbl" id="tileLbl2" for="tileLbl"><b>Competition</b></label>
+  <label class="tileLbl" id="tileLbl3" for="tileLbl"><b>Table</b></label>
+  <label class="tileLbl" id="tileLbl4" for="tileLbl">by Droxus corporation</label>`
+} else if (width > 600){
+  root.style.setProperty('--headerHeight', '100px')
+  root.style.setProperty('--profile-width', '15%')
+  profile.style.setProperty('--height-Profile', '40px')
+  navigationPanel.style.opacity = '1'
+  navigationPanel.style["pointer-events"] = 'visible'
+  profile.style.opacity = '1'
+  profile.style["pointer-events"] = 'visible'
+  contentBlock.style.setProperty('--contentBlock-Top', 'calc(var(--headerHeight) + 4%)')
+  contentBlock.style["margin-top"] = 'var(--contentBlock-Top)'
+  headerBlock.style["margin-top"] = '0px'
+  contentBlock.style.height = 'calc(100% - var(--headerHeight) - 6%)'
+  navigationPanel.style["margin-left"] = '0px'
+  navigationPanel.style.width = width - width * 0.15
+
+  NavPanelBtns.forEach(element => element.style.font = '24px "Fira Sans", sans-serif')
+  NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black')
+  labelUnity.innerHTML = ' '
+  profIcon.style["margin-top"] = '-10px'
+  profIcon.style.width = '36px'
+  profile["font-size"] = '18px' 
+} else {
+  root.style.setProperty('--headerHeight', '65px')
+  navigationPanel.style.opacity = '0'
+  navigationPanel.style["pointer-events"] = 'none'
+  profile.style.opacity = '0'
+  profile.style["pointer-events"] = 'none'
+headerBlock.style["margin-top"] = height - 65
+contentBlock.style["margin-top"] = '1%'
+contentBlock.style.height = height - 65 - height * 0.02
+
+
+
+
+
+
+}
+
+
+}
+
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
 
 import firebase from 'firebase/compat/app';

@@ -5,14 +5,16 @@ html {
     width: 100%;
     padding: 0;
     display: flex;
-    --headerHeight: 200px;
-    --labelUnity-width: 450px;
-    --profile-width: 200px;
-    --height-NavPanel: calc(var(--headerHeight) / 3);
+    --headerHeight: 150px;
+    --labelUnity-width: 25%;
+    --navigationPanel-width: calc(100% - var(--labelUnity-width) - var(--profile-width) - 5px);
+    --NavPanel-top: calc(var(--headerHeight) - var(--NavPanel-height));
+    --NavPanel-height: 40px;
+    --profile-width: 15%
  }
  
  body {
-     position: fixed;
+    position: fixed;
     margin: 0;
     min-height: 100%;
     width: 100%;
@@ -21,7 +23,6 @@ html {
     background: linear-gradient(90deg, #c6ffdd, #fbd786, #f7797d);
 	background-size: 200% 200%;
 	animation: gradient 10s ease infinite;
-	height: 100vh;
 }
 @keyframes gradient {
 	0% {
@@ -41,13 +42,13 @@ html {
     margin-top: 95%;
     height: 36px;
     border-radius: 18px;
-    background-color: #5a5a5a;
+    background-color: #c9a277c7;
     border: 0px;
     text-align: center;
     display: inline-block;
     color: white;
     font-size: 18px;
-    border: 2px solid #5a5a5a;
+    border: 2px solid #c9a277c7;
 }
 .signUp{
     pointer-events: none;
@@ -61,45 +62,51 @@ html {
     position:absolute;
     font-family: arial;
     font-size: 50px;
-    color: #5a5a5a;
+    color: white;
     width: 60%;
     margin-left: 35%;
     margin-top: 15%;
 }
 .btnsForm:hover{
-    background-color: white;
-    color: #5a5a5a;
+    background-color: #c78b4ac7;
+    border: 2px solid #c78b4ac7;
 }
 .btnsChangeForm{
     background-color: white;
+    border: 2px solid white;
     color: #5a5a5a;
     margin-top: 107%;
 }
 .btnsChangeForm:hover{
-    background-color: #5a5a5a;
-    color: white;
+    background-color: rgb(233, 232, 232);
+    border: 2px solid rgb(233, 232, 232);
 }
 .dataEnterSqr {
+    position:absolute;
+    z-index: -1;
     border: solid 1px white;
     background-color: rgba(255, 255, 255, 0.3);
-    width: 600px;
-    height: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 250px;
-    position:relative;
-    border-radius: 100px;
+    width: var(--width-dataEnterSqr);
+    height: var(--height-dataEnterSqr);
+    margin-left: calc((100% - var(--width-dataEnterSqr)) / 2);
+    margin-top: calc((100% - var(--height-dataEnterSqr)) / 4); 
+    border-radius: 15%;
+    --height-dataEnterSqr: 80%;
+    --width-dataEnterSqr: 600px
 }
 .authMenu{
     position:absolute;
     background: rgb(187, 24, 24);
     border-radius: 50px;
-    border: #06b0ff;
-    background-color: rgb(187, 172, 87);
+    border: none;
+    background-color: rgba(255, 255, 255, 0.5);
     width: 60%;
     margin-left: 20%;
     height: 40px;
     font-size: 24px;
+}
+.authMenu::placeholder {
+    opacity: 0.5;
 }
 #inptUsername{
     margin-top: 50%;
@@ -110,6 +117,8 @@ html {
 #mainBlock{
     pointer-events: none;
     opacity: 0;
+    width: 0%;
+    height: 0%;
 }
 .headerBlock{
     position:absolute;
@@ -126,66 +135,80 @@ html {
     border-radius: 20px;
     background-color: rgb(255, 255, 255, 0.3);
     opacity: 1;
-    width: calc(100%  - 100px);
-    height: calc(100% - var(--headerHeight) - 100px);
-    margin-left: 50px;
-    margin-top: calc(var(--headerHeight) + 50px);
-    --marginLeft: 15%;
+    width: 96%;
+    height: calc(100% - var(--headerHeight) - 6%);
+    margin-left: 2%;
+    margin-top: var(--contentBlock-Top);
+    --contentBlock-Top: calc(var(--headerHeight) + 2%);
 }
 .tileLbl{
     position:absolute;
-    width: 200px;
-    font-size: 36px;
-    padding: 30px;
-    margin: 10px auto;
-    text-align: justify;
+    width: 15%;
+    font-size: 160%;
+    margin: calc(var(--headerHeight) / 200);
+    text-align:start;   
     color: rgb(3, 15, 85);
 }
 #tileLbl1{
-    margin-left: 10px;
-    margin-top: 20px;
+    margin-left: 1%;
+    margin-top: calc(var(--headerHeight) / 10);
 }
-#tileLbl4{
-    font-size: 16px;
-    margin-top: 120px;
-    margin-left: 10px;
-}
+
 #tileLbl2{
-    margin-left: 80px;
-    margin-top: 60px;
+    margin-left: 4%;
+    margin-top: calc(var(--headerHeight) / 3);
 }
 #tileLbl3{
-    margin-left: 250px;
-    margin-top: 100px;
-    width: 100px;
+    margin-left: 13%;
+    margin-top: calc(var(--headerHeight) / 1.67);
+    width: 6%;
+}
+#tileLbl4{
+    font-size: 65%;
+    margin-top: calc(var(--headerHeight) / 1.4);
+    margin-left: 1%;
+    width: 12%;
 }
 .labelUnity{
-    /* border-right: 2px dashed black; */
     width:  var(--labelUnity-width);
-    height: 200px;
-    font: small-caps bold 24px/1 sans-serif;
-}
-#underTitleLbl{
-    position:absolute;
-    width: 28%;
-    font-size: 18px;
-    padding-top: 130px;
-    padding-left: 50px;
-    margin: 10px auto;
-    text-align: justify;
-    color: rgb(20, 13, 13);
+    height: var(--headerHeight);
+    font: small-caps bold 115% sans-serif;
 }
 .profile{
-    position: absolute;
+    position: absolute; 
+    background-color:transparent;
     margin-left: calc(100% - var(--profile-width));
-    margin-top: calc(var(--headerHeight) - var(--height-Profile));
-    /* border: 2px solid black; */
-    width:  var(--profile-width);
-    height: var(--height-Profile);
+    margin-top: 0px;
+    width:  100%;
+    height: var(--headerHeight);
     font-size: 24px;
     color: rgb(0, 0, 109);
     font-weight:400;
-    --height-Profile: calc(var(--headerHeight) / 3);
+    --height-Profile: 70px;
+}
+#ID{
+    display:flex;
+    position: relative;
+    border-bottom: 2px solid black;    
+    margin-top: 10px;
+    padding-bottom: 5px;
+    width: calc(var(--profile-width) - var(--profile-width) / 10);
+    height: 12px;
+    color:#5a5a5a;
+    text-shadow: none;
+    font: small-caps bold 16px/1 sans-serif;
+}
+#eMail{
+    display:flex;
+    position: relative;
+    border-bottom: 2px solid black;  
+    padding-bottom: 5px;
+    margin-top: 15px;  
+    width: calc(var(--profile-width) - var(--profile-width) / 10);
+    height: 12px;
+    color:#5a5a5a;
+    text-shadow: none;
+    font: small-caps bold 16px/1 sans-serif;
 }
 #nickForLabel:hover{
     color:black !important;
@@ -196,26 +219,28 @@ html {
 }
 .navigationPanel{
     position: absolute;
-    margin-left: calc(var(--labelUnity-width) + 3px);
-    width: calc(100% - var(--labelUnity-width) - var(--profile-width) - 5px);
+    margin-left: 0px;
+    width: var(--navigationPanel-width);
     padding: 0px;
     list-style-type: none;
+    margin-top: calc(var(--headerHeight) - var(--NavPanel-height));
+    height: var(--NavPanel-height);
+    z-index: 999;
 }
 li {
-    display: line;
     float: left;
     width: calc(100% / 5);
-    height:var(--height-NavPanel);
 }
 li a {
-    margin-top: calc(var(--headerHeight) - var(--height-NavPanel) - 47px);
     display: block;
+    margin-top: 0px;
+    height: 100%;
+    width: 99%;
     text-decoration: none;
     color: rgb(255, 255, 255);
     text-align: left;
-    padding-top: var(--height-NavPanel);
     background-color: none;
-    font: 32px "Fira Sans", sans-serif;
+    font: 250% "Fira Sans", sans-serif;
     font-weight:normal;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
@@ -224,10 +249,11 @@ li a:hover{
 }
 #nickForLabel{
     /* font: small-caps lighter 24px/1 sans-serif; */
-    margin-left: 10px;
-    font: 27px "Fira Sans", sans-serif;
-    font-weight:normal;
-    color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    margin-left: 1%;
+    font: 80% "Fira Sans", sans-serif;
+    font-weight:bolder;
+    color: rgb(3, 15, 85) !important;
+    text-shadow: none !important;
+    /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
 }
 
