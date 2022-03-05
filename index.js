@@ -26,7 +26,17 @@ const navigationPanel = document.getElementById('navigationPanel')
 const profile = document.getElementById('profile')
 const headerBlock = document.getElementById('headerBlock')
 const profIcon = document.getElementById('profIcon')
+const mobileNavPanel = document.getElementById('mobileNavPanel')
+const btnMobHome = document.getElementById('btnMobHome')
+const btnMobFav = document.getElementById('btnMobFav')
+const btnMobData = document.getElementById('btnMobData')
+const btnMobStat = document.getElementById('btnMobStat')
+const btnMobProf = document.getElementById('btnMobProf')
+
+
+
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile]
+const mobileNavPanelBtns = [btnMobHome, btnMobFav, btnMobData, btnMobStat, btnMobProf]
 let password, email, width, height
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
@@ -38,6 +48,15 @@ btnData.addEventListener('click', onbtnData)
 btnStatistics.addEventListener('click', onbtnStatistics)
 btnAbout.addEventListener('click', onbtnAbout)
 profile.addEventListener('click', onProfile)
+btnMobHome.addEventListener('click', onbtnHome)
+btnMobFav.addEventListener('click', onbtnFavorites)
+btnMobData.addEventListener('click', onbtnData)
+btnMobStat.addEventListener('click', onbtnStatistics)
+btnMobProf.addEventListener('click', onProfile)
+
+
+
+
 width = window.innerWidth
 height = window.innerHeight
 function onresize() {
@@ -104,24 +123,29 @@ function onbtnHome(event){
   clearMenu()
   btnHome.style["border-bottom"] = '2px solid black'
   btnHome.style.color = 'black'
+  btnMobHome.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)'
+
 }
 function onbtnFavorites(event){
   contentBlock.innerHTML = "<h1> You at Favorites page now </h1>"
   clearMenu()
   btnFavorites.style["border-bottom"] = '2px solid black'
   btnFavorites.style.color = 'black'
+  btnMobFav.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)'
 }
 function onbtnData(event){
   contentBlock.innerHTML = "<h1> You at Data page now </h1>"
   clearMenu()
   btnData.style["border-bottom"] = '2px solid black'
   btnData.style.color = 'black'
+  btnMobData.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)'
 }
 function onbtnStatistics(event){
   contentBlock.innerHTML = "<h1> You at Statistics page now </h1>"
   clearMenu()
   btnStatistics.style["border-bottom"] = '2px solid black'
   btnStatistics.style.color = 'black'
+  btnMobStat.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)'
 }
 function onbtnAbout(event){
   contentBlock.innerHTML = "<h1> You at About page now </h1>"
@@ -130,17 +154,19 @@ function onbtnAbout(event){
   btnAbout.style.color = 'black'
 }
 
-function onProfile() {
+function onProfile(event) {
   contentBlock.innerHTML = "<h1> You at Profile page now </h1>"
   clearMenu()
   profile.style.color = 'black'
   profile.style["background-color"] = 'rgba(170, 170, 170, 0.2)'
+  btnMobProf.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)'
 }
 
 function clearMenu(){
   NavPanelBtns.forEach(element => element.style["border-bottom"] = '0px solid black')
   NavPanelBtns.forEach(element => element.style.color = 'white')
   profile.style["background-color"] = 'transparent'
+  mobileNavPanelBtns.forEach(element => element.parentElement.style["background-color"] = 'transparent')
 }
 checkAspectRatio()
 function checkAspectRatio(){
@@ -150,6 +176,8 @@ if (width > 1100) {
   navigationPanel.style["pointer-events"] = 'visible'
   profile.style.opacity = '1'
   profile.style["pointer-events"] = 'visible'
+  mobileNavPanel.style.opacity = '0'
+  mobileNavPanel.style["pointer-events"] = 'none'
   headerBlock.style["margin-top"] = '0px'
   root.style.setProperty('--headerHeight', '150px')
   root.style.setProperty('--profile-width', '12%')
@@ -161,6 +189,9 @@ if (width > 1100) {
   profile["font-size"] = '24px'
   profIcon.style["margin-top"] = '10px'
   profIcon.style.width = '48px'
+  contentBlock.style.setProperty('--contentBlock-Top', 'calc(var(--headerHeight) + 2%)')
+  contentBlock.style["margin-top"] = 'var(--contentBlock-Top)'
+  contentBlock.style.height = 'calc(100% - var(--headerHeight) - 5%)'
   labelUnity.innerHTML = `
   <label class="tileLbl" id="tileLbl1" for="tileLbl"><b>Online</b></label>
   <label class="tileLbl" id="tileLbl2" for="tileLbl"><b>Competition</b></label>
@@ -174,6 +205,8 @@ if (width > 1100) {
   navigationPanel.style["pointer-events"] = 'visible'
   profile.style.opacity = '1'
   profile.style["pointer-events"] = 'visible'
+  mobileNavPanel.style.opacity = '0'
+  mobileNavPanel.style["pointer-events"] = 'none'
   contentBlock.style.setProperty('--contentBlock-Top', 'calc(var(--headerHeight) + 4%)')
   contentBlock.style["margin-top"] = 'var(--contentBlock-Top)'
   headerBlock.style["margin-top"] = '0px'
@@ -197,8 +230,8 @@ if (width > 1100) {
 headerBlock.style["margin-top"] = height - 65
 contentBlock.style["margin-top"] = '1%'
 contentBlock.style.height = height - 65 - height * 0.02
-
-
+mobileNavPanel.style.opacity = '1'
+mobileNavPanel.style["pointer-events"] = 'visible'
 
 
 

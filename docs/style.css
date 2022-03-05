@@ -112,12 +112,6 @@ html {
 .authMenu::placeholder {
     opacity: 0.5;
 }
-#inptUsername{
-    /* margin-top: 20%; */
-}
-#inptPassword{
-    /* margin-top: 25%; */
-}
 #mainBlock{
     pointer-events: none;
     opacity: 0;
@@ -259,5 +253,28 @@ li a:hover{
     color: rgb(3, 15, 85) !important;
     text-shadow: none !important;
     /* text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black; */
+}
+.mobileNavPanel {
+    float: none;
+    display: inline-block;
+    opacity: 1;
+    pointer-events: visible;
+    position: absolute;
+    margin-top: calc(-1 * var(--headerHeight));
+    margin-left: -44px; /* magic number 44 */
+    list-style-type: none;
+    height: calc(var(--headerHeight) - 4px);
+    width: 100%;
+}
+.mobileNavPanel li {
+    height: 100%;
+    margin-top: 0px;
+    margin-left: 0px;
+}
+.mobileNavPanel img {
+    margin-left: calc((100% - var(--width-img)) / 2);
+    margin-top: 10px;
+    width: var(--width-img);
+    --width-img: 42px;
 }
 
