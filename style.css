@@ -11,6 +11,7 @@ html {
     --NavPanel-top: calc(var(--headerHeight) - var(--NavPanel-height));
     --NavPanel-height: 40px;
     --profile-width: 15%
+    
  }
  
  body {
