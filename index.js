@@ -28,6 +28,7 @@ const headerBlock = document.getElementById('headerBlock')
 const profIcon = document.getElementById('profIcon')
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile]
 let password, email, width, height
+let test = 1
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
 btnSignIn.addEventListener('click', onBtnSignIn)
