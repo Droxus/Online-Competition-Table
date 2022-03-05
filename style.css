@@ -10,8 +10,8 @@ html {
     --navigationPanel-width: calc(100% - var(--labelUnity-width) - var(--profile-width) - 5px);
     --NavPanel-top: calc(var(--headerHeight) - var(--NavPanel-height));
     --NavPanel-height: 40px;
-    --profile-width: 15%
-    
+    --profile-width: 15%;
+    --height-dataEnterSqr: 650px;
  }
  
  body {
@@ -37,10 +37,10 @@ html {
 	}
 }
 .btnsForm{
-    position:absolute;
+    position: relative;
     width: 60%;
     margin-left: 20%;
-    margin-top: 95%;
+    margin-top: 15%;
     height: 36px;
     border-radius: 18px;
     background-color: #c9a277c7;
@@ -60,23 +60,23 @@ html {
     opacity: 1;
 }
 #isignIn{
-    position:absolute;
+    position:relative;
     font-family: arial;
     font-size: 50px;
     color: white;
     width: 60%;
     margin-left: 35%;
-    margin-top: 15%;
 }
 .btnsForm:hover{
     background-color: #c78b4ac7;
     border: 2px solid #c78b4ac7;
 }
 .btnsChangeForm{
+    position: relative;
     background-color: white;
     border: 2px solid white;
     color: #5a5a5a;
-    margin-top: 107%;
+    margin-top: -15%;
 }
 .btnsChangeForm:hover{
     background-color: rgb(233, 232, 232);
@@ -84,19 +84,21 @@ html {
 }
 .dataEnterSqr {
     position:absolute;
+    display: block;
     z-index: -1;
     border: solid 1px white;
     background-color: rgba(255, 255, 255, 0.3);
     width: var(--width-dataEnterSqr);
     height: var(--height-dataEnterSqr);
     margin-left: calc((100% - var(--width-dataEnterSqr)) / 2);
-    margin-top: calc((100% - var(--height-dataEnterSqr)) / 4); 
-    border-radius: 15%;
-    --height-dataEnterSqr: 80%;
-    --width-dataEnterSqr: 600px
+    margin-top: 10%; 
+    padding-top: 5%;
+    align-items: center;
+     border-radius: 15%;
+    --width-dataEnterSqr: 600px;
 }
 .authMenu{
-    position:absolute;
+    position:relative;
     background: rgb(187, 24, 24);
     border-radius: 50px;
     border: none;
@@ -105,15 +107,16 @@ html {
     margin-left: 20%;
     height: 40px;
     font-size: 24px;
+    margin-top: 10%;
 }
 .authMenu::placeholder {
     opacity: 0.5;
 }
 #inptUsername{
-    margin-top: 50%;
+    /* margin-top: 20%; */
 }
 #inptPassword{
-    margin-top: 70%;
+    /* margin-top: 25%; */
 }
 #mainBlock{
     pointer-events: none;

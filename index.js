@@ -28,7 +28,6 @@ const headerBlock = document.getElementById('headerBlock')
 const profIcon = document.getElementById('profIcon')
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile]
 let password, email, width, height
-let test = 1
 noaccLink.addEventListener('click', onNoaccLink)
 hasaccLink.addEventListener('click', onHasaccLink)
 btnSignIn.addEventListener('click', onBtnSignIn)
@@ -147,10 +146,14 @@ checkAspectRatio()
 function checkAspectRatio(){
 
 if (width > 1100) {
+  navigationPanel.style.opacity = '1'
+  navigationPanel.style["pointer-events"] = 'visible'
+  profile.style.opacity = '1'
+  profile.style["pointer-events"] = 'visible'
+  headerBlock.style["margin-top"] = '0px'
   root.style.setProperty('--headerHeight', '150px')
   root.style.setProperty('--profile-width', '12%')
   profile.style.setProperty('--height-Profile', '70px')
-  contentBlock.style.setProperty('--contentBlock-Top', 'calc(var(--headerHeight) + 2%)')
   NavPanelBtns.forEach(element => element.style.font = '32px "Fira Sans", sans-serif')
   NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black')
   navigationPanel.style["margin-left"] = 'calc(var(--labelUnity-width))'
@@ -190,6 +193,7 @@ if (width > 1100) {
   navigationPanel.style["pointer-events"] = 'none'
   profile.style.opacity = '0'
   profile.style["pointer-events"] = 'none'
+  labelUnity.innerHTML = ' '
 headerBlock.style["margin-top"] = height - 65
 contentBlock.style["margin-top"] = '1%'
 contentBlock.style.height = height - 65 - height * 0.02
