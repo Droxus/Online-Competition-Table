@@ -4,12 +4,8 @@
 const body = document.body
 const root = document.querySelector(':root')
 const btnSignIn = document.getElementById('btnSignIn')
-const btnSignUp = document.getElementById('btnSignUp')
-const signIn = Array.from(document.getElementsByClassName('signIn'))
-const signUp = Array.from(document.getElementsByClassName('signUp'))
 const authMenu = Array.from(document.getElementsByClassName('authMenu'))
 const dataEnterSqr = Array.from(document.getElementsByClassName('dataEnterSqr'))
-const hasaccLink = document.getElementById('hasaccLink')
 const noaccLink = document.getElementById('noaccLink')
 const inptUsername = document.getElementById('inptUsername')
 const inptPassword = document.getElementById('inptPassword')
@@ -32,16 +28,11 @@ const btnMobFav = document.getElementById('btnMobFav')
 const btnMobData = document.getElementById('btnMobData')
 const btnMobStat = document.getElementById('btnMobStat')
 const btnMobProf = document.getElementById('btnMobProf')
-
-
+const lblErrorOutput = document.getElementById('lblErrorOutput')
 
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile]
 const mobileNavPanelBtns = [btnMobHome, btnMobFav, btnMobData, btnMobStat, btnMobProf]
 let password, email, width, height
-noaccLink.addEventListener('click', onNoaccLink)
-hasaccLink.addEventListener('click', onHasaccLink)
-btnSignIn.addEventListener('click', onBtnSignIn)
-btnSignUp.addEventListener('click', onBtnSignUp)
 btnHome.addEventListener('click', onbtnHome)
 btnFavorites.addEventListener('click', onbtnFavorites)
 btnData.addEventListener('click', onbtnData)
@@ -75,16 +66,23 @@ window.addEventListener("resize", onresize);
 //  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
 
 function onNoaccLink(event){
-    signUp.forEach(element => element.style.opacity = "1")
-    signIn.forEach(element => element.style.opacity = "0")
-    signUp.forEach(element => element.style["pointer-events"] = "visible")
-    signIn.forEach(element => element.style["pointer-events"] = "none")
+  isignIn.innerHTML = 'Sign Up'
+  btnSignIn.innerHTML = 'Sign Up'
+  noaccLink.innerHTML = 'Sign In'
+  noaccLink.removeEventListener('click', onNoaccLink)
+  noaccLink.addEventListener('click', onHasaccLink)
+  btnSignIn.removeEventListener('click', onBtnSignIn)
+  btnSignIn.addEventListener('click', onBtnSignUp)
 }
+onHasaccLink()
 function onHasaccLink(event){
-    signUp.forEach(element => element.style.opacity = "0")
-    signIn.forEach(element => element.style.opacity = "1")
-    signUp.forEach(element => element.style["pointer-events"] = "none")
-    signIn.forEach(element => element.style["pointer-events"] = "visible")
+  isignIn.innerHTML = 'Login'
+  btnSignIn.innerHTML = 'Login'
+  noaccLink.innerHTML = 'Sign Up'
+  noaccLink.removeEventListener('click', onHasaccLink)
+  noaccLink.addEventListener('click', onNoaccLink)
+  btnSignIn.removeEventListener('click', onBtnSignUp)
+  btnSignIn.addEventListener('click', onBtnSignIn)
 }
 
 function clearMenuOfAuth(){
@@ -113,8 +111,15 @@ function onSignIn(){
   clearMenuOfAuth()
   showMainPage()
   }
-
-
+  let msg = ''
+  function outputFormError(msg){
+      msg = msg.slice(10, msg.length)
+      msg = msg.slice(0, msg.indexOf('.'))
+      lblErrorOutput.innerHTML = msg
+      authMenu.forEach(element => element.style.border = '1px solid red')
+      setTimeout(function(){lblErrorOutput.innerHTML = ''; 
+      authMenu.forEach(element => element.style.border = 'none')}, 3000)
+  }
 
 //--- --- --- --- --- ---  Главная --- --- --- --- --- --- --- ---
 
@@ -213,7 +218,6 @@ if (width > 1100) {
   contentBlock.style.height = 'calc(100% - var(--headerHeight) - 6%)'
   navigationPanel.style["margin-left"] = '0px'
   navigationPanel.style.width = width - width * 0.15
-
   NavPanelBtns.forEach(element => element.style.font = '24px "Fira Sans", sans-serif')
   NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black')
   labelUnity.innerHTML = ' '
@@ -233,13 +237,9 @@ contentBlock.style.height = height - 65 - height * 0.02
 mobileNavPanel.style.opacity = '1'
 mobileNavPanel.style["pointer-events"] = 'visible'
 
-
-
-
+}
 }
 
-
-}
 
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
 
@@ -275,6 +275,7 @@ firebase.auth().createUserWithEmailAndPassword(email, password)
   .catch((error) => {
     var errorCode = error.code;
     var errorMessage = error.message;
+    outputFormError(errorMessage)
     // ..
   });
 
@@ -293,6 +294,7 @@ function onBtnSignIn(event){
     .catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
+      outputFormError(errorMessage)
     });
 }
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
