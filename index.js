@@ -69,6 +69,23 @@ const tournamentReqLabelInfo = document.getElementById('tournamentReqLabelInfo')
 const tournamentCupInfo = document.getElementById('tournamentCupInfo');
 const tournamentLikeBtn = Array.from(document.getElementsByClassName('tournamentLikeBtn'));
 const lockbg = document.getElementById('lockbg');
+const crossIcononCreate = document.getElementById('crossIcononCreate')
+const prewPageTurn = document.getElementById('prewPageTurn')
+const nextPagTurn = document.getElementById('nextPagTurn')
+const tournamentCreatePanel = document.getElementById('tournamentCreatePanel')
+const tournamentRequirementsLblAtCreatePanel = document.getElementById('tournamentRequirementsLblAtCreatePanel')
+const tournamentDescriptionTextAreaAtCreatePanel = document.getElementById('tournamentDescriptionTextAreaAtCreatePanel')
+const creatingTournamentLbl = document.getElementById('creatingTournamentLbl')
+const tournamentCreateBtn = document.getElementById('tournamentCreateBtn')
+const tournamentNameInputAtCreatePanel = document.getElementById('tournamentNameInputAtCreatePanel')
+const tournamentMaxMembersInputAtCreatePanel = document.getElementById('tournamentMaxMembersInputAtCreatePanel')
+const tournamentOpenedTypeInputAtCreatePanel = document.getElementById('tournamentOpenedTypeInputAtCreatePanel')
+const tournamentInvitedTypeInputAtCreatePanel = document.getElementById('tournamentInvitedTypeInputAtCreatePanel')
+const tournamentClosedTypeInputAtCreatePanel = document.getElementById('tournamentClosedTypeInputAtCreatePanel')
+const tournamentTargetsBlockAtCreatePanel = document.getElementById('tournamentTargetsBlockAtCreatePanel')
+const tournamentRequirementsBlockAtCreatePanel = document.getElementById('tournamentRequirementsBlockAtCreatePanel')
+let tournamentRequirementsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentRequirementsInputAtCreatePanel'))
+let tournamentTargetsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))
 let tournamentNameBlock = document.getElementById('tournamentNameBlock');
 let tournamentDescriptionBlock = document.getElementById('tournamentDescriptionBlock');
 let tournamentTypeBlock = document.getElementById('tournamentTypeBlock');
@@ -79,9 +96,10 @@ let tournamentType = Array.from(document.getElementsByClassName('tournamentTypeB
 let tournamentMaxMembers = Array.from(document.getElementsByClassName('tournamentMaxMembers'));
 let tournament = Array.from(document.getElementsByClassName('tournament'));
 let tournamentGoalsLabelInfo = document.getElementById('tournamentGoalsLabelInfo');
+let trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'))
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile];
 const mobileNavPanelBtns = [btnMobHome, btnMobFav, btnMobData, btnMobStat, btnMobProf];
-let password, email, width, height, temporaryElementsTI;
+let password, email, width, height, temporaryElementsTI, isMobileVersion
 inptUsername.addEventListener('click', onClearError);
 inptPassword.addEventListener('click', onClearError);
 btnHome.addEventListener('click', onbtnHome);
@@ -96,7 +114,13 @@ btnMobData.addEventListener('click', onbtnData);
 btnMobStat.addEventListener('click', onbtnStatistics);
 btnMobProf.addEventListener('click', onProfile);
 createTournament.addEventListener('click', onCreateTournament);
+prewPageTurn.addEventListener('click', onPrewPageTurn)
+nextPagTurn.addEventListener('click', onNextPagTurn)
 crossIcon.addEventListener('click', onCrossTournamentInfo);
+crossIcononCreate.addEventListener('click', oncrossIcononCreate)
+tournamentTargetsInputAtCreatePanel[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel)
+tournamentRequirementsInputAtCreatePanel[0].addEventListener('input', ontournamentRequirementsInputAtCreatePanel)
+tournamentCreateBtn.addEventListener('click', onTournamentCreateBtn)
 
 
 width = window.innerWidth;
@@ -113,6 +137,23 @@ function onresize() {
 }
 
 window.addEventListener("resize", onresize);
+
+getMobileOperatingSystem()
+function getMobileOperatingSystem() {
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  if (/windows phone/i.test(userAgent)) {
+      return console.log("Windows Phone");
+  }
+
+  if (/android/i.test(userAgent)) {
+      return  console.log("Android");
+  }
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      return  console.log("iOS");
+  }
+
+  return console.log("unknown");
+}
 
 //  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
 
@@ -149,8 +190,9 @@ function showMainPage() {
   mainBlock.style["pointer-events"] = "visible";
   getFirebaseData();
 }
+let login
 function getNickName() {
-  let login = email;
+  login = email;
   login = email[0].toUpperCase() + email.slice(1, email.indexOf('@')).toLowerCase();
   if (login.length > 10) { login = login.slice(0, login.length); }
   nickForLabel.innerHTML = login;
@@ -177,7 +219,9 @@ function onClearError() {
 
 //--- --- --- --- --- ---  Главная --- --- --- --- --- --- --- ---
 let firebaseTornemnts = [];
+let homePagesNum = 1
 function getFirebaseData() {
+  firebaseTornemnts = []
   blackout.style.display = 'block';
   db.collection("global_tournaments").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
@@ -186,33 +230,68 @@ function getFirebaseData() {
     });
   }).then(() => onbtnHome());
 }
+let yNums
 function onbtnHome(event) {
   blackout.style.display = 'none';
   let contentBlockHeight = contentBlock.offsetHeight;
-  let heightTrn = 150;
-  let yNums = Math.floor(contentBlockHeight / heightTrn);
+  let heightTrn = 127;
+  yNums = Math.floor((contentBlockHeight - 50) / heightTrn);
   let k = 0;
   clearMenu();
   btnHome.removeEventListener('click', onbtnHome);
   btnHome.style["border-bottom"] = '2px solid black';
   btnHome.style.color = 'black';
   btnMobHome.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
-  contentBlock.insertAdjacentHTML('beforeend', '<div id="footerPanel"><button id="createTournament" style="display: none;">Create</button></div><div id="tournamentsPanel"></div>');
-  const tournamentsPanel = document.getElementById('tournamentsPanel');
+  contentBlock.insertAdjacentHTML('beforeend', `<div id="footerPanel"><button id="createTournament">
+  <img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
+  <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
+  <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button></div>
+  <div id="tournamentsPanel"></div>
+  `);
+  let tournamentsPanel = document.getElementById('tournamentsPanel');
+  const prewPageTurn = document.getElementById('prewPageTurn')
+  const nextPagTurn = document.getElementById('nextPagTurn')
   const createTournament = document.getElementById('createTournament');
+  prewPageTurn.addEventListener('click', onPrewPageTurn)
+nextPagTurn.addEventListener('click', onNextPagTurn)
   createTournament.addEventListener('click', onCreateTournament);
   k = firebaseTornemnts.length;
   console.log(k);
-  if (k < yNums) {
-    for (let i = 0; i < k; i++) {
-      tournamentsPanel.insertAdjacentHTML('beforeend', `<div class="tournament" >               
-            <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${firebaseTornemnts[i].name}</label></div>
-            <div id="tournamentDescriptionBlock"><label class="tournamentDescription" for="tournamentDescription">${firebaseTornemnts[i].description}</label></div>
-            <div id="tournamentTypeBlock"><label class="tournamentType" for="tournamentType">type: ${firebaseTornemnts[i].type}</label></div>
-            <div id="tournamentMaxMembersBlock"><label class="tournamentMaxMembers" for="tournamentMaxMembers">${firebaseTornemnts[i].curr_members} / ${firebaseTornemnts[i].max_members}</label></div>
-            <div class="heart-like-button tournamentLikeBtn"></div></div>`);
-    }
-  } else { console.log((k - yNums) / yNums); }
+
+  if (k > yNums) {
+    homePagesNum = Math.floor(firebaseTornemnts.length / yNums)
+    k = yNums;
+  } 
+  showTournaments(0, k)
+
+  tournament = Array.from(document.getElementsByClassName('tournament'));
+  tournamentNameBlock = document.getElementById('tournamentNameBlock');
+  tournamentDescriptionBlock = document.getElementById('tournamentDescriptionBlock');
+  tournamentTypeBlock = document.getElementById('tournamentTypeBlock');
+  tournamentMaxMembersBlock = document.getElementById('tournamentMaxMembersBlock');
+  tournamentName = Array.from(document.getElementsByClassName('tournamentName'));
+  tournamentDescription = Array.from(document.getElementsByClassName('tournamentDescriptionBlock'));
+  tournamentType = Array.from(document.getElementsByClassName('tournamentTypeBlock'));
+  tournamentMaxMembers = Array.from(document.getElementsByClassName('tournamentMaxMembers'));
+  tournament.forEach(element => element.addEventListener('click', onTournament));
+  checkAspectRatio();
+}
+let lastShowedTrnNum
+function showTournaments(from, to){
+  lastShowedTrnNum = to
+  let tournamentsPanel = document.getElementById('tournamentsPanel');
+  
+  while (tournamentsPanel.firstChild) {
+    tournamentsPanel.removeChild(tournamentsPanel.firstChild);
+  }
+  for (let i = from; i < to; i++) {
+    tournamentsPanel.insertAdjacentHTML('beforeend', `<div class="tournament" >               
+          <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${firebaseTornemnts[i].name}</label></div>
+          <div id="tournamentDescriptionBlock"><label class="tournamentDescription" for="tournamentDescription">${firebaseTornemnts[i].description}</label></div>
+          <div id="tournamentTypeBlock"><label class="tournamentType" for="tournamentType">type: ${firebaseTornemnts[i].type}</label></div>
+          <div id="tournamentMaxMembersBlock"><label class="tournamentMaxMembers" for="tournamentMaxMembers">${firebaseTornemnts[i].curr_members} / ${firebaseTornemnts[i].max_members}</label></div>
+          <div class="heart-like-button tournamentLikeBtn"></div></div>`);
+  }
   tournament = Array.from(document.getElementsByClassName('tournament'));
   tournamentNameBlock = document.getElementById('tournamentNameBlock');
   tournamentDescriptionBlock = document.getElementById('tournamentDescriptionBlock');
@@ -254,7 +333,7 @@ function onTournament(event) {
     tournamentReqLabelInfo.style.display = 'block';
     tournamentBtnsInfo.style.display = 'block';
   }
-  if (firebaseTornemnts[num].targets[0] !== "") {
+  if (firebaseTornemnts[num].targets[0] !== "" && firebaseTornemnts[num].targets.length !== 0) {
     for (let i = 0; i < firebaseTornemnts[num].targets.length; i++) {
       tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li class="temporaryElementsTI tournamentGoalsInfo">${firebaseTornemnts[num].targets[i]}</li>`);
     }
@@ -263,14 +342,14 @@ function onTournament(event) {
     `<li class="temporaryElementsTI" id="id="tournamentAdminInfo"><img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"> ${firebaseTornemnts[num].administrator}</li>`);
   let membersNums;
   firebaseTornemnts[num].participants.length > 5 ? membersNums = 5 : membersNums = firebaseTornemnts[num].participants.length;
-  if (firebaseTornemnts[num].participants[0] !== "") {
+  if (firebaseTornemnts[num].participants[0] !== "" && firebaseTornemnts[num].participants.length !== 0) {
     for (let i = 0; i < membersNums; i++) {
       tournamentMembersLabelInfo.insertAdjacentHTML('afterend', `<li class="temporaryElementsTI tournamentParticipantsInfo">
       <img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"
        style="margin-left: 20px; margin-top: 5px;"> ${firebaseTornemnts[num].participants[i]}<br>`);
     }
   } else { tournamentMembersLabelInfo.insertAdjacentHTML('afterend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no participants :(</li>`); }
-  if (firebaseTornemnts[num].requirements[0] !== "") {
+  if (firebaseTornemnts[num].requirements[0] !== "" && firebaseTornemnts[num].requirements.length !== 0) {
     for (let i = 0; i < firebaseTornemnts[num].requirements.length; i++) {
       tournamentReqLabelInfo.insertAdjacentHTML('afterend', `<li class="temporaryElementsTI tournamentReqsInfo">${firebaseTornemnts[num].requirements[i]}</li>`);
     }
@@ -278,6 +357,7 @@ function onTournament(event) {
   temporaryElementsTI = Array.from(document.getElementsByClassName('temporaryElementsTI'));
   checkAspectRatio();
 }
+
 function onCrossTournamentInfo(event) {
   mainBlock.style.display = 'block';
   tournamentInfo.style.display = 'none';
@@ -287,6 +367,82 @@ function onCrossTournamentInfo(event) {
   }
   checkAspectRatio();
 }
+let canMakeNewTarg = true
+function ontournamentTargetsInputAtCreatePanel(event){
+  if (canMakeNewTarg){
+    tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length-1].removeEventListener('input', ontournamentTargetsInputAtCreatePanel)
+    tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length-1].insertAdjacentHTML('afterend', ' <input type="text" class="trnCrtPanel tournamentTargetsInputAtCreatePanel"><br>')
+    tournamentTargetsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))
+    trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'))
+    tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length-1].addEventListener('input', ontournamentTargetsInputAtCreatePanel)
+    if (isMobileVersion){
+      tournamentRequirementsLblAtCreatePanel.style["margin-top"] = (-20 * (tournamentTargetsInputAtCreatePanel.length-1))
+      tournamentDescriptionTextAreaAtCreatePanel.style["margin-top"] = 225 - (48 * (tournamentRequirementsInputAtCreatePanel.length-1) + 28 * (tournamentTargetsInputAtCreatePanel.length-1))
+
+    } else {
+      tournamentRequirementsLblAtCreatePanel.style["margin-top"] = -130 - (68 * (tournamentTargetsInputAtCreatePanel.length-1))
+    }
+    checkAspectRatio();
+  }
+  canMakeNewTarg =  (tournamentTargetsInputAtCreatePanel.length == 1) || (tournamentTargetsInputAtCreatePanel.length < 5) && (tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length-2].value !== "")
+}
+let canMakeNewReq = true
+function ontournamentRequirementsInputAtCreatePanel(event){
+  if (canMakeNewReq){
+    tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length-1].removeEventListener('input', ontournamentRequirementsInputAtCreatePanel)
+    tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length-1].insertAdjacentHTML('afterend', ' <input type="text" class ="trnCrtPanel tournamentRequirementsInputAtCreatePanel"><br>')
+    tournamentRequirementsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentRequirementsInputAtCreatePanel'))
+    trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'))
+    tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length-1].addEventListener('input', ontournamentRequirementsInputAtCreatePanel)
+    tournamentDescriptionTextAreaAtCreatePanel.style["margin-top"] = (!isMobileVersion)
+     ? 250 - (68 * (tournamentRequirementsInputAtCreatePanel.length-1)) : 225 - (48 * (tournamentRequirementsInputAtCreatePanel.length-1) + 28 * (tournamentTargetsInputAtCreatePanel.length-1));
+    checkAspectRatio();
+  }
+  canMakeNewReq = (tournamentRequirementsInputAtCreatePanel.length == 1) || (tournamentRequirementsInputAtCreatePanel.length < 5) && (tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length-2].value !== "") 
+}
+function onTournamentCreateBtn(){
+  if ((tournamentNameInputAtCreatePanel.value == "")){
+    outputMessege('Enter Tournament Name')
+  } else if (tournamentMaxMembersInputAtCreatePanel.value == ""){
+    outputMessege('Enter Tournament Max Participants')
+  } else if ((tournamentOpenedTypeInputAtCreatePanel.checked == false) && 
+    (tournamentInvitedTypeInputAtCreatePanel.checked == false) && 
+    (tournamentClosedTypeInputAtCreatePanel.checked == false)){
+    outputMessege('Enter Tournament Type')
+  } else {
+    let trnTargets = []
+     tournamentTargetsInputAtCreatePanel.forEach(element => trnTargets.push(element.value))
+     trnTargets.pop()
+    let trnRequirements = []
+    tournamentRequirementsInputAtCreatePanel.forEach(element => trnRequirements.push(element.value))
+    trnRequirements.pop()
+    let trnType
+    if (tournamentClosedTypeInputAtCreatePanel.checked){
+      trnType = "closed"
+    } else if (tournamentInvitedTypeInputAtCreatePanel.checked){
+      trnType = "invited"
+    } else {trnType = "opened"}
+    db.collection("global_tournaments").add({
+      name: tournamentNameInputAtCreatePanel.value,
+      targets: trnTargets,
+      requirements: trnRequirements,
+      description: tournamentDescriptionTextAreaAtCreatePanel.value,
+      max_members: tournamentMaxMembersInputAtCreatePanel.value,
+      type: trnType,
+      curr_members: 1,
+      administrator: login,
+      participants: ""
+  })
+  .then((docRef) => {
+    getFirebaseData()
+    oncrossIcononCreate()
+  })
+  .catch((error) => {
+      console.error("Error adding document: ", error);
+  });
+  }
+}
+
 function newPageHome() {
   // k more tournaments we need to render
   // console.log(Math.ceil(k / yNums) + ' more new page created')
@@ -339,6 +495,8 @@ function clearMenu() {
   profile.style["background-color"] = 'transparent';
   mobileNavPanelBtns.forEach(element => element.parentElement.style["background-color"] = 'transparent');
   createTournament.removeEventListener('click', onCreateTournament);
+  prewPageTurn.removeEventListener('click', onPrewPageTurn)
+nextPagTurn.removeEventListener('click', onNextPagTurn)
   btnHome.addEventListener('click', onbtnHome);
   btnFavorites.addEventListener('click', onbtnFavorites);
   btnData.addEventListener('click', onbtnData);
@@ -391,6 +549,7 @@ function checkAspectRatio() {
   <label class="tileLbl" id="tileLbl2" for="tileLbl"><b>Competition</b></label>
   <label class="tileLbl" id="tileLbl3" for="tileLbl"><b>Table</b></label>
   <label class="tileLbl" id="tileLbl4" for="tileLbl">by Droxus corporation</label>`;
+    extendedVersion()
   } else if (width > 600) {
     root.style.setProperty('--headerHeight', '100px');
     root.style.setProperty('--profile-width', '15%');
@@ -423,6 +582,8 @@ function checkAspectRatio() {
     tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
     tournamentAdminLabelInfo.innerText = 'ADMINISTRATOR';
     tournamentReqInfo.style.width = '50%';
+    halfMobileVersion()
+
   } else {
     root.style.setProperty('--headerHeight', '65px');
     root.style.setProperty('--like-btn-size-scale', '0.25');
@@ -448,6 +609,7 @@ function checkAspectRatio() {
     tournamentReqInfo.style["font-size"] = '16px';
     tournamentReqLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
     tournamentGoalsLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
+    mobileVersion()
   }
   dataEnterSqr.style["margin-top"] = (height - 650) / 2;
   root.style.setProperty('--footerPanel-MarginTop', `${contentBlock.offsetHeight - 52}`);
@@ -462,8 +624,72 @@ function checkAspectRatio() {
   lockbg.style["margin-left"] = (tournamentInfo.offsetWidth - 900) / 2;
   lockbg.style["margin-top"] = tournamentInfo.offsetHeight / -2;
 }
+function mobileVersion(){
+  isMobileVersion = true
+  trnCrtPanel.forEach(element => element.setAttribute('aspect-ratio', 'mobile'))
+}
+function halfMobileVersion(){
+  isMobileVersion = true
+  trnCrtPanel.forEach(element => element.setAttribute('aspect-ratio', 'mobile'))
+}
+function extendedVersion(){
+  isMobileVersion = false
+  trnCrtPanel.forEach(element => element.setAttribute('aspect-ratio', 'extended'))
+}
+
 function onCreateTournament(event) {
-  console.log('aaa');
+  tournamentCreatePanel.style.display = 'block'
+  mainBlock.style.display = 'none'
+}
+function onPrewPageTurn(event){
+  let firstTrn
+  if (lastShowedTrnNum - 2 * yNums < 0){
+    firstTrn = 0
+  } else {firstTrn = lastShowedTrnNum - 2 * yNums}
+  showTournaments(firstTrn, (lastShowedTrnNum - yNums))
+  console.log('Prew Page')
+}
+function onNextPagTurn(event){
+  showTournaments(lastShowedTrnNum, (lastShowedTrnNum + yNums))
+  console.log('Next Page')
+}
+function oncrossIcononCreate(event){
+  tournamentCreatePanel.style.display = 'none'
+  mainBlock.style.display = 'block'
+  tournamentNameInputAtCreatePanel.value = ""
+  tournamentDescriptionTextAreaAtCreatePanel.value = ""
+  tournamentMaxMembersInputAtCreatePanel.value = ""
+  tournamentOpenedTypeInputAtCreatePanel.checked = false
+  tournamentInvitedTypeInputAtCreatePanel.checked = false
+  tournamentClosedTypeInputAtCreatePanel.checked = false
+    while (tournamentTargetsBlockAtCreatePanel.firstChild) {
+      tournamentTargetsBlockAtCreatePanel.removeChild(tournamentTargetsBlockAtCreatePanel.firstChild);
+    }
+    while (tournamentRequirementsBlockAtCreatePanel.firstChild) {
+      tournamentRequirementsBlockAtCreatePanel.removeChild(tournamentRequirementsBlockAtCreatePanel.firstChild);
+    }
+  tournamentTargetsBlockAtCreatePanel.insertAdjacentHTML('beforeend', '<input type="text" class="trnCrtPanel tournamentTargetsInputAtCreatePanel"><br>')
+  tournamentRequirementsBlockAtCreatePanel.insertAdjacentHTML('beforeend', ' <input type="text" class ="trnCrtPanel tournamentRequirementsInputAtCreatePanel"><br>')
+  tournamentRequirementsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentRequirementsInputAtCreatePanel'))
+  tournamentTargetsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))
+  trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'))
+  tournamentTargetsInputAtCreatePanel[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel)
+tournamentRequirementsInputAtCreatePanel[0].addEventListener('input', ontournamentRequirementsInputAtCreatePanel)
+  tournamentRequirementsLblAtCreatePanel.style["margin-top"] = isMobileVersion ? 0 : -125
+  tournamentDescriptionTextAreaAtCreatePanel.style["margin-top"] = isMobileVersion ? 225 : 250
+  checkAspectRatio()
+}
+function outputMessege(msg){
+  blackout.style.display = 'block'
+  blackout.insertAdjacentHTML('beforeend', `<label style="margin-left:
+   ${(width - msg.length * 14) / 2}" id="outputMsgLbl">${msg}</label><button
+    id="outputMsgBtn">OK</button>`)
+    let outputMsgBtn = document.getElementById('outputMsgBtn')
+    outputMsgBtn.addEventListener('click', () => {outputMsgBtn.removeEventListener
+      blackout.removeChild(blackout.firstChild)
+      blackout.removeChild(blackout.firstChild)
+      blackout.style.display = 'none'
+    })
 }
 
 

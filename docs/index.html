@@ -42,7 +42,9 @@
         </div>
         <div class="contentBlock" id="contentBlock">
             <div id="footerPanel">
-                <button id="createTournament" style="display: none;"></button>
+                <button id="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
+                <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
+                <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
             </div>
             <div id="tournamentsPanel">
                 <div id="tournamentNameBlock"> <label id="tournamentName" for="tournamentName"></label></div>
@@ -84,6 +86,33 @@
         <img src="img/cup.png" alt="cup" id="tournamentCupInfo">
         <img src="img/lock.jpg" alt="lock" id="lockbg">
     </div>
+        <div id="tournamentCreatePanel">
+            <img src="img/crossIcon.svg" alt="cross" id="crossIcononCreate">
+            <label class="trnCrtPanel" for="creatingTournament" id="creatingTournamentLbl">Creating Tournament</label>
+            <input class="trnCrtPanel" type="text" id="tournamentNameInputAtCreatePanel" maxlength="30" placeholder="Tournament Name"><br>
+            <label class="trnCrtPanel" for="trnTargets" id="tournamentTargetsLblAtCreatePanel">Tartgets: </label><br>
+            <div id="tournamentTargetsBlockAtCreatePanel">  
+                <input type="text" class="trnCrtPanel tournamentTargetsInputAtCreatePanel"><br>
+            </div>
+            <label class="trnCrtPanel" for="trnRequirements" id="tournamentRequirementsLblAtCreatePanel">Requirements: </label><br>
+           <div id="tournamentRequirementsBlockAtCreatePanel">
+               <input type="text" class="trnCrtPanel tournamentRequirementsInputAtCreatePanel"><br>
+           </div>
+            <textarea class="trnCrtPanel" id="tournamentDescriptionTextAreaAtCreatePanel" name="tournamentDescriptionTextAreaAtCreatePanel"
+                cols="30" rows="3" maxlength="100" placeholder="write some short description"></textarea>
+            <input class="trnCrtPanel" type="text" id="tournamentMaxMembersInputAtCreatePanel" placeholder="Max Participants">
+            <form action="#" class="trnCrtPanel" id="tournamentTypeInputAtCreatePanel">
+                <fieldset form="tournamentTypeInputAtCreatePanel">
+                    <input class="trnCrtPanel" type="radio" id="tournamentOpenedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
+                    <label for="opened">Opened</label><br>
+                    <input class="trnCrtPanel" type="radio" id="tournamentInvitedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
+                    <label for="invited">Invited</label><br>
+                    <input class="trnCrtPanel" type="radio" id="tournamentClosedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
+                    <label for="closed">Closed</label>
+                </fieldset>
+            </form>
+            <button class="trnCrtPanel btn-grad" id="tournamentCreateBtn">Create</button>
+        </div>
     <div id="blackout"></div>
 </body>
 

@@ -135,6 +135,10 @@ body {
 
 }
 
+#noRegBlock {
+    display: none;
+}
+
 #mainBlock {
     pointer-events: none;
     opacity: 0;
@@ -435,7 +439,7 @@ li a:hover {
 #blackout {
     position: fixed;
     display: none;
-    z-index: 10;
+    z-index: 999;
     left: 0;
     top: 0;
     width: 100%;
@@ -702,4 +706,289 @@ ul {
     margin-top: -25%;
     margin-left: 20%;
     opacity: 0.1;
+}
+
+#createTournament {
+    background-color: transparent;
+    border: none;
+    margin-left: 20%;
+    margin-top: 5px;
+}
+
+#createTrnIcon {
+    width: 40px;
+    height: 40px;
+}
+#prewPageTurn{
+    background-color: transparent;
+    border: none;
+    margin-left: 20%;
+    margin-top: 5px;
+}
+#prewPageIcon {
+    width: 40px;
+    height: 40px;
+}
+#nextPagTurn{
+    background-color: transparent;
+    border: none;
+    margin-left: 10%;
+    margin-top: 5px;
+}
+#nextPageIcon {
+    width: 40px;
+    height: 40px;
+}
+#tournamentCreatePanels {
+    display: none;
+}
+
+#tournamentCreatePanel {
+    position: fixed;
+    display: none;
+    z-index: 11;
+    left: 3%;
+    top: 3%;
+    height: 94%;
+    width: 94%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid white;
+    border-radius: 5%;
+}
+
+#crossIcononCreate {
+    width: 48px;
+    margin-left: calc(98% - 48px);
+    margin-top: 2%;
+}
+
+#creatingTournamentLbl {
+    position: relative;
+    display: block;
+    font-size: 42px;
+    margin-top: -20px;
+    margin-left: 150px;
+    width: 500px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-family: Cursive;
+}
+
+#tournamentNameInputAtCreatePanel {
+    position: relative;
+    display: block;
+    margin-left: 100px;
+    margin-top: 75px;
+    width: 35%;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid rgb(119, 98, 212);
+    font-size: 28px;
+}
+
+#tournamentTargetsLblAtCreatePanel {
+    position: relative;
+    display: block;
+    font-size: 28px;
+    margin-top: 25px;
+    margin-left: 100px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    font-family: Cursive;
+}
+
+.tournamentTargetsInputAtCreatePanel {
+    position: relative;
+    display: flex;
+    height: 50px;
+    margin-left: 100px;
+    width: 30%;
+    outline: none;
+    background-color: transparent;
+    border: 2px solid rgb(119, 98, 212);
+    border-top: none;
+    font-size: 24px;
+}
+
+#tournamentRequirementsLblAtCreatePanel {
+    position: relative;
+    display: block;
+    font-size: 28px;
+    margin-top: -125px;
+    margin-left: calc(70% - 100px);
+    letter-spacing: 1px;
+    font-weight: bold;
+    font-family: Cursive;
+}
+
+.tournamentRequirementsInputAtCreatePanel {
+    position: relative;
+    display: flex;
+    height: 50px;
+    margin-left: calc(70% - 100px);
+    width: 30%;
+    outline: none;
+    background-color: transparent;
+    border: 2px solid rgb(119, 98, 212);
+    border-top: none;
+    font-size: 24px;
+}
+
+#tournamentDescriptionTextAreaAtCreatePanel {
+    position: relative;
+    display: flex;
+    resize: none;
+    height: 150px;
+    width: 40%;
+    margin-top: 250px;
+    margin-left: 100px;
+    outline: none;
+    font-size: 24px;
+    background-color: transparent;
+    border: 2px solid rgb(119, 98, 212);
+}
+
+#tournamentMaxMembersInputAtCreatePanel {
+    position: relative;
+    display: flex;
+    margin-left: calc(100% - 295px);
+    margin-top: -150px;
+    width: 200px;
+    height: 50px;
+    outline: none;
+    background-color: transparent;
+    border: 2px solid rgb(119, 98, 212);
+    border-radius: 10px;
+    font-size: 24px;
+
+}
+
+#tournamentTypeInputAtCreatePanel {
+    position: relative;
+    display: flex;
+    margin-left: calc(100% - 540px);
+    margin-top: -65px;
+    font-size: 28px;
+    border: none;
+    outline: none;
+    width: 200px;
+}
+
+#tournamentTypeInputAtCreatePanel fieldset {
+    border: none;
+}
+
+#tournamentTypeInputAtCreatePanel fieldset input {
+    margin-top: 25px;
+}
+
+#tournamentCreateBtn {
+    margin-left: calc(100% - 310px);
+    margin-top: -80px;
+    padding: 15px 80px;
+    background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
+}
+#creatingTournamentLbl[aspect-ratio='mobile'] {
+    position: relative;
+    display: block;
+    font-size: 24px;
+    margin-left: 15px;
+    margin-top: -40px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    font-family: Cursive;
+    width: 275px;
+}
+
+#tournamentNameInputAtCreatePanel[aspect-ratio='mobile'] {
+    position: relative;
+    display: block;
+    margin-left: 10%;
+    margin-top: 25px;
+    width: 80%;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid rgb(119, 98, 212);
+    font-size: 20px;
+}
+
+#tournamentTargetsLblAtCreatePanel[aspect-ratio='mobile'] {
+    position: relative;
+    display: block;
+    font-size: 20px;
+    margin-top: 0px;
+    margin-left: calc((100% - 110px) / 2);
+    letter-spacing: 1px;
+    font-weight: bold;
+    font-family: Cursive;
+}
+
+.tournamentTargetsInputAtCreatePanel[aspect-ratio='mobile'] {
+    margin-left: 10%;
+    width: 80%;
+    height: 30px;
+    font-size: 20px;
+}
+
+#tournamentRequirementsLblAtCreatePanel[aspect-ratio='mobile'] {
+    font-size: 20px;
+    margin-top: 0px;
+    margin-left: calc((100% - 150px) / 2);
+    letter-spacing: 1px;
+}
+
+.tournamentRequirementsInputAtCreatePanel[aspect-ratio='mobile'] {
+    height: 30px;
+    margin-left: 10%;
+    width: 80%;
+    font-size: 20px;
+}
+
+#tournamentDescriptionTextAreaAtCreatePanel[aspect-ratio='mobile'] {
+    height: 50px;
+    width: 80%;
+    margin-top: 225px;
+    margin-left: 10%;
+    font-size: 16px;
+}
+#tournamentMaxMembersInputAtCreatePanel[aspect-ratio='mobile'] {
+    margin-left: calc(90% - 150px);
+    margin-top: 10px;
+    width: 150px;
+    height: 30px;
+    font-size: 18px;
+}
+
+#tournamentTypeInputAtCreatePanel[aspect-ratio='mobile'] {
+    margin-left: 5%;
+    margin-top: -40px;
+    font-size: 18px;
+    width: 125px;
+}
+#tournamentTypeInputAtCreatePanel fieldset input[aspect-ratio='mobile'] {
+    margin-top: 10px;
+}
+#tournamentCreateBtn[aspect-ratio='mobile'] {
+    margin-left: calc(90% - 140px);
+    margin-top: -65px;
+    padding: 10px 40px;
+}
+#outputMsgLbl{
+    display: block;
+    position: relative;
+    margin-top: 30%;
+    max-width: 80%;
+    font-size: 28px;
+    color: white;
+}
+#outputMsgBtn{
+    position: relative;
+    margin-top: 50px;
+    margin-left: 40%;
+    width: 20%;
+    background-color: transparent;
+    font-size: 36px;
+    color: white;
 }
