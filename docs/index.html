@@ -5,14 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Online-Competition-Table</title>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
+    <title>Butula</title>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css"/>
 <script defer src="bundle.js"></script></head>
 
 <body>
 
     <div id="mainBlock">
         <div class="headerBlock" id="headerBlock">
+            <div class="labelUnity" id="labelUnity">
+                <label class="tileLbl" id="tileLbl1" for="tileLbl"><b>Butula</b></label>
+                <label class="tileLbl" id="tileLbl4" for="tileLbl">by Droxus corporation</label>
+            </div>
             <ul class="navigationPanel" id="navigationPanel">
                 <li><a href="#" id="btnHome">Home</a></li>
                 <li><a href="#" id="btnFavorites">Favorites</a></li>
@@ -26,26 +30,9 @@
                 <label id="ID" for="ID">ID:</label>
                 <label id="eMail" for="eMail">e-mail</label>
             </div>
-            <div class="labelUnity" id="labelUnity">
-                <label class="tileLbl" id="tileLbl1" for="tileLbl"><b>Online</b></label>
-                <label class="tileLbl" id="tileLbl2" for="tileLbl"><b>Competition</b></label>
-                <label class="tileLbl" id="tileLbl3" for="tileLbl"><b>Table</b></label>
-                <label class="tileLbl" id="tileLbl4" for="tileLbl">by Droxus corporation</label>
-            </div>
-            <ul class="mobileNavPanel" id="mobileNavPanel">
-                <li><img src="img/homeIcon.png" alt="btnMobHome" id="btnMobHome"></li>
-                <li><img src="img/FavIcon.png" alt="btnMobFav" id="btnMobFav"></li>
-                <li><img src="img/DataIcon.png" alt="btnMobData" id="btnMobData"></li>
-                <li><img src="img/statisticIcon.png" alt="btnMobStat" id="btnMobStat"></li>
-                <li><img src="img/userIcon.png" alt="btnMobProf" id="btnMobProf"></li>
-            </ul>
         </div>
         <div class="contentBlock" id="contentBlock">
-            <div id="footerPanel">
-                <button id="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
-                <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
-                <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
-            </div>
+            
             <div id="tournamentsPanel">
                 <div id="tournamentNameBlock"> <label id="tournamentName" for="tournamentName"></label></div>
                 <div id="tournamentDescriptionBlock"><label id="tournamentDescription"
@@ -54,9 +41,30 @@
                 <div id="tournamentMaxMembersBlock"><label id="tournamentMaxMembers" for="tournamentMaxMembers"></label>
                 </div>
             </div>
+            <div id="footerPanel">
+                <button id="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
+                <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
+                <label for="pageNumLbl" id="pageNumLbl">1</label>
+                <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
+                <select name="numsOfTrnsOnthePage" id="numsOfTrnsOnthePage">
+                    <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
+                    <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
+                    <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
+                    <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
+                    <option class="numsOfTrnsOnthePageOpt" selected="selected" value=""></option>
+                </select>
+                <!-- <button type="menu" id="trnNumsbtn"><img src="img/trnNumsIcon.png" alt="trnNumsIcon" id="trnNumsIcon"></button> -->
+            </div>
         </div>
+        <ul class="mobileNavPanel" id="mobileNavPanel">
+            <li><img src="img/homeIcon.png" alt="btnMobHome" id="btnMobHome"></li>
+            <li><img src="img/FavIcon.png" alt="btnMobFav" id="btnMobFav"></li>
+            <li><img src="img/DataIcon.png" alt="btnMobData" id="btnMobData"></li>
+            <li><img src="img/statisticIcon.png" alt="btnMobStat" id="btnMobStat"></li>
+            <li><img src="img/userIcon.png" alt="btnMobProf" id="btnMobProf"></li>
+        </ul>
     </div>
-    <div id="dataEnterSqr">
+    <div class="dataEnterSqr">
         <label id="isignIn" for="isignIn">Login</label>
         <label id="lblErrorOutput" for="ErrorOutput"></label>
         <input class="authMenu" id="inptUsername" type="text" name="nickname" autocomplete="on" maxlength="30"
@@ -86,33 +94,7 @@
         <img src="img/cup.png" alt="cup" id="tournamentCupInfo">
         <img src="img/lock.jpg" alt="lock" id="lockbg">
     </div>
-        <div id="tournamentCreatePanel">
-            <img src="img/crossIcon.svg" alt="cross" id="crossIcononCreate">
-            <label class="trnCrtPanel" for="creatingTournament" id="creatingTournamentLbl">Creating Tournament</label>
-            <input class="trnCrtPanel" type="text" id="tournamentNameInputAtCreatePanel" maxlength="30" placeholder="Tournament Name"><br>
-            <label class="trnCrtPanel" for="trnTargets" id="tournamentTargetsLblAtCreatePanel">Tartgets: </label><br>
-            <div id="tournamentTargetsBlockAtCreatePanel">  
-                <input type="text" class="trnCrtPanel tournamentTargetsInputAtCreatePanel"><br>
-            </div>
-            <label class="trnCrtPanel" for="trnRequirements" id="tournamentRequirementsLblAtCreatePanel">Requirements: </label><br>
-           <div id="tournamentRequirementsBlockAtCreatePanel">
-               <input type="text" class="trnCrtPanel tournamentRequirementsInputAtCreatePanel"><br>
-           </div>
-            <textarea class="trnCrtPanel" id="tournamentDescriptionTextAreaAtCreatePanel" name="tournamentDescriptionTextAreaAtCreatePanel"
-                cols="30" rows="3" maxlength="100" placeholder="write some short description"></textarea>
-            <input class="trnCrtPanel" type="text" id="tournamentMaxMembersInputAtCreatePanel" placeholder="Max Participants">
-            <form action="#" class="trnCrtPanel" id="tournamentTypeInputAtCreatePanel">
-                <fieldset form="tournamentTypeInputAtCreatePanel">
-                    <input class="trnCrtPanel" type="radio" id="tournamentOpenedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
-                    <label for="opened">Opened</label><br>
-                    <input class="trnCrtPanel" type="radio" id="tournamentInvitedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
-                    <label for="invited">Invited</label><br>
-                    <input class="trnCrtPanel" type="radio" id="tournamentClosedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
-                    <label for="closed">Closed</label>
-                </fieldset>
-            </form>
-            <button class="trnCrtPanel btn-grad" id="tournamentCreateBtn">Create</button>
-        </div>
+        <div id="tournamentCreatePanel"></div>
     <div id="blackout"></div>
 </body>
 
