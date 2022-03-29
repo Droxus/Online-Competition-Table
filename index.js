@@ -52,7 +52,6 @@ const btnMobProf = document.getElementById('btnMobProf');
 const lblErrorOutput = document.getElementById('lblErrorOutput');
 const createTournament = document.getElementById('createTournament');
 const footerPanel = document.getElementById('footerPanel');
-const tournamentsPanel = document.getElementById('tournamentsPanel');
 const blackout = document.getElementById('blackout');
 const tournamentInfo = document.getElementById('tournamentInfo');
 const crossIcon = document.getElementById('crossIcon');
@@ -75,6 +74,7 @@ const nextPagTurn = document.getElementById('nextPagTurn');
 const tournamentCreatePanel = document.getElementById('tournamentCreatePanel');
 let numsOfTrnsOnthePage = document.getElementById('numsOfTrnsOnthePage')
 let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'))
+let tournamentsPanel
 let typeMaxBtns;
 let secondMpage;
 let firstMpage;
@@ -228,6 +228,7 @@ function onClearError() {
 
 //--- --- --- --- --- ---  Главная --- --- --- --- --- --- --- ---
 let firebaseTornemnts = [];
+let from = 0;
 function getFirebaseData() {
   firebaseTornemnts = [];
   blackout.style.display = 'block';
@@ -266,10 +267,8 @@ function onbtnHome(event) {
                 let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'))
                 let numsOfTrnsOnthePage = document.getElementById('numsOfTrnsOnthePage')
                 numsOfTrnsOnthePage.addEventListener("change", onchangeTrnNumsOnPage)
-                
-                // numsOfTrnsOnthePageOpt.forEach(element => element.addEventListener('click', onchangeTrnNumsOnPage))
   pageNumLbl = document.getElementById('pageNumLbl');
-  let tournamentsPanel = document.getElementById('tournamentsPanel');
+  tournamentsPanel = document.getElementById('tournamentsPanel');
   const prewPageTurn = document.getElementById('prewPageTurn');
   const nextPagTurn = document.getElementById('nextPagTurn');
   const createTournament = document.getElementById('createTournament');
@@ -282,7 +281,7 @@ function onbtnHome(event) {
   if (k > tournamentsOnThePage) {
     k = tournamentsOnThePage;
   }
-  showTournaments(0);
+  showTournaments(from);
 
   tournament = Array.from(document.getElementsByClassName('tournament'));
   tournamentNameBlock = document.getElementById('tournamentNameBlock');
@@ -296,14 +295,14 @@ function onbtnHome(event) {
   onTournamentInfoBlock.forEach(element => element.addEventListener('click', onTournament));
   checkAspectRatio();
 }
-let to, from = 0;
+let to = 0;
 function showTournaments(from) {
   pageNumLbl.innerHTML = Math.floor(to / tournamentsOnThePage);
   if (from < 0) return from = 0;
   to = from + tournamentsOnThePage;
   if (to > firebaseTornemnts.length) { to = firebaseTornemnts.length; }
   // console.log(from, to);
-  let tournamentsPanel = document.getElementById('tournamentsPanel');
+  tournamentsPanel = document.getElementById('tournamentsPanel');
   while (tournamentsPanel.firstChild) {
     tournamentsPanel.removeChild(tournamentsPanel.firstChild);
   }
@@ -359,6 +358,7 @@ function onTournament(event) {
     tournamentReqLabelInfo.style.display = 'block';
     tournamentBtnsInfo.style.display = 'inline-flex';
   }
+  tournamentAdminLabelInfo.innerText = isMobileVersion ? 'ADMIN' : 'ADMINISTRATOR'
   if (firebaseTornemnts[num].targets[0] !== "" && firebaseTornemnts[num].targets.length !== 0) {
     for (let i = 0; i < firebaseTornemnts[num].targets.length; i++) {
       tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li class="temporaryElementsTI tournamentGoalsInfo">${firebaseTornemnts[num].targets[i]}</li>`);
@@ -535,10 +535,7 @@ function clearMenu() {
 checkAspectRatio();
 function checkAspectRatio() {
   if (width > 1100) {
-    mobileNavPanel.style.display = 'none';
-    headerBlock.style.display = 'flex';
     // NavPanelBtns.forEach(element => element.style.font = '32px "Fira Sans", sans-serif');
-    // NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black');
     profile["font-size"] = '24px';
     tournamentName.forEach(element => element.style["font-size"] = '28px');
     tournamentDescription.forEach(element => element.style["font-size"] = '18px');
@@ -547,19 +544,11 @@ function checkAspectRatio() {
     // tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
     // tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
     // tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
-    tournamentAdminLabelInfo.innerText = 'ADMINISTRATOR';
     tournamentReqInfo.style["font-size"] = '20px';
     // tournamentReqLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
     // tournamentGoalsLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
-    labelUnity.style.display = 'grid';
-    extendedVersion();
   } else if (width > 600) {
-    profile.style.display = 'grid';
-    mobileNavPanel.style.display = 'none';
-    headerBlock.style.display = 'flex';
     // NavPanelBtns.forEach(element => element.style.font = '24px "Fira Sans", sans-serif');
-    // NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black');
-    labelUnity.style.display = 'none';
     profile["font-size"] = '18px';
     tournamentName.forEach(element => element.style["font-size"] = '28px');
     tournamentDescription.forEach(element => element.style["font-size"] = '18px');
@@ -569,36 +558,21 @@ function checkAspectRatio() {
     // tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
     // tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
     // tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
-    tournamentAdminLabelInfo.innerText = 'ADMINISTRATOR';
-    halfMobileVersion();
 
   } else {
-    mobileNavPanel.style.display = 'flex';
-    labelUnity.style.display = 'none';
-    headerBlock.style.display = 'none';
     tournamentName.forEach(element => element.style["font-size"] = '24px');
     tournamentDescription.forEach(element => element.style["font-size"] = '14px');
     tournamentType.forEach(element => element.style["font-size"] = '12px');
     // tournamentMembersInfo.style.font = 'small-caps bold 17px/1 sans-serif';
     // tournamentAdminLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
     // tournamentMembersLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    tournamentAdminLabelInfo.innerText = 'ADMIN';
     tournamentsTargetInfo.style["font-size"] = '16px';
     tournamentReqInfo.style["font-size"] = '16px';
     // tournamentReqLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
     // tournamentGoalsLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
-    mobileVersion();
   }
 }
-function mobileVersion() {
-  isMobileVersion = true;
-}
-function halfMobileVersion() {
-  isMobileVersion = false;
-}
-function extendedVersion() {
-  isMobileVersion = false;
-}
+isMobileVersion = width < 600;
 
 function onCreateTournament(event) {
   tournamentCreatePanel.style.display = 'grid';

@@ -271,6 +271,7 @@ li a:hover {
     flex: 1;
     padding: 0px;
     list-style-type: none;
+    height: 50px;
 }
 
 .mobileNavPanel li {
@@ -373,6 +374,7 @@ li a:hover {
     align-self: flex-end;
     font-family: 'Asap', sans-serif;
     font-weight: bold;
+    margin-top: 10px;
 }
 #tournamentMaxMembersBlock {
     grid-area: maxMemb;
@@ -946,6 +948,13 @@ ul {
     }
     .headerBlock{
         height: 150px;
+        display: flex;
+    }
+    .labelUnity{
+        display: grid;
+    }
+    .mobileNavPanel{
+        display: none;
     }
 }
 @media screen and (min-device-width: 600px) and  (max-device-width: 1100px){
@@ -954,11 +963,21 @@ ul {
     }
     .headerBlock{
         height: 100px;
+        display: flex;
+    }
+    .mobileNavPanel{
+        display: none;
+    }
+    .labelUnity{
+        display: none;
+    }   
+    .profile{
+        display: grid;
     }
 }
 @media screen and (min-device-width: 0px) and  (max-device-width: 600px){
     #mainBlock {
-        grid-template-rows: 1fr 65px;
+        grid-template-rows: 1fr 50px;
     }
     #tournamentCreatePanel {
         grid-template-rows: 10% 10% 35% 35% 10%;
@@ -1042,5 +1061,14 @@ ul {
         grid-area: btnsm;
         width: 35%;
         justify-self:flex-end;
+    }
+    .mobileNavPanel{
+        display: flex;
+    }
+    .labelUnity{
+        display: none;
+    }   
+    .headerBlock{
+        display: none;
     }
 }
