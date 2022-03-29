@@ -126,8 +126,11 @@ prewPageTurn.addEventListener('click', onPrewPageTurn);
 nextPagTurn.addEventListener('click', onNextPagTurn);
 crossIcon.addEventListener('click', onCrossTournamentInfo);
 
-
-
+// let counterDegGradBg = 0;
+// setInterval(() =>{
+//   counterDegGradBg++
+//   root.style.setProperty('--gradient-deg-bg', `${counterDegGradBg}deg`)
+// }, 40)
 
 width = window.innerWidth;
 height = window.innerHeight;
