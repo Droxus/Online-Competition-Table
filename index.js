@@ -537,19 +537,17 @@ function checkAspectRatio() {
     // NavPanelBtns.forEach(element => element.style.font = '32px "Fira Sans", sans-serif');
     // NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black');
     profile["font-size"] = '24px';
-    profIcon.style["margin-top"] = '10px';
-    profIcon.style.width = '48px';
     tournamentName.forEach(element => element.style["font-size"] = '28px');
     tournamentDescription.forEach(element => element.style["font-size"] = '18px');
     tournamentType.forEach(element => element.style["font-size"] = '16px');
     tournamentsTargetInfo.style["font-size"] = '24px';
-    tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
-    tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
+    // tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
+    // tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
+    // tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
     tournamentAdminLabelInfo.innerText = 'ADMINISTRATOR';
     tournamentReqInfo.style["font-size"] = '20px';
-    tournamentReqLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
-    tournamentGoalsLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
+    // tournamentReqLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
+    // tournamentGoalsLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
     labelUnity.style.display = 'grid';
     extendedVersion();
   } else if (width > 600) {
@@ -559,17 +557,15 @@ function checkAspectRatio() {
     // NavPanelBtns.forEach(element => element.style.font = '24px "Fira Sans", sans-serif');
     // NavPanelBtns.forEach(element => element.style["text-shadow"] = '1px 0 black, 0 1px black, -1px 0 black, 0 -1px black');
     labelUnity.style.display = 'none';
-    profIcon.style["margin-top"] = '0px';
-    profIcon.style.width = '32px';
     profile["font-size"] = '18px';
     tournamentName.forEach(element => element.style["font-size"] = '28px');
     tournamentDescription.forEach(element => element.style["font-size"] = '18px');
     tournamentType.forEach(element => element.style["font-size"] = '16px');
     tournamentsTargetInfo.style["font-size"] = '20px';
     tournamentReqInfo.style["font-size"] = '20px';
-    tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
-    tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
+    // tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
+    // tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
+    // tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
     tournamentAdminLabelInfo.innerText = 'ADMINISTRATOR';
     halfMobileVersion();
 
@@ -580,14 +576,14 @@ function checkAspectRatio() {
     tournamentName.forEach(element => element.style["font-size"] = '24px');
     tournamentDescription.forEach(element => element.style["font-size"] = '14px');
     tournamentType.forEach(element => element.style["font-size"] = '12px');
-    tournamentMembersInfo.style.font = 'small-caps bold 17px/1 sans-serif';
-    tournamentAdminLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    tournamentMembersLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
+    // tournamentMembersInfo.style.font = 'small-caps bold 17px/1 sans-serif';
+    // tournamentAdminLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
+    // tournamentMembersLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
     tournamentAdminLabelInfo.innerText = 'ADMIN';
     tournamentsTargetInfo.style["font-size"] = '16px';
     tournamentReqInfo.style["font-size"] = '16px';
-    tournamentReqLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
-    tournamentGoalsLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
+    // tournamentReqLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
+    // tournamentGoalsLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
     mobileVersion();
   }
 }
