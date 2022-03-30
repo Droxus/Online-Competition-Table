@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Butula</title>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css"/>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.0/firebase-ui-auth.css" />
 </head>
 
 <body>
@@ -18,7 +18,7 @@
                 <label class="tileLbl" id="tileLbl4" for="tileLbl">by Droxus corporation</label>
             </div>
             <ul class="navigationPanel" id="navigationPanel">
-                <li><a href="#" id="btnHome">Home</a></li> 
+                <li><a href="#" id="btnHome">Home</a></li>
                 <li><a href="#" id="btnFavorites">Favorites</a></li>
                 <li><a href="#" id="btnData">Data</a></li>
                 <li><a href="#" id="btnStatistics">Statistics</a></li>
@@ -32,29 +32,27 @@
             </div>
         </div>
         <div class="contentBlock" id="contentBlock">
-            
-            <div id="tournamentsPanel">
-                <div id="tournamentNameBlock"> <label id="tournamentName" for="tournamentName"></label></div>
-                <div id="tournamentDescriptionBlock"><label id="tournamentDescription"
-                        for="tournamentDescription"></label></div>
-                <div id="tournamentTypeBlock"><label id="tournamentType" for="tournamentType"></label></div>
-                <div id="tournamentMaxMembersBlock"><label id="tournamentMaxMembers" for="tournamentMaxMembers"></label>
+            <div id="homePageBlock">
+                <div id="tournamentsPanel"></div>
+                <div id="footerPanel">
+                    <button id="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
+                    <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
+                    <label for="pageNumLbl" id="pageNumLbl">1</label>
+                    <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
+                    <select name="numsOfTrnsOnthePage" id="numsOfTrnsOnthePage">
+                        <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
+                        <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
+                        <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
+                        <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
+                        <option class="numsOfTrnsOnthePageOpt" selected="selected" value=""></option>
+                    </select>
                 </div>
             </div>
-            <div id="footerPanel">
-                <button id="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
-                <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
-                <label for="pageNumLbl" id="pageNumLbl">1</label>
-                <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
-                <select name="numsOfTrnsOnthePage" id="numsOfTrnsOnthePage">
-                    <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
-                    <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
-                    <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
-                    <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
-                    <option class="numsOfTrnsOnthePageOpt" selected="selected" value=""></option>
-                </select>
-                <!-- <button type="menu" id="trnNumsbtn"><img src="img/trnNumsIcon.png" alt="trnNumsIcon" id="trnNumsIcon"></button> -->
-            </div>
+            <div id="favoritesPageBlock"></div>
+            <div id="dataPageBlock"></div>
+            <div id="statisticPageBlock"></div>
+            <div id="aboutPageBlock"></div>
+            <div id="profilePageBlock"></div>
         </div>
         <ul class="mobileNavPanel" id="mobileNavPanel">
             <li><img src="img/homeIcon.png" alt="btnMobHome" id="btnMobHome"></li>
@@ -94,7 +92,7 @@
         <img src="img/cup.png" alt="cup" id="tournamentCupInfo">
         <img src="img/lock.jpg" alt="lock" id="lockbg">
     </div>
-        <div id="tournamentCreatePanel"></div>
+    <div id="tournamentCreatePanel"></div>
     <div id="blackout"></div>
 </body>
 

@@ -286,19 +286,50 @@ li a:hover {
 }
 
 .contentBlock {
-    display: grid;
-    grid-template-rows: 1fr 50px;
     border: 1px solid white;
     border-radius: 20px;
     background-color: rgb(255, 255, 255, 0.3);
     margin: 1%;
     box-sizing: border-box;
 }
-
+#homePageBlock{
+    display: none;
+    grid-template-rows: 1fr 50px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
+#profilePageBlock{
+    display: none;
+    grid-template-rows: 1fr 50px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
+#dataPageBlock{
+    display: none;
+    grid-template-rows: 1fr 50px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
+#statisticPageBlock{
+    display: none;
+    grid-template-rows: 1fr 50px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
+#aboutPageBlock{
+    display: none;
+    grid-template-rows: 1fr 50px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
 .tournament {
     display: grid;
     grid-template-columns: 6fr 1fr;
-    /* min-height: 25px; */
     border: 1px solid white;
     border-radius: 20px;
     width: 100%;
@@ -942,40 +973,7 @@ ul {
 .numsOfTrnsOnthePageOpt{
     color: black
 }
-@media screen and (min-device-width: 1100px){
-    #mainBlock {
-        grid-template-rows: 150px 1fr;
-    }
-    .headerBlock{
-        height: 150px;
-        display: flex;
-    }
-    .labelUnity{
-        display: grid;
-    }
-    .mobileNavPanel{
-        display: none;
-    }
-}
-@media screen and (min-device-width: 600px) and  (max-device-width: 1100px){
-    #mainBlock {
-        grid-template-rows: 100px 1fr;
-    }
-    .headerBlock{
-        height: 100px;
-        display: flex;
-    }
-    .mobileNavPanel{
-        display: none;
-    }
-    .labelUnity{
-        display: none;
-    }   
-    .profile{
-        display: grid;
-    }
-}
-@media screen and (min-device-width: 0px) and  (max-device-width: 600px){
+@media screen and (max-device-width: 600px){
     #mainBlock {
         grid-template-rows: 1fr 50px;
     }
@@ -1069,6 +1067,40 @@ ul {
         display: none;
     }   
     .headerBlock{
+        display: none;
+    }
+}
+@media screen and (min-device-width: 600px){
+    #mainBlock {
+        grid-template-rows: 100px 1fr;
+    }
+    .headerBlock{
+        height: 100px;
+        display: flex;
+    }
+    .mobileNavPanel{
+        display: none;
+    }
+    .labelUnity{
+        display: none;
+    }   
+    .profile{
+        display: grid;
+    }
+}
+
+@media screen and (min-device-width: 1100px){
+    #mainBlock {
+        grid-template-rows: 150px 1fr;
+    }
+    .headerBlock{
+        height: 150px;
+        display: flex;
+    }
+    .labelUnity{
+        display: grid;
+    }
+    .mobileNavPanel{
         display: none;
     }
 }

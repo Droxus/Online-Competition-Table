@@ -72,13 +72,13 @@ let crossIcononCreate = document.getElementById('crossIcononCreate');
 const prewPageTurn = document.getElementById('prewPageTurn');
 const nextPagTurn = document.getElementById('nextPagTurn');
 const tournamentCreatePanel = document.getElementById('tournamentCreatePanel');
-let numsOfTrnsOnthePage = document.getElementById('numsOfTrnsOnthePage')
-let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'))
-let tournamentsPanel
+let numsOfTrnsOnthePage = document.getElementById('numsOfTrnsOnthePage');
+let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'));
+let tournamentsPanel = document.getElementById('tournamentsPanel');
 let typeMaxBtns;
 let secondMpage;
 let firstMpage;
-let pageNumLbl;
+let pageNumLbl = document.getElementById('pageNumLbl');
 let onTournamentInfoBlock;
 let tournamentNameBlock = document.getElementById('tournamentNameBlock');
 let tournamentDescriptionBlock = document.getElementById('tournamentDescriptionBlock');
@@ -107,7 +107,6 @@ let tournamentCreateBtn;
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile];
 const mobileNavPanelBtns = [btnMobHome, btnMobFav, btnMobData, btnMobStat, btnMobProf];
 let password, email, width, height, temporaryElementsTI, isMobileVersion;
-// numsOfTrnsOnthePage.addEventListener('change', onchangeTrnNumsOnPage)
 inptUsername.addEventListener('click', onClearError);
 inptPassword.addEventListener('click', onClearError);
 btnHome.addEventListener('click', onbtnHome);
@@ -125,6 +124,7 @@ createTournament.addEventListener('click', onCreateTournament);
 prewPageTurn.addEventListener('click', onPrewPageTurn);
 nextPagTurn.addEventListener('click', onNextPagTurn);
 crossIcon.addEventListener('click', onCrossTournamentInfo);
+numsOfTrnsOnthePage.addEventListener("change", onchangeTrnNumsOnPage);
 
 // let counterDegGradBg = 0;
 // setInterval(() =>{
@@ -172,7 +172,7 @@ function getMobileOperatingSystem() {
 function onNoaccLink(event) {
   isignIn.innerHTML = 'Sign Up';
   btnSignIn.innerHTML = 'Sign Up';
-  noaccLink.innerHTML = 'Sign In';
+  noaccLink.innerHTML = 'Login';
   noaccLink.removeEventListener('click', onNoaccLink);
   noaccLink.addEventListener('click', onHasaccLink);
   btnSignIn.removeEventListener('click', onBtnSignIn);
@@ -207,7 +207,7 @@ function getNickName() {
   nickForLabel.innerHTML = login;
 }
 function onSignIn() {
-  document.getElementById('eMail').innerText = email
+  document.getElementById('eMail').innerText = email;
   getNickName();
   password = null;
   clearMenuOfAuth();
@@ -239,60 +239,19 @@ function getFirebaseData() {
     });
   }).then(() => onbtnHome());
 }
-let tournamentsOnThePage = 5
+let tournamentsOnThePage = 5;
 function onbtnHome(event) {
+  from = 0;
   blackout.style.display = 'none';
   root.style.setProperty('--tournamnets-on-the-page', `${tournamentsOnThePage}`);
-  root.style.setProperty('--like-btn-size-scale', '0.25')
-  let k = 0;
+  root.style.setProperty('--like-btn-size-scale', '0.25');
   clearMenu();
   btnHome.removeEventListener('click', onbtnHome);
-  // btnHome.style["margin-top"] = '20%';
-      btnHome.classList.add("moveDown");
+  btnHome.classList.add("moveDown");
   btnHome.style.color = 'black';
   btnMobHome.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
-  contentBlock.insertAdjacentHTML('beforeend', ` <div id="tournamentsPanel"></div>
-  <div id="footerPanel"><button id="createTournament">
-  <img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
-  <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
-  <label for="pageNumLbl" id="pageNumLbl">1</label>
-  <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
-  <select name="numsOfTrnsOnthePage" id="numsOfTrnsOnthePage">
-  <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
-  <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
-  <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
-  <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
-  <option class="numsOfTrnsOnthePageOpt" selected="selected" value=""></option>
-                </select></div>`);
-                let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'))
-                let numsOfTrnsOnthePage = document.getElementById('numsOfTrnsOnthePage')
-                numsOfTrnsOnthePage.addEventListener("change", onchangeTrnNumsOnPage)
-  pageNumLbl = document.getElementById('pageNumLbl');
-  tournamentsPanel = document.getElementById('tournamentsPanel');
-  const prewPageTurn = document.getElementById('prewPageTurn');
-  const nextPagTurn = document.getElementById('nextPagTurn');
-  const createTournament = document.getElementById('createTournament');
-  prewPageTurn.addEventListener('click', onPrewPageTurn);
-  nextPagTurn.addEventListener('click', onNextPagTurn);
-  createTournament.addEventListener('click', onCreateTournament);
-  k = firebaseTornemnts.length;
-  // console.log(k);
-
-  if (k > tournamentsOnThePage) {
-    k = tournamentsOnThePage;
-  }
+  document.getElementById('homePageBlock').style.display = 'grid';
   showTournaments(from);
-
-  tournament = Array.from(document.getElementsByClassName('tournament'));
-  tournamentNameBlock = document.getElementById('tournamentNameBlock');
-  tournamentDescriptionBlock = document.getElementById('tournamentDescriptionBlock');
-  tournamentTypeBlock = document.getElementById('tournamentTypeBlock');
-  tournamentMaxMembersBlock = document.getElementById('tournamentMaxMembersBlock');
-  tournamentName = Array.from(document.getElementsByClassName('tournamentName'));
-  tournamentDescription = Array.from(document.getElementsByClassName('tournamentDescriptionBlock'));
-  tournamentType = Array.from(document.getElementsByClassName('tournamentTypeBlock'));
-  tournamentMaxMembers = Array.from(document.getElementsByClassName('tournamentMaxMembers'));
-  onTournamentInfoBlock.forEach(element => element.addEventListener('click', onTournament));
   checkAspectRatio();
 }
 let to = 0;
@@ -326,7 +285,6 @@ function showTournaments(from) {
   onTournamentInfoBlock = Array.from(document.getElementsByClassName('onTournamentInfoBlock'));
   onTournamentInfoBlock.forEach(element => element.addEventListener('click', onTournament));
   pageNumLbl.innerHTML = Math.ceil(to / tournamentsOnThePage);
-  // console.log();
   checkAspectRatio();
 }
 function onTournament(event) {
@@ -358,7 +316,7 @@ function onTournament(event) {
     tournamentReqLabelInfo.style.display = 'block';
     tournamentBtnsInfo.style.display = 'inline-flex';
   }
-  tournamentAdminLabelInfo.innerText = isMobileVersion ? 'ADMIN' : 'ADMINISTRATOR'
+  tournamentAdminLabelInfo.innerText = isMobileVersion ? 'ADMIN' : 'ADMINISTRATOR';
   if (firebaseTornemnts[num].targets[0] !== "" && firebaseTornemnts[num].targets.length !== 0) {
     for (let i = 0; i < firebaseTornemnts[num].targets.length; i++) {
       tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li class="temporaryElementsTI tournamentGoalsInfo">${firebaseTornemnts[num].targets[i]}</li>`);
@@ -461,26 +419,21 @@ function onTournamentCreateBtn() {
       });
   }
 }
-
-function newPageHome() {
-  // k more tournaments we need to render
-  // console.log(Math.ceil(k / tournamentsOnThePage) + ' more new page created')
-}
 function onbtnFavorites(event) {
   clearMenu();
   btnFavorites.classList.add("moveDown");
   btnFavorites.removeEventListener('click', onbtnFavorites);
   btnFavorites.style.color = 'black';
+  document.getElementById('favoritesPageBlock').style.display = 'grid';
   btnMobFav.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
-
 }
 function onbtnData(event) {
   clearMenu();
   btnData.removeEventListener('click', onbtnData);
   btnData.classList.add("moveDown");
   btnData.style.color = 'black';
+  document.getElementById('dataPageBlock').style.display = 'grid';
   btnMobData.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
-
 
 }
 function onbtnStatistics(event) {
@@ -488,34 +441,29 @@ function onbtnStatistics(event) {
   btnStatistics.removeEventListener('click', onbtnStatistics);
   btnStatistics.classList.add("moveDown");
   btnStatistics.style.color = 'black';
+  document.getElementById('statisticPageBlock').style.display = 'grid';
   btnMobStat.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
-
 }
 function onbtnAbout(event) {
   clearMenu();
   btnAbout.removeEventListener('click', onbtnAbout);
   btnAbout.classList.add("moveDown");
   btnAbout.style.color = 'black';
-
+  document.getElementById('aboutPageBlock').style.display = 'grid';
 }
 
 function onProfile(event) {
   clearMenu();
   profile.removeEventListener('click', onProfile);
-  profile.style.color = 'black';
   profile.style["background-color"] = 'rgba(170, 170, 170, 0.2)';
+  document.getElementById('profilePageBlock').style.display = 'grid';
   btnMobProf.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
-
 }
 
 function clearMenu() {
-  NavPanelBtns.forEach(element => element.style["border-bottom"] = '0px solid black');
   NavPanelBtns.forEach(element => element.style.color = 'white');
   profile.style["background-color"] = 'transparent';
   mobileNavPanelBtns.forEach(element => element.parentElement.style["background-color"] = 'transparent');
-  createTournament.removeEventListener('click', onCreateTournament);
-  prewPageTurn.removeEventListener('click', onPrewPageTurn);
-  nextPagTurn.removeEventListener('click', onNextPagTurn);
   btnHome.addEventListener('click', onbtnHome);
   btnFavorites.addEventListener('click', onbtnFavorites);
   btnData.addEventListener('click', onbtnData);
@@ -527,9 +475,12 @@ function clearMenu() {
   btnData.classList.remove("moveDown");
   btnStatistics.classList.remove("moveDown");
   btnAbout.classList.remove("moveDown");
-  while (contentBlock.firstChild) {
-    contentBlock.removeChild(contentBlock.firstChild);
-  }
+  document.getElementById('homePageBlock').style.display = 'none';
+  document.getElementById('profilePageBlock').style.display = 'none';
+  document.getElementById('favoritesPageBlock').style.display = 'none';
+  document.getElementById('dataPageBlock').style.display = 'none';
+  document.getElementById('statisticPageBlock').style.display = 'none';
+  document.getElementById('aboutPageBlock').style.display = 'none';
 
 }
 checkAspectRatio();
@@ -672,10 +623,10 @@ function oncrossIcononCreate(event) {
   mainBlock.style.display = 'grid';
   checkAspectRatio();
 }
-function onchangeTrnNumsOnPage(event){
-  tournamentsOnThePage = Number(this.value)
+function onchangeTrnNumsOnPage(event) {
+  tournamentsOnThePage = Number(this.value);
 
-  onbtnHome()
+  onbtnHome();
 }
 function outputMessege(msg) {
   blackout.style.display = 'block';
@@ -704,10 +655,8 @@ function onBtnSignUp(event) {
   password = inptPassword.value;
   firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      // Signed in 
       onSignIn();
       var user = userCredential.user;
-      // ...
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -716,8 +665,6 @@ function onBtnSignUp(event) {
       noaccLink.addEventListener('click', onHasaccLink);
       btnSignIn.addEventListener('click', onBtnSignUp);
     });
-
-
 }
 function onBtnSignIn(event) {
   noaccLink.removeEventListener('click', onNoaccLink);
@@ -739,33 +686,7 @@ function onBtnSignIn(event) {
       outputFormError(errorMessage);
     });
 }
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-  .then(() => {
-    // Existing and future Auth states are now persisted in the current
-    // session only. Closing the window would clear any existing state even
-    // if a user forgets to sign out.
-    // ...
-    // New sign-in will be persisted with session persistence.
-    return firebase.auth().signInWithEmailAndPassword(email, password);
-  })
-  .catch((error) => {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-  });
 
-
-firebase.auth().onAuthStateChanged((user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    var uid = user.uid;
-    // ...
-  } else {
-    // User is signed out
-    // ...
-  }
-});
 const button = document.querySelector(".heart-like-button");
 
 button.addEventListener("click", () => {
