@@ -74,6 +74,7 @@ const nextPagTurn = document.getElementById('nextPagTurn');
 const tournamentCreatePanel = document.getElementById('tournamentCreatePanel');
 let numsOfTrnsOnthePage = document.getElementById('numsOfTrnsOnthePage');
 let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'));
+let likeButton = Array.from(document.getElementsByClassName("heart-like-button"));
 let tournamentsPanel = document.getElementById('tournamentsPanel');
 let typeMaxBtns;
 let secondMpage;
@@ -121,6 +122,7 @@ btnMobData.addEventListener('click', onbtnData);
 btnMobStat.addEventListener('click', onbtnStatistics);
 btnMobProf.addEventListener('click', onProfile);
 createTournament.addEventListener('click', onCreateTournament);
+likeButton.forEach(element => element.addEventListener("click", onLikebtn));
 prewPageTurn.addEventListener('click', onPrewPageTurn);
 nextPagTurn.addEventListener('click', onNextPagTurn);
 crossIcon.addEventListener('click', onCrossTournamentInfo);
@@ -134,18 +136,6 @@ numsOfTrnsOnthePage.addEventListener("change", onchangeTrnNumsOnPage);
 
 width = window.innerWidth;
 height = window.innerHeight;
-function onresize() {
-  setTimeout(function () {
-    if ((width != window.innerWidth) || (height !== window.innerHeight)) {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      checkAspectRatio();
-      // console.log('resized');
-    }
-  }, 300);
-}
-
-window.addEventListener("resize", onresize);
 
 blackout.style.display = 'none';
 dataEnterSqr.forEach(element => element.style.display = 'block');
@@ -252,7 +242,6 @@ function onbtnHome(event) {
   btnMobHome.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
   document.getElementById('homePageBlock').style.display = 'grid';
   showTournaments(from);
-  checkAspectRatio();
 }
 let to = 0;
 function showTournaments(from) {
@@ -284,8 +273,9 @@ function showTournaments(from) {
   tournamentMaxMembers = Array.from(document.getElementsByClassName('tournamentMaxMembers'));
   onTournamentInfoBlock = Array.from(document.getElementsByClassName('onTournamentInfoBlock'));
   onTournamentInfoBlock.forEach(element => element.addEventListener('click', onTournament));
+  likeButton = Array.from(document.getElementsByClassName("heart-like-button"));
+  likeButton.forEach(element => element.addEventListener("click", onLikebtn));
   pageNumLbl.innerHTML = Math.ceil(to / tournamentsOnThePage);
-  checkAspectRatio();
 }
 function onTournament(event) {
   mainBlock.style.display = 'none';
@@ -305,7 +295,6 @@ function onTournament(event) {
     tournamentReqLabelInfo.style.display = 'none';
     tournamentBtnsInfo.style.display = 'none';
     lockbg.style.display = 'block';
-    checkAspectRatio();
     return tournamentCupInfo.style.display = 'none';
   } else {
     tournamentCupInfo.style.display = 'block';
@@ -329,8 +318,7 @@ function onTournament(event) {
   if (firebaseTornemnts[num].participants[0] !== "" && firebaseTornemnts[num].participants.length !== 0) {
     for (let i = 0; i < membersNums; i++) {
       tournamentMembersLabelInfo.insertAdjacentHTML('afterend', `<li class="temporaryElementsTI tournamentParticipantsInfo">
-      <img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"
-       style="margin-left: 20px; margin-top: 5px;"> ${firebaseTornemnts[num].participants[i]}<br>`);
+      <img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"> ${firebaseTornemnts[num].participants[i]}<br>`);
     }
   } else { tournamentMembersLabelInfo.insertAdjacentHTML('afterend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no participants :(</li>`); }
   if (firebaseTornemnts[num].requirements[0] !== "" && firebaseTornemnts[num].requirements.length !== 0) {
@@ -339,17 +327,14 @@ function onTournament(event) {
     }
   } else { tournamentReqLabelInfo.insertAdjacentHTML('afterend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no requirements :(</li>`); }
   temporaryElementsTI = Array.from(document.getElementsByClassName('temporaryElementsTI'));
-  checkAspectRatio();
 }
 
 function onCrossTournamentInfo(event) {
   mainBlock.style.display = 'grid';
   tournamentInfo.style.display = 'none';
   temporaryElementsTI.forEach(element => element.remove());
-  if (button.classList.contains("liked")) {
-    button.classList.remove("liked");
-  }
-  checkAspectRatio();
+  likeButton.forEach(element => element.classList.remove("liked"));
+  onbtnHome()
 }
 let canMakeNewTarg = true;
 function ontournamentTargetsInputAtCreatePanel(event) {
@@ -359,7 +344,6 @@ function ontournamentTargetsInputAtCreatePanel(event) {
     tournamentTargetsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'));
     trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'));
     tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 1].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
-    checkAspectRatio();
   }
   canMakeNewTarg = (tournamentTargetsInputAtCreatePanel.length == 1) || (tournamentTargetsInputAtCreatePanel.length < 5) && (tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 2].value !== "");
 }
@@ -371,7 +355,6 @@ function ontournamentRequirementsInputAtCreatePanel(event) {
     tournamentRequirementsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentRequirementsInputAtCreatePanel'));
     trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'));
     tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length - 1].addEventListener('input', ontournamentRequirementsInputAtCreatePanel);
-    checkAspectRatio();
   }
   canMakeNewReq = (tournamentRequirementsInputAtCreatePanel.length == 1) || (tournamentRequirementsInputAtCreatePanel.length < 5) &&
     (tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length - 2].value !== "");
@@ -483,46 +466,7 @@ function clearMenu() {
   document.getElementById('aboutPageBlock').style.display = 'none';
 
 }
-checkAspectRatio();
-function checkAspectRatio() {
-  if (width > 1100) {
-    // NavPanelBtns.forEach(element => element.style.font = '32px "Fira Sans", sans-serif');
-    profile["font-size"] = '24px';
-    tournamentName.forEach(element => element.style["font-size"] = '28px');
-    tournamentDescription.forEach(element => element.style["font-size"] = '18px');
-    tournamentType.forEach(element => element.style["font-size"] = '16px');
-    tournamentsTargetInfo.style["font-size"] = '24px';
-    // tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    // tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
-    // tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
-    tournamentReqInfo.style["font-size"] = '20px';
-    // tournamentReqLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
-    // tournamentGoalsLabelInfo.style.font = 'bold 24px/1 Tahoma, Verdana, sans-serif';
-  } else if (width > 600) {
-    // NavPanelBtns.forEach(element => element.style.font = '24px "Fira Sans", sans-serif');
-    profile["font-size"] = '18px';
-    tournamentName.forEach(element => element.style["font-size"] = '28px');
-    tournamentDescription.forEach(element => element.style["font-size"] = '18px');
-    tournamentType.forEach(element => element.style["font-size"] = '16px');
-    tournamentsTargetInfo.style["font-size"] = '20px';
-    tournamentReqInfo.style["font-size"] = '20px';
-    // tournamentMembersInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    // tournamentAdminLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
-    // tournamentMembersLabelInfo.style.font = 'small-caps bold 24px/1 sans-serif';
 
-  } else {
-    tournamentName.forEach(element => element.style["font-size"] = '24px');
-    tournamentDescription.forEach(element => element.style["font-size"] = '14px');
-    tournamentType.forEach(element => element.style["font-size"] = '12px');
-    // tournamentMembersInfo.style.font = 'small-caps bold 17px/1 sans-serif';
-    // tournamentAdminLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    // tournamentMembersLabelInfo.style.font = 'small-caps bold 20px/1 sans-serif';
-    tournamentsTargetInfo.style["font-size"] = '16px';
-    tournamentReqInfo.style["font-size"] = '16px';
-    // tournamentReqLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
-    // tournamentGoalsLabelInfo.style.font = 'bold 20px/1 Tahoma, Verdana, sans-serif';
-  }
-}
 isMobileVersion = width < 600;
 
 function onCreateTournament(event) {
@@ -587,7 +531,6 @@ function onCreateTournament(event) {
   crossIcononCreate = document.getElementById('crossIcononCreate');
   crossIcononCreate.addEventListener('click', oncrossIcononCreate);
   trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'));
-  checkAspectRatio();
 }
 function onTournamentSwitchPageBtn(event) {
   // console.log(tournamentSwitchPageBtn.innerText);
@@ -621,7 +564,6 @@ function oncrossIcononCreate(event) {
   }
   tournamentCreatePanel.style.display = 'none';
   mainBlock.style.display = 'grid';
-  checkAspectRatio();
 }
 function onchangeTrnNumsOnPage(event) {
   tournamentsOnThePage = Number(this.value);
@@ -640,6 +582,14 @@ function outputMessege(msg) {
     blackout.removeChild(blackout.firstChild);
     blackout.style.display = 'none';
   });
+}
+function onLikebtn(event){
+  // (likeButton.classList.contains("liked")) ? likeButton.classList.remove("liked") : likeButton.classList.add("liked")
+  if (this.classList.contains("liked")){
+    this.classList.remove("liked")
+  } else {
+    this.classList.add("liked")
+  }
 }
 
 
@@ -686,13 +636,3 @@ function onBtnSignIn(event) {
       outputFormError(errorMessage);
     });
 }
-
-const button = document.querySelector(".heart-like-button");
-
-button.addEventListener("click", () => {
-  if (button.classList.contains("liked")) {
-    button.classList.remove("liked");
-  } else {
-    button.classList.add("liked");
-  }
-});

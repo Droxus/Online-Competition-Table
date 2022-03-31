@@ -41,6 +41,7 @@ body {
         background-position: 50% 0%;
     }
 }
+
 .dataEnterSqr {
     position: absolute;
     display: none;
@@ -116,6 +117,7 @@ div.dataEnterSqr>* {
 .btnsChangeForm:hover {
     background-color: rgb(233, 232, 232);
 }
+
 .authMenu::placeholder {
     opacity: 0.5;
 }
@@ -146,6 +148,7 @@ div.dataEnterSqr>* {
     font-size: 36px;
     color: rgb(3, 15, 85);
 }
+
 #tileLbl4 {
     align-self: flex-start;
     justify-self: center;
@@ -153,27 +156,28 @@ div.dataEnterSqr>* {
     font-size: 16px;
     word-spacing: 5px;
 }
+
 .labelUnity {
     display: grid;
     font: small-caps bold 18px sans-serif;
     font-family: 'Cinzel Decorative', cursive;
-font-family: 'Krona One', sans-serif;
+    font-family: 'Krona One', sans-serif;
 }
 
 .profile {
     display: grid;
     grid-template-rows: 40% 30% 30%;
     grid-template-columns: 60px 1fr;
-    grid-template-areas: 
-    "iconProf nickProf"
-    "idProf idProf"
-    "eMailProf eMailProf"
+    grid-template-areas:
+        "iconProf nickProf"
+        "idProf idProf"
+        "eMailProf eMailProf"
     ;
     background-color: transparent;
     font-size: 24px;
     color: rgb(0, 0, 109);
     font-weight: 400;
-    min-width: 150px;
+    width: 200px;
 }
 
 #ID {
@@ -211,26 +215,26 @@ font-family: 'Krona One', sans-serif;
 
 .navigationPanel {
     display: flex;
-    align-items:center;
+    align-items: center;
     flex: 2;
     padding: 0px;
     list-style-type: none;
 }
 
-.navigationPanel li{
+.navigationPanel li {
     display: flex;
     flex-grow: 1;
     justify-content: center;
 }
 
-.navigationPanel li a{
+.navigationPanel li a {
     flex-grow: 1;
     text-decoration: none;
     text-align: center;
     box-sizing: border-box;
     cursor: url('img/cena.png'), auto;
     font-size: 40px;
-    text-shadow:1px 0 black, 0 1px black, -1px 0 black, 0 -1px black;
+    text-shadow: 1px 0 black, 0 1px black, -1px 0 black, 0 -1px black;
     font-family: 'Harmattan', sans-serif;
 }
 
@@ -240,17 +244,18 @@ font-family: 'Krona One', sans-serif;
 
 @keyframes moveDown {
     0% {
-        transform:translate(0, 0%);
+        transform: translate(0, 0%);
     }
 
     50% {
-        transform:translate(0, 20%);
+        transform: translate(0, 20%);
     }
 
     100% {
-        transform:translate(0, 60%);
+        transform: translate(0, 60%);
     }
 }
+
 li a:hover {
     color: black !important;
 }
@@ -267,7 +272,7 @@ li a:hover {
 
 .mobileNavPanel {
     display: flex;
-    align-items:center;
+    align-items: center;
     flex: 1;
     padding: 0px;
     list-style-type: none;
@@ -292,41 +297,47 @@ li a:hover {
     margin: 1%;
     box-sizing: border-box;
 }
-#homePageBlock{
+
+#homePageBlock {
     display: none;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
 }
-#profilePageBlock{
+
+#profilePageBlock {
     display: none;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
 }
-#dataPageBlock{
+
+#dataPageBlock {
     display: none;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
 }
-#statisticPageBlock{
+
+#statisticPageBlock {
     display: none;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
 }
-#aboutPageBlock{
+
+#aboutPageBlock {
     display: none;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
 }
+
 .tournament {
     display: grid;
     grid-template-columns: 6fr 1fr;
@@ -335,13 +346,14 @@ li a:hover {
     width: 100%;
     background-color: rgb(255 185 93 / 40%);
 }
-.onTournamentInfoBlock{
+
+.onTournamentInfoBlock {
     display: grid;
     grid-template-rows: 33% 64%;
     grid-template-columns: 4fr 1fr;
-    grid-template-areas: 
-    "title type"
-    "description maxMemb";
+    grid-template-areas:
+        "title type"
+        "description maxMemb";
 }
 
 .tournamentLikeBtn {
@@ -365,7 +377,8 @@ li a:hover {
     height: 50px;
     background-color: rgba(255, 255, 255, 0.4);
 }
-#pageNumLbl{
+
+#pageNumLbl {
     justify-self: center;
     align-self: center;
     display: block;
@@ -379,6 +392,7 @@ li a:hover {
     font-size: 24px;
     font-weight: bold;
 }
+
 #tournamentsPanel {
     display: grid;
     grid-template-columns: 100%;
@@ -394,7 +408,7 @@ li a:hover {
 }
 
 #tournamentDescriptionBlock {
-    grid-area:description;
+    grid-area: description;
     padding: 5px 10px;
     font-family: 'Asap', sans-serif;
     font-style: italic;
@@ -407,6 +421,7 @@ li a:hover {
     font-weight: bold;
     margin-top: 10px;
 }
+
 #tournamentMaxMembersBlock {
     grid-area: maxMemb;
     align-self: center;
@@ -464,11 +479,11 @@ li a:hover {
     width: 94%;
     grid-template-rows: 10% 1fr 1fr 15%;
     grid-template-columns: 50% 50%;
-    grid-template-areas: 
-    "titleAndcloseIcon titleAndcloseIcon"
-    "Goals tournamentMembers"
-    "Reqs tournamentMembers"
-    "btns btns";
+    grid-template-areas:
+        "titleAndcloseIcon titleAndcloseIcon"
+        "Goals tournamentMembers"
+        "Reqs tournamentMembers"
+        "btns btns";
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
     border: 1px solid white;
@@ -477,7 +492,7 @@ li a:hover {
 
 #crossIcon {
     grid-area: titleAndcloseIcon;
-    align-self:baseline;
+    align-self: baseline;
     justify-self: end;
     padding: 20px 20px 0 0;
     width: 48px;
@@ -485,7 +500,8 @@ li a:hover {
 
 #tournamentNameInfo {
     grid-area: titleAndcloseIcon;
-    font: small-caps bold 38px/1 sans-serif;
+    font-size: 38px;
+    font-weight: bold;
     align-self: center;
     justify-self: flex-start;
     margin-left: 10%;
@@ -535,6 +551,7 @@ ul {
     line-height: 0px;
     font-family: 'Asap', sans-serif;
 }
+
 #tournamentMembersInfo li {
     list-style-type: none;
     float: none;
@@ -579,15 +596,18 @@ ul {
 #tournamentBtnsInfo {
     grid-area: btns;
     display: inline-flex;
-    justify-self:center;
+    justify-self: center;
     align-self: center;
 }
-#tournamentLikeBtnInfo{
+
+#tournamentLikeBtnInfo {
     left: 25px;
 }
-#tournamentJoinInfo{
+
+#tournamentJoinInfo {
     position: relative;
 }
+
 #tournamentReqInfo {
     grid-area: Reqs;
     font-size: 10px;
@@ -624,11 +644,13 @@ ul {
     font-size: 24px;
     font-weight: bolder;
 }
-#tournamentsTargetInfo li{
+
+#tournamentsTargetInfo li {
     padding: 10px;
     letter-spacing: 0px;
     margin-left: 2%;
 }
+
 .tournamentGoalsInfo {
     font-family: 'Asap', sans-serif;
     font-weight: normal !important;
@@ -675,7 +697,7 @@ ul {
 
 .heart-like-button.liked::before,
 .heart-like-button.liked::after {
-    background-color: #ff0000;
+    background-color: #ffa033;
 }
 
 .heart-like-button.liked {
@@ -695,6 +717,7 @@ ul {
         transform: scale(1);
     }
 }
+
 #lockbg {
     position: fixed;
     display: none;
@@ -757,13 +780,6 @@ ul {
     left: 3%;
     height: 94%;
     width: 94%;
-    grid-template-rows: 10% 10% 50% 30%;
-    grid-template-columns: 50% 50%;
-    grid-template-areas: 
-    "labelCP closeIconCP"
-    "titleCP titleCP"
-    "goalsCP reqsCP"
-    "descript typeMaxCreate";
     background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid white;
     border-radius: 5%;
@@ -771,7 +787,6 @@ ul {
 
 #crossIcononCreate {
     width: 48px;
-    grid-area: closeIconCP;
     align-self: flex-start;
     justify-self: end;
     margin: 20px;
@@ -779,13 +794,10 @@ ul {
 
 #creatingTournamentLbl {
     display: block;
-    font-size: 42px;
     grid-area: labelCP;
     align-self: flex-end;
     justify-self: start;
     margin-left: 2%;
-    width: 500px;
-    letter-spacing: 3px;
     font-weight: bold;
     font-family: 'Asap', sans-serif;
 }
@@ -794,7 +806,6 @@ ul {
     display: block;
     grid-area: titleCP;
     margin-left: 5%;
-    width: 35%;
     padding: 0px;
     height: 40px;
     align-self: flex-end;
@@ -802,85 +813,76 @@ ul {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid rgb(119, 98, 212);
-    font-size: 28px;
     font-family: 'Asap', sans-serif;
 }
-#typeMaxBtns{
-    grid-area: typeMaxCreate;
+
+#typeMaxBtns {
     display: grid;
     grid-template-columns: 30% 70%;
     grid-template-rows: 50% 50%;
-    grid-template-areas: 
-    "typeCP MaxMembCP"
-    "typeCP btnCP";
+    grid-template-areas:
+        "typeCP MaxMembCP"
+        "typeCP btnCP";
     font-family: 'Asap', sans-serif;
 }
+
 #tournamentTargetsLblAtCreatePanel {
     position: relative;
     display: block;
     justify-self: center;
-    font-size: 28px;
-    letter-spacing: 1px;
     font-weight: bold;
     font-family: 'Asap', sans-serif;
 }
-#TargetsCreatePanel{
+
+#TargetsCreatePanel {
     grid-area: goalsCP;
-    padding: 10%;
     font-family: 'Asap', sans-serif;
 }
-#RequirementsCreatePanel{
+
+#RequirementsCreatePanel {
     grid-area: reqsCP;
-    padding: 10%;
     font-family: 'Asap', sans-serif;
 }
+
 .tournamentTargetsInputAtCreatePanel {
     display: flex;
-    height: 50px;
-    width: 60%;
     outline: none;
     background-color: transparent;
     border: 2px solid rgb(119, 98, 212);
     border-top: none;
-    font-size: 24px;
 }
 
 #tournamentRequirementsLblAtCreatePanel {
     display: block;
-    font-size: 28px;
-    justify-self:center;
+    justify-self: center;
     letter-spacing: 1px;
     font-weight: bold;
     font-family: 'Asap', sans-serif;
 }
-#tournamentRequirementsBlockAtCreatePanel{
+
+#tournamentRequirementsBlockAtCreatePanel {
     position: relative;
 }
-#tournamentTargetsBlockAtCreatePanel{
+
+#tournamentTargetsBlockAtCreatePanel {
     position: relative;
 }
+
 .tournamentRequirementsInputAtCreatePanel {
     display: flex;
-    height: 50px;
-    width: 60%;
     outline: none;
     background-color: transparent;
     border: 2px solid rgb(119, 98, 212);
     border-top: none;
-    font-size: 24px;
 }
 
 #tournamentDescriptionTextAreaAtCreatePanel {
     position: relative;
     display: flex;
-    grid-area: descript;
     justify-self: center;
     align-self: center;
     resize: none;
-    height: 80%;
-    width: 80%;
     outline: none;
-    font-size: 24px;
     background-color: transparent;
     border: 2px solid rgb(119, 98, 212);
     font-family: 'Asap', sans-serif;
@@ -889,29 +891,20 @@ ul {
 #tournamentMaxMembersInputAtCreatePanel {
     position: relative;
     display: flex;
-    grid-area: MaxMembCP;
-    justify-self: center;
     align-self: center;
-    width: 200px;
-    height: 50px;
     outline: none;
     background-color: transparent;
     border: 2px solid rgb(119, 98, 212);
     border-radius: 10px;
-    font-size: 24px;
     font-family: 'Asap', sans-serif;
 }
 
 #tournamentTypeInputAtCreatePanel {
     position: relative;
     display: flex;
-    grid-area: typeCP;
-    justify-self: center;
     align-self: center;
-    font-size: 28px;
     border: none;
     outline: none;
-    width: 200px;
 }
 
 #tournamentTypeInputAtCreatePanel fieldset {
@@ -923,12 +916,9 @@ ul {
 }
 
 #tournamentCreateBtn {
-    grid-area: btnCP;
-    justify-self: center;
-    align-self: center;
-    padding: 15px 80px;
     background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
 }
+
 #outputMsgLbl {
     display: block;
     position: relative;
@@ -952,155 +942,390 @@ ul {
     padding: 10px 10px;
     grid-area: btnsm;
     justify-self: center;
-    align-self: center;
     width: 35%;
     background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
 }
-#trnNumsbtn{
+
+#trnNumsbtn {
     background-color: transparent;
     border: none;
 }
-#numsOfTrnsOnthePage{
+
+#numsOfTrnsOnthePage {
     background-image: url('img/trnNumsIcon.png');
-    background-size:contain;
+    background-size: contain;
     background-color: transparent;
     width: 50px;
     border: none;
     outline: none;
-    appearance:none;
+    appearance: none;
     color: transparent;
 }
-.numsOfTrnsOnthePageOpt{
+
+.numsOfTrnsOnthePageOpt {
     color: black
 }
-@media screen and (max-device-width: 600px){
+
+
+
+@media screen and (min-device-width: 0px) {
     #mainBlock {
         grid-template-rows: 1fr 50px;
     }
+
     #tournamentCreatePanel {
         grid-template-rows: 10% 10% 35% 35% 10%;
         grid-template-columns: 100%;
-        grid-template-areas: 
-        "labelCP"
-        "titleCP"
-        "goalsCP"
-        "reqsCP"
-        "btnsm";
+        grid-template-areas:
+            "labelCP"
+            "titleCP"
+            "goalsCP"
+            "reqsCP"
+            "btnsm";
     }
-    #crossIcononCreate{
+
+    #crossIcononCreate {
         grid-area: labelCP;
     }
-    #TargetsCreatePanel{
+
+    #TargetsCreatePanel {
         justify-self: center;
         padding: 0;
         padding-top: 20px;
     }
-    #RequirementsCreatePanel{
+
+    #RequirementsCreatePanel {
         justify-self: center;
         padding: 0;
     }
-    #creatingTournamentLbl  {
+
+    #creatingTournamentLbl {
         font-size: 24px;
         letter-spacing: 1px;
         width: 275px;
     }
-    #typeMaxBtns{
+
+    #typeMaxBtns {
         grid-area: reqsCP;
     }
-    #tournamentNameInputAtCreatePanel  {
+
+    #tournamentNameInputAtCreatePanel {
         width: 90%;
         font-size: 20px;
     }
-    
-    #tournamentTargetsLblAtCreatePanel  {
+
+    #tournamentTargetsLblAtCreatePanel {
         font-size: 20px;
         letter-spacing: 1px;
     }
-    
-    .tournamentTargetsInputAtCreatePanel  {
-        width:  100%;
+
+    .tournamentTargetsInputAtCreatePanel {
+        width: 100%;
         height: 30px;
         font-size: 20px;
     }
-    
-    #tournamentRequirementsLblAtCreatePanel  {
+
+    #tournamentRequirementsLblAtCreatePanel {
         font-size: 20px;
     }
-    
-    .tournamentRequirementsInputAtCreatePanel  {
+
+    .tournamentRequirementsInputAtCreatePanel {
         height: 30px;
         width: 100%;
         font-size: 20px;
     }
-    
-    #tournamentDescriptionTextAreaAtCreatePanel  {
+
+    #tournamentDescriptionTextAreaAtCreatePanel {
         height: 80%;
         width: 80%;
         font-size: 16px;
         grid-area: goalsCP;
     }
-    
-    #tournamentMaxMembersInputAtCreatePanel  {
+
+    #tournamentMaxMembersInputAtCreatePanel {
         width: 150px;
         height: 30px;
         font-size: 18px;
         grid-area: reqsCP;
         justify-self: flex-end;
     }
-    
+
     #tournamentTypeInputAtCreatePanel {
         font-size: 18px;
         width: 125px;
         grid-area: reqsCP;
         justify-self: flex-start;
     }
-    #tournamentCreateBtn{
+
+    #tournamentCreateBtn {
         padding: 10px 10px;
         grid-area: btnsm;
         width: 35%;
-        justify-self:flex-end;
+        justify-self: flex-end;
     }
-    .mobileNavPanel{
-        display: flex;
-    }
-    .labelUnity{
-        display: none;
-    }   
-    .headerBlock{
-        display: none;
-    }
-}
-@media screen and (min-device-width: 600px){
-    #mainBlock {
-        grid-template-rows: 100px 1fr;
-    }
-    .headerBlock{
-        height: 100px;
-        display: flex;
-    }
-    .mobileNavPanel{
-        display: none;
-    }
-    .labelUnity{
-        display: none;
-    }   
-    .profile{
-        display: grid;
-    }
-}
 
-@media screen and (min-device-width: 1100px){
-    #mainBlock {
-        grid-template-rows: 150px 1fr;
-    }
-    .headerBlock{
-        height: 150px;
+    .mobileNavPanel {
         display: flex;
     }
-    .labelUnity{
-        display: grid;
-    }
-    .mobileNavPanel{
+
+    .labelUnity {
         display: none;
+    }
+
+    .headerBlock {
+        display: none;
+    }
+
+    .tournamentName {
+        font-size: 24px;
+    }
+
+    .tournamentDescription {
+        font-size: 14px;
+    }
+
+    .tournamentType {
+        font-size: 12px;
+    }
+
+    #tournamentsTargetInfo {
+        font-size: 16px;
+    }
+
+    #tournamentReqInfo {
+        font-size: 16px;
+    }
+
+    #tournamentAdminLabelInfo {
+        font-size: 20px;
+    }
+
+    #tournamentMembersLabelInfo {
+        font-size: 20px;
+    }
+
+    #tournamentReqLabelInfo {
+        font-size: 20px;
+    }
+
+    #tournamentGoalsLabelInfo {
+        font-size: 20px;
+    }
+
+    #tournamentNameInfo {
+        font-size: 28px;
+    }
+
+    @media screen and (min-device-width: 600px) {
+        #mainBlock {
+            grid-template-rows: 100px 1fr;
+        }
+
+        #tournamentCreatePanel {
+            grid-template-rows: 10% 10% 50% 30%;
+            grid-template-columns: 50% 50%;
+            grid-template-areas:
+                "labelCP closeIconCP"
+                "titleCP titleCP"
+                "goalsCP reqsCP"
+                "descript typeMaxCreate";
+        }
+
+        #crossIcononCreate {
+            grid-area: closeIconCP;
+        }
+
+        #TargetsCreatePanel {
+            padding: 10%;
+        }
+
+        #RequirementsCreatePanel {
+            padding: 10%;
+        }
+
+        #creatingTournamentLbl {
+            font-size: 42px;
+            letter-spacing: 3px;
+            width: 500px;
+        }
+
+        #typeMaxBtns {
+            grid-area: typeMaxCreate;
+        }
+
+        #tournamentNameInputAtCreatePanel {
+            width: 35%;
+            font-size: 28px;
+        }
+
+        #tournamentTargetsLblAtCreatePanel {
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        .tournamentTargetsInputAtCreatePanel {
+            height: 50px;
+            font-size: 24px;
+        }
+
+        #tournamentRequirementsLblAtCreatePanel {
+            font-size: 28px;
+        }
+
+        .tournamentRequirementsInputAtCreatePanel {
+            height: 50px;
+            font-size: 24px;
+        }
+
+        #tournamentDescriptionTextAreaAtCreatePanel {
+            grid-area: descript;
+            height: 80%;
+            width: 80%;
+            font-size: 24px;
+        }
+
+        #tournamentMaxMembersInputAtCreatePanel {
+            grid-area: MaxMembCP;
+            justify-self: center;
+            width: 200px;
+            height: 50px;
+            font-size: 24px;
+        }
+
+        #tournamentTypeInputAtCreatePanel {
+            grid-area: typeCP;
+            justify-self: center;
+            width: 200px;
+            font-size: 28px;
+        }
+
+        #tournamentCreateBtn {
+            grid-area: btnCP;
+            justify-self: center;
+            padding: 15px 80px;
+            width: 20%;
+        }
+
+        .headerBlock {
+            height: 100px;
+            display: flex;
+        }
+
+        .mobileNavPanel {
+            display: none;
+        }
+
+        .labelUnity {
+            display: none;
+        }
+
+        .profile {
+            display: grid;
+            font-size: 18px;
+        }
+
+        .tournamentName {
+            font-size: 28px;
+        }
+
+        .tournamentDescription {
+            font-size: 18px;
+        }
+
+        .tournamentType {
+            font-size: 16px;
+        }
+
+        #tournamentsTargetInfo {
+            font-size: 20px;
+        }
+
+        #tournamentReqInfo {
+            font-size: 20px;
+        }
+
+        .NavPanelBtns {
+            font-size: 24px;
+        }
+
+        #tournamentMembersInfo {
+            font-size: 20px;
+        }
+
+        #tournamentAdminLabelInfo {
+            font-size: 24px;
+        }
+
+        #tournamentMembersLabelInfo {
+            font-size: 24px;
+        }
+
+        #profIcon {
+            width: 36px;
+        }
+
+        .navigationPanel li a {
+            font-size: 30px;
+        }
+
+        #tournamentNameInfo {
+            font-size: 34px;
+        }
+
+        @media screen and (min-device-width: 1100px) {
+            .profile {
+                font-size: 24px;
+
+            }
+
+            #mainBlock {
+                grid-template-rows: 150px 1fr;
+            }
+
+            .headerBlock {
+                height: 150px;
+                display: flex;
+            }
+
+            .labelUnity {
+                display: grid;
+            }
+
+            .mobileNavPanel {
+                display: none;
+            }
+
+            #tournamentsTargetInfo {
+                font-size: 24px;
+            }
+
+            .NavPanelBtns {
+                font-size: 32px;
+            }
+
+            #tournamentMembersInfo {
+                font-size: 17px;
+            }
+
+            #tournamentGoalsLabelInfo {
+                font-size: 24px;
+            }
+
+            #tournamentReqLabelInfo {
+                font-size: 24px;
+            }
+
+            #profIcon {
+                width: 48px;
+            }
+
+            .navigationPanel li a {
+                font-size: 40px;
+            }
+
+            #tournamentNameInfo {
+                font-size: 38px;
+            }
+        }
     }
 }
