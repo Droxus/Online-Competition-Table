@@ -52,7 +52,10 @@
             <div id="dataPageBlock"></div>
             <div id="statisticPageBlock"></div>
             <div id="aboutPageBlock"></div>
-            <div id="profilePageBlock"></div>
+            <div id="profilePageBlock">
+                <div></div>
+                <button id="btnLogout">Log Out</button>
+            </div>
         </div>
         <ul class="mobileNavPanel" id="mobileNavPanel">
             <li><img src="img/homeIcon.png" alt="btnMobHome" id="btnMobHome"></li>
@@ -69,8 +72,9 @@
             placeholder="Login" />
         <input class="authMenu" id="inptPassword" type="password" name="password" autocomplete="on" maxlength="30"
             placeholder="Password" />
-        <button class="signIn btnsForm" id="btnSignIn">Sign In</button>
+        <div id="authMnuBtns"><button class="signIn btnsForm" id="btnSignIn">Sign In</button>
         <button class="signIn btnsForm btnsChangeForm" id="noaccLink">Sign Up</button>
+        <button class="signIn btnsForm" id="gooleSignIn">Google</button></div>
     </div>
     <div id="tournamentInfo">
         <img src="img/crossIcon.svg" alt="cross" id="crossIcon">

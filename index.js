@@ -127,6 +127,8 @@ prewPageTurn.addEventListener('click', onPrewPageTurn);
 nextPagTurn.addEventListener('click', onNextPagTurn);
 crossIcon.addEventListener('click', onCrossTournamentInfo);
 numsOfTrnsOnthePage.addEventListener("change", onchangeTrnNumsOnPage);
+document.getElementById('btnLogout').addEventListener('click', onBtnSignOut)
+document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth)
 
 // let counterDegGradBg = 0;
 // setInterval(() =>{
@@ -137,8 +139,8 @@ numsOfTrnsOnthePage.addEventListener("change", onchangeTrnNumsOnPage);
 width = window.innerWidth;
 height = window.innerHeight;
 
-blackout.style.display = 'none';
-dataEnterSqr.forEach(element => element.style.display = 'block');
+blackout.style.display = 'block';
+dataEnterSqr.forEach(element => element.style.display = 'none');
 
 getMobileOperatingSystem();
 function getMobileOperatingSystem() {
@@ -181,7 +183,6 @@ function onHasaccLink(event) {
 
 function clearMenuOfAuth() {
   dataEnterSqr.forEach(element => element.style.display = 'none');
-  body.style["background-color"] = "white";
   // body.style.background = "none"
 }
 
@@ -197,11 +198,18 @@ function getNickName() {
   nickForLabel.innerHTML = login;
 }
 function onSignIn() {
+  blackout.style.display = 'none';
   document.getElementById('eMail').innerText = email;
   getNickName();
   password = null;
   clearMenuOfAuth();
   showMainPage();
+}
+function onSignOut(){
+  blackout.style.display = 'none';
+  dataEnterSqr.forEach(element => element.style.display = 'grid');
+  mainBlock.style.display = 'none';
+  onHasaccLink()
 }
 let msg = '';
 function outputFormError(msg) {
@@ -281,6 +289,9 @@ function onTournament(event) {
   mainBlock.style.display = 'none';
   tournamentInfo.style.display = 'grid';
   root.style.setProperty('--like-btn-size-scale', '0.33');
+  body.addEventListener('keydown', function(event) {
+   if (event.code == 'Escape') {onCrossTournamentInfo()}
+  })
   let num;
   tournamentNameInfo.innerText = this.firstElementChild.innerText;
   for (let i = 0; i < firebaseTornemnts.length; i++) {
@@ -330,6 +341,9 @@ function onTournament(event) {
 }
 
 function onCrossTournamentInfo(event) {
+  body.removeEventListener('keydown', function(event) {
+    if (event.code == 'Escape') {onCrossTournamentInfo()}
+   })
   mainBlock.style.display = 'grid';
   tournamentInfo.style.display = 'none';
   temporaryElementsTI.forEach(element => element.remove());
@@ -513,6 +527,9 @@ function onCreateTournament(event) {
   firstMpage = Array.from(document.getElementsByClassName('firstMpage'));
   secondMpage = Array.from(document.getElementsByClassName('secondMpage'));
   tournamentCreateBtn = document.getElementById('tournamentCreateBtn');
+    body.addEventListener('keydown', function(event) {
+   if (event.code == 'Escape') {oncrossIcononCreate()}
+  })
   tournamentCreateBtn.addEventListener('click', onTournamentCreateBtn);
   tournamentRequirementsLblAtCreatePanel = document.getElementById('tournamentRequirementsLblAtCreatePanel');
   tournamentDescriptionTextAreaAtCreatePanel = document.getElementById('tournamentDescriptionTextAreaAtCreatePanel');
@@ -559,6 +576,9 @@ function onNextPagTurn(event) {
   // console.log('Next Page');
 }
 function oncrossIcononCreate(event) {
+  body.removeEventListener('keydown', function(event) {
+    if (event.code == 'Escape') {oncrossIcononCreate()}
+   })
   while (tournamentCreatePanel.firstChild) {
     tournamentCreatePanel.removeChild(tournamentCreatePanel.firstChild);
   }
@@ -619,14 +639,13 @@ function onBtnSignUp(event) {
 function onBtnSignIn(event) {
   noaccLink.removeEventListener('click', onNoaccLink);
   btnSignIn.removeEventListener('click', onBtnSignIn);
+  console.log(email, password)
   email = inptUsername.value;
   password = inptPassword.value;
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
-      // Signed in
       onSignIn();
       var user = userCredential.user;
-      // ...
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -636,3 +655,40 @@ function onBtnSignIn(event) {
       outputFormError(errorMessage);
     });
 }
+function onBtnSignOut(event){
+  firebase.auth().signOut().then(() => {
+    onSignOut()
+  }).catch((error) => {
+    console.error('sign out fail')
+  });
+}
+var provider = new firebase.auth.GoogleAuthProvider();
+function onGoogleAuth(event){
+  firebase.auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+      /** @type {firebase.auth.OAuthCredential} */
+      var credential = result.credential;
+      var token = credential.accessToken;
+      console.log(credential, token)
+      var user = result.user;
+      onSignIn();
+    }).catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.error(errorCode, errorMessage)
+      var email = error.email;
+      var credential = error.credential;
+      console.log(email, credential)
+    });
+}
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      var uid = user.uid;
+      email = user.email
+      onSignIn()
+    } else {
+     onSignOut()
+    }
+  });
+  

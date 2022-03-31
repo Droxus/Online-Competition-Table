@@ -45,6 +45,8 @@ body {
 .dataEnterSqr {
     position: absolute;
     display: none;
+    grid-template-columns: 100%;
+    grid-template-rows: 25% 10% 15% 20% 20%;
     z-index: -1;
     border: solid 1px white;
     background-color: rgba(255, 255, 255, 0.3);
@@ -53,11 +55,39 @@ body {
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    border-radius: 15%;
-    max-width: 600px;
-    min-height: 650px;
+    border-radius: 100px;
+    width: 500px;
+    height: 650px;
 }
-
+#authMnuBtns{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 
+    "login login"
+    "signUp googleUp";
+}
+#btnSignIn{
+    grid-area: login;
+}
+#noaccLink{
+    grid-area: signUp;
+    width: 95%;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+#noaccLink:hover{
+    background-color: rgb(255, 255, 255);
+}
+#gooleSignIn{
+    grid-area: googleUp;
+    background-color: rgba(255, 0, 0, 0.5);
+    width: 95%;
+    justify-self: center;
+    align-self: center;
+}
+#gooleSignIn:hover{
+    background-color: rgba(255, 0, 0, 0.8);
+}
 div.dataEnterSqr>* {
     width: 70%;
     margin-left: 15%;
@@ -93,7 +123,6 @@ div.dataEnterSqr>* {
 
 .btnsForm {
     position: relative;
-    margin-top: 30px;
     height: 36px;
     border-radius: 18px;
     border: none;
@@ -112,10 +141,6 @@ div.dataEnterSqr>* {
     background-color: white;
     color: #5a5a5a;
     margin-top: 10%;
-}
-
-.btnsChangeForm:hover {
-    background-color: rgb(233, 232, 232);
 }
 
 .authMenu::placeholder {
@@ -308,12 +333,19 @@ li a:hover {
 
 #profilePageBlock {
     display: none;
+    grid-template-columns: 100%;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
 }
-
+#btnLogout{
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #718bff;
+    font-size: 42px;
+}
 #dataPageBlock {
     display: none;
     grid-template-rows: 1fr 50px;
