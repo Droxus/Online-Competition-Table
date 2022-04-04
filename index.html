@@ -33,13 +33,13 @@
         </div>
         <div class="contentBlock" id="contentBlock">
             <div id="homePageBlock">
-                <div id="tournamentsPanel"></div>
-                <div id="footerPanel">
-                    <button id="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
-                    <button id="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
-                    <label for="pageNumLbl" id="pageNumLbl">1</label>
-                    <button id="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
-                    <select name="numsOfTrnsOnthePage" id="numsOfTrnsOnthePage">
+                <div class="tournamentsPanel"></div>
+                <div class="footerPanel">
+                    <button class="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
+                    <button class="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
+                    <label for="pageNumLbl" class="pageNumLbl">1</label>
+                    <button class="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
+                    <select name="numsOfTrnsOnthePage" class="numsOfTrnsOnthePage">
                         <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
                         <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
                         <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
@@ -48,7 +48,23 @@
                     </select>
                 </div>
             </div>
-            <div id="favoritesPageBlock"></div>
+            <div id="favoritesPageBlock">
+                <div class="tournamentsPanel"></div>
+                <div class="footerPanel">
+                    <button class="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
+                    <button class="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
+                    <label for="pageNumLbl" class="pageNumLbl">1</label>
+                    <button class="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
+                    <select name="numsOfTrnsOnthePage" class="numsOfTrnsOnthePage">
+                        <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
+                        <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
+                        <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
+                        <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
+                        <option class="numsOfTrnsOnthePageOpt" selected="selected" value=""></option>
+                    </select>
+                    <button id="trnsTOshow">joined</button>
+                </div>
+            </div>
             <div id="dataPageBlock"></div>
             <div id="statisticPageBlock"></div>
             <div id="aboutPageBlock"></div>
@@ -77,7 +93,7 @@
         <button class="signIn btnsForm" id="gooleSignIn">Google</button></div>
     </div>
     <div id="tournamentInfo">
-        <img src="img/crossIcon.svg" alt="cross" id="crossIcon">
+        <img src="img/crossIcon.svg" alt="cross" class="crossIcons" id="crossIcon">
         <label id="tournamentNameInfo" for="tournamentNameInfo"></label>
         <div id="tournamentBtnsInfo">
             <button class="btn-grad" id="tournamentJoinInfo">Join</button>
@@ -97,6 +113,11 @@
         <img src="img/lock.jpg" alt="lock" id="lockbg">
     </div>
     <div id="tournamentCreatePanel"></div>
+    <div id="joinedTournament">
+        <img src="img/crossIcon.svg" alt="cross" class="crossIcons" id="crossIconJT">
+        <label id="nameJT" for="nameJT"></label>
+        <button class="btn-grad" id="btnLeaveTrn">Leave</button>
+    </div>
     <div id="blackout"></div>
 </body>
 

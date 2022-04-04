@@ -50,8 +50,7 @@ const btnMobData = document.getElementById('btnMobData');
 const btnMobStat = document.getElementById('btnMobStat');
 const btnMobProf = document.getElementById('btnMobProf');
 const lblErrorOutput = document.getElementById('lblErrorOutput');
-const createTournament = document.getElementById('createTournament');
-const footerPanel = document.getElementById('footerPanel');
+const createTournament = Array.from(document.getElementsByClassName('createTournament'));
 const blackout = document.getElementById('blackout');
 const tournamentInfo = document.getElementById('tournamentInfo');
 const crossIcon = document.getElementById('crossIcon');
@@ -69,17 +68,18 @@ const tournamentCupInfo = document.getElementById('tournamentCupInfo');
 const tournamentLikeBtn = Array.from(document.getElementsByClassName('tournamentLikeBtn'));
 const lockbg = document.getElementById('lockbg');
 let crossIcononCreate = document.getElementById('crossIcononCreate');
-const prewPageTurn = document.getElementById('prewPageTurn');
-const nextPagTurn = document.getElementById('nextPagTurn');
+const prewPageTurn = Array.from(document.getElementsByClassName('prewPageTurn'));
+const nextPagTurn = Array.from(document.getElementsByClassName('nextPagTurn'));
 const tournamentCreatePanel = document.getElementById('tournamentCreatePanel');
-let numsOfTrnsOnthePage = document.getElementById('numsOfTrnsOnthePage');
+const trnsTOshow = document.getElementById('trnsTOshow')
+let numsOfTrnsOnthePage = Array.from(document.getElementsByClassName('numsOfTrnsOnthePage'));
 let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'));
 let likeButton = Array.from(document.getElementsByClassName("heart-like-button"));
-let tournamentsPanel = document.getElementById('tournamentsPanel');
+let tournamentsPanel = Array.from(document.getElementsByClassName('tournamentsPanel'));
 let typeMaxBtns;
 let secondMpage;
 let firstMpage;
-let pageNumLbl = document.getElementById('pageNumLbl');
+let pageNumLbl = Array.from(document.getElementsByClassName('pageNumLbl'));
 let onTournamentInfoBlock;
 let tournamentNameBlock = document.getElementById('tournamentNameBlock');
 let tournamentDescriptionBlock = document.getElementById('tournamentDescriptionBlock');
@@ -107,7 +107,7 @@ let tournamentRequirementsInputAtCreatePanel;
 let tournamentCreateBtn;
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile];
 const mobileNavPanelBtns = [btnMobHome, btnMobFav, btnMobData, btnMobStat, btnMobProf];
-let password, email, width, height, temporaryElementsTI, isMobileVersion;
+let password, email, width, height, temporaryElementsTI, isMobileVersion, docName;
 inptUsername.addEventListener('click', onClearError);
 inptPassword.addEventListener('click', onClearError);
 btnHome.addEventListener('click', onbtnHome);
@@ -121,14 +121,25 @@ btnMobFav.addEventListener('click', onbtnFavorites);
 btnMobData.addEventListener('click', onbtnData);
 btnMobStat.addEventListener('click', onbtnStatistics);
 btnMobProf.addEventListener('click', onProfile);
-createTournament.addEventListener('click', onCreateTournament);
+createTournament.forEach(element => element.addEventListener('click', onCreateTournament));
 likeButton.forEach(element => element.addEventListener("click", onLikebtn));
-prewPageTurn.addEventListener('click', onPrewPageTurn);
-nextPagTurn.addEventListener('click', onNextPagTurn);
+prewPageTurn.forEach(element => element.addEventListener('click', onPrewPageTurn));
+nextPagTurn.forEach(element => element.addEventListener('click', onNextPagTurn));
 crossIcon.addEventListener('click', onCrossTournamentInfo);
-numsOfTrnsOnthePage.addEventListener("change", onchangeTrnNumsOnPage);
-document.getElementById('btnLogout').addEventListener('click', onBtnSignOut)
-document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth)
+numsOfTrnsOnthePage.forEach(element => element.addEventListener("change", onchangeTrnNumsOnPage));
+document.getElementById('btnLogout').addEventListener('click', onBtnSignOut);
+document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
+document.getElementById('tournamentJoinInfo').addEventListener('click', onJTbtn);
+document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn)
+trnsTOshow.addEventListener('click', () => {
+  if (trnsTOshow.innerText == 'joined'){
+    trnsTOshow.innerText = 'liked'
+    showTournaments(from)
+  } else {
+    trnsTOshow.innerText = 'joined'
+    showTournaments(from)
+  } 
+})
 
 // let counterDegGradBg = 0;
 // setInterval(() =>{
@@ -192,24 +203,32 @@ function showMainPage() {
 }
 let login;
 function getNickName() {
-  login = email;
-  login = email[0].toUpperCase() + email.slice(1, email.indexOf('@')).toLowerCase();
-  if (login.length > 10) { login = login.slice(0, login.length); }
-  nickForLabel.innerHTML = login;
+  if (User.displayName == null) {
+    login = email;
+    login = email[0].toUpperCase() + email.slice(1, email.indexOf('@')).toLowerCase();
+    if (login.length > 10) { login = login.slice(0, login.length); }
+    nickForLabel.innerHTML = login;
+    User.updateProfile({
+      displayName: login
+    }).then(() => console.log(User.displayName));
+  } else { login = User.displayName; nickForLabel.innerHTML = login; }
 }
 function onSignIn() {
+  console.log(User);
   blackout.style.display = 'none';
   document.getElementById('eMail').innerText = email;
   getNickName();
   password = null;
+  Promise.all([  getFirebaseLikedTrn(),   getFirebaseUserJT()]).then(() => {
   clearMenuOfAuth();
   showMainPage();
+  })
 }
-function onSignOut(){
+function onSignOut() {
   blackout.style.display = 'none';
   dataEnterSqr.forEach(element => element.style.display = 'grid');
   mainBlock.style.display = 'none';
-  onHasaccLink()
+  onHasaccLink();
 }
 let msg = '';
 function outputFormError(msg) {
@@ -225,15 +244,34 @@ function onClearError() {
 }
 
 //--- --- --- --- --- ---  Главная --- --- --- --- --- --- --- ---
-let firebaseTornemnts = [];
+let firebaseTournaments = [];
+let firebaseUser = [];
+let firebaseLikedTrn = []
 let from = 0;
+function getFirebaseLikedTrn(){
+  firebaseLikedTrn = []
+  db.collection("users_info").doc(uid).collection("liked_tournaments").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      firebaseLikedTrn.push(doc.data());
+      console.log(firebaseLikedTrn);
+    });
+  });
+}
+function getFirebaseUserJT() {
+  firebaseUser = [];
+  db.collection("users_info").doc(uid).collection("active_tournaments").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      firebaseUser.push(doc.data());
+      console.log(firebaseUser);
+    });
+  });
+}
 function getFirebaseData() {
-  firebaseTornemnts = [];
+  firebaseTournaments = [];
   blackout.style.display = 'block';
   db.collection("global_tournaments").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-      firebaseTornemnts.push(doc.data());
-      // console.log(firebaseTornemnts);
+      firebaseTournaments.push(doc.data());
     });
   }).then(() => onbtnHome());
 }
@@ -249,26 +287,37 @@ function onbtnHome(event) {
   btnHome.style.color = 'black';
   btnMobHome.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
   document.getElementById('homePageBlock').style.display = 'grid';
+  panelNum = 0
+  from = 0
   showTournaments(from);
 }
 let to = 0;
+let panelNum = 0
+let trnsToShow
 function showTournaments(from) {
-  pageNumLbl.innerHTML = Math.floor(to / tournamentsOnThePage);
+  if (panelNum == 0){
+    trnsToShow = firebaseTournaments
+  } else if (trnsTOshow.innerText == 'joined'){
+    trnsToShow = firebaseUser
+  } else {trnsToShow = firebaseLikedTrn}
+  pageNumLbl[panelNum].innerHTML = Math.floor(to / tournamentsOnThePage);
   if (from < 0) return from = 0;
   to = from + tournamentsOnThePage;
-  if (to > firebaseTornemnts.length) { to = firebaseTornemnts.length; }
-  // console.log(from, to);
-  tournamentsPanel = document.getElementById('tournamentsPanel');
-  while (tournamentsPanel.firstChild) {
-    tournamentsPanel.removeChild(tournamentsPanel.firstChild);
+  if (to > trnsToShow.length) { to = trnsToShow.length; }
+  console.log(from, to);
+  while (tournamentsPanel[panelNum].firstChild) {
+    tournamentsPanel[panelNum].removeChild(tournamentsPanel[panelNum].firstChild);
   }
   for (let i = from; i < to; i++) {
-    tournamentsPanel.insertAdjacentHTML('beforeend', `<div class="tournament" ><div class="onTournamentInfoBlock">               
-          <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${firebaseTornemnts[i].name}</label></div>
-          <div id="tournamentDescriptionBlock"><label class="tournamentDescription" for="tournamentDescription">${firebaseTornemnts[i].description}</label></div>
-          <div id="tournamentTypeBlock"><label class="tournamentType" for="tournamentType">type: ${firebaseTornemnts[i].type}</label></div>
-          <div id="tournamentMaxMembersBlock"><label class="tournamentMaxMembers" for="tournamentMaxMembers">${firebaseTornemnts[i].curr_members} / ${firebaseTornemnts[i].max_members}</label></div>
-          </div><div class="heart-like-button tournamentLikeBtn"></div></div>`);
+    tournamentsPanel[panelNum].insertAdjacentHTML('beforeend', `<div class="tournament" ><div class="onTournamentInfoBlock">               
+          <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
+          <div id="tournamentDescriptionBlock"><label class="tournamentDescription" for="tournamentDescription">${trnsToShow[i].description}</label></div>
+          <div id="tournamentTypeBlock"><label class="tournamentType" for="tournamentType">type: ${trnsToShow[i].type}</label></div>
+          <div id="tournamentMaxMembersBlock"><label class="tournamentMaxMembers" for="tournamentMaxMembers">${trnsToShow[i].curr_members} / ${trnsToShow[i].max_members}</label></div>
+          </div></div>`);
+          if (firebaseLikedTrn.findIndex((element) => element.name == trnsToShow[i].name) !== -1){
+            tournamentsPanel[panelNum].lastChild.insertAdjacentHTML('beforeend', `<div class="heart-like-button tournamentLikeBtn liked"></div>`)
+          } else {tournamentsPanel[panelNum].lastChild.insertAdjacentHTML('beforeend', `<div class="heart-like-button tournamentLikeBtn"></div>`)}
   }
   tournament = Array.from(document.getElementsByClassName('tournament'));
   tournamentNameBlock = document.getElementById('tournamentNameBlock');
@@ -283,23 +332,38 @@ function showTournaments(from) {
   onTournamentInfoBlock.forEach(element => element.addEventListener('click', onTournament));
   likeButton = Array.from(document.getElementsByClassName("heart-like-button"));
   likeButton.forEach(element => element.addEventListener("click", onLikebtn));
-  pageNumLbl.innerHTML = Math.ceil(to / tournamentsOnThePage);
+  pageNumLbl.forEach(element => element.innerHTML = Math.ceil(to / tournamentsOnThePage));
 }
+let num;
 function onTournament(event) {
-  mainBlock.style.display = 'none';
-  tournamentInfo.style.display = 'grid';
-  root.style.setProperty('--like-btn-size-scale', '0.33');
-  body.addEventListener('keydown', function(event) {
-   if (event.code == 'Escape') {onCrossTournamentInfo()}
-  })
-  let num;
-  tournamentNameInfo.innerText = this.firstElementChild.innerText;
-  for (let i = 0; i < firebaseTornemnts.length; i++) {
-    if (firebaseTornemnts[i].name == this.firstElementChild.innerText) {
+  for (let i = 0; i < firebaseTournaments.length; i++) {
+    if (firebaseTournaments[i].name == this.firstElementChild.innerText) {
       num = i; break;
     }
   }
-  if (firebaseTornemnts[num].type == "closed") {
+  docName = this.firstElementChild.innerText
+  // for (let i = 0; i < firebaseTournaments[num].usersInfo.length; i++){
+  //   if (firebaseTournaments[num].usersInfo[i] == uid){
+  //     return onTournamentJoin()
+  //   }
+  // } 
+  // return onTournamentInfo()
+  for (let i = 0; i < firebaseUser.length; i++) {
+    if (firebaseUser[i].name == firebaseTournaments[num].name) {
+      return onTournamentJoin();
+    }
+  }
+  return onTournamentInfo();
+}
+function onTournamentInfo() {
+  mainBlock.style.display = 'none';
+  tournamentInfo.style.display = 'grid';
+  root.style.setProperty('--like-btn-size-scale', '0.33');
+  body.addEventListener('keydown', function (event) {
+    if (event.code == 'Escape') { onCrossTournamentInfo(); }
+  });
+  tournamentNameInfo.innerText = firebaseTournaments[num].name;
+  if (firebaseTournaments[num].type == "closed") {
     tournamentGoalsLabelInfo.style.display = 'none';
     tournamentAdminLabelInfo.style.display = 'none';
     tournamentMembersLabelInfo.style.display = 'none';
@@ -317,38 +381,37 @@ function onTournament(event) {
     tournamentBtnsInfo.style.display = 'inline-flex';
   }
   tournamentAdminLabelInfo.innerText = isMobileVersion ? 'ADMIN' : 'ADMINISTRATOR';
-  if (firebaseTornemnts[num].targets[0] !== "" && firebaseTornemnts[num].targets.length !== 0) {
-    for (let i = 0; i < firebaseTornemnts[num].targets.length; i++) {
-      tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li class="temporaryElementsTI tournamentGoalsInfo">${firebaseTornemnts[num].targets[i]}</li>`);
+  if (firebaseTournaments[num].targets[0] !== "" && firebaseTournaments[num].targets.length !== 0) {
+    for (let i = 0; i < firebaseTournaments[num].targets.length; i++) {
+      tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li class="temporaryElementsTI tournamentGoalsInfo">${firebaseTournaments[num].targets[i]}</li>`);
     }
   } else { tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no goals :(</li>`); }
   tournamentAdminLabelInfo.insertAdjacentHTML('afterend',
-    `<li class="temporaryElementsTI" id="id="tournamentAdminInfo"><img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"> ${firebaseTornemnts[num].administrator}</li>`);
+    `<li class="temporaryElementsTI" id="id="tournamentAdminInfo"><img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"> ${firebaseTournaments[num].administrator}</li>`);
   let membersNums;
-  firebaseTornemnts[num].participants.length > 5 ? membersNums = 5 : membersNums = firebaseTornemnts[num].participants.length;
-  if (firebaseTornemnts[num].participants[0] !== "" && firebaseTornemnts[num].participants.length !== 0) {
+  firebaseTournaments[num].participants.length > 5 ? membersNums = 5 : membersNums = firebaseTournaments[num].participants.length;
+  if (firebaseTournaments[num].participants[0] !== "" && firebaseTournaments[num].participants.length !== 0) {
     for (let i = 0; i < membersNums; i++) {
       tournamentMembersLabelInfo.insertAdjacentHTML('afterend', `<li class="temporaryElementsTI tournamentParticipantsInfo">
-      <img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"> ${firebaseTornemnts[num].participants[i]}<br>`);
+      <img src="img/icons8-test-account-48.png" alt="userIcon" class="userIconTI"> ${firebaseTournaments[num].participants[i]}<br>`);
     }
   } else { tournamentMembersLabelInfo.insertAdjacentHTML('afterend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no participants :(</li>`); }
-  if (firebaseTornemnts[num].requirements[0] !== "" && firebaseTornemnts[num].requirements.length !== 0) {
-    for (let i = 0; i < firebaseTornemnts[num].requirements.length; i++) {
-      tournamentReqLabelInfo.insertAdjacentHTML('afterend', `<li class="temporaryElementsTI tournamentReqsInfo">${firebaseTornemnts[num].requirements[i]}</li>`);
+  if (firebaseTournaments[num].requirements[0] !== "" && firebaseTournaments[num].requirements.length !== 0) {
+    for (let i = 0; i < firebaseTournaments[num].requirements.length; i++) {
+      tournamentReqLabelInfo.insertAdjacentHTML('afterend', `<li class="temporaryElementsTI tournamentReqsInfo">${firebaseTournaments[num].requirements[i]}</li>`);
     }
   } else { tournamentReqLabelInfo.insertAdjacentHTML('afterend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no requirements :(</li>`); }
   temporaryElementsTI = Array.from(document.getElementsByClassName('temporaryElementsTI'));
 }
-
 function onCrossTournamentInfo(event) {
-  body.removeEventListener('keydown', function(event) {
-    if (event.code == 'Escape') {onCrossTournamentInfo()}
-   })
+  body.removeEventListener('keydown', function (event) {
+    if (event.code == 'Escape') { onCrossTournamentInfo(); }
+  });
   mainBlock.style.display = 'grid';
   tournamentInfo.style.display = 'none';
   temporaryElementsTI.forEach(element => element.remove());
   likeButton.forEach(element => element.classList.remove("liked"));
-  onbtnHome()
+  onbtnHome();
 }
 let canMakeNewTarg = true;
 function ontournamentTargetsInputAtCreatePanel(event) {
@@ -396,25 +459,70 @@ function onTournamentCreateBtn() {
     } else if (tournamentInvitedTypeInputAtCreatePanel.checked) {
       trnType = "invited";
     } else { trnType = "opened"; }
-    db.collection("global_tournaments").add({
-      name: tournamentNameInputAtCreatePanel.value,
-      targets: trnTargets,
-      requirements: trnRequirements,
-      description: tournamentDescriptionTextAreaAtCreatePanel.value,
-      max_members: tournamentMaxMembersInputAtCreatePanel.value,
-      type: trnType,
-      curr_members: 1,
-      administrator: login,
-      participants: ""
-    })
-      .then((docRef) => {
-        getFirebaseData();
-        oncrossIcononCreate();
-      })
-      .catch((error) => {
-        // console.error("Error adding document: ", error);
-      });
+    db.collection("global_tournaments").doc(`${tournamentNameInputAtCreatePanel.value}`).get().then((doc) => {
+      if (doc.exists) {
+        outputMessege('Tournament with this name exists');
+      } else {
+        db.collection("global_tournaments").doc(`${tournamentNameInputAtCreatePanel.value}`).set({
+          name: tournamentNameInputAtCreatePanel.value,
+          targets: trnTargets,
+          requirements: trnRequirements,
+          description: tournamentDescriptionTextAreaAtCreatePanel.value,
+          max_members: tournamentMaxMembersInputAtCreatePanel.value,
+          type: trnType,
+          curr_members: 1,
+          administrator: login,
+          participants: "",
+          usersInfo: [uid]
+        })
+          .then((docRef) => {
+            getFirebaseData();
+            oncrossIcononCreate();
+          });
+      }
+    });
+    
   }
+}
+function onJTbtn(event) {
+    db.collection("users_info").doc(uid).collection("active_tournaments").doc(`${docName}`).set(firebaseTournaments[num]).then(() => {
+    db.collection("global_tournaments").doc(`${docName}`).update({
+      usersInfo: firebase.firestore.FieldValue.arrayUnion(uid),
+      participants: firebase.firestore.FieldValue.arrayUnion(login)
+    });
+  }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); });
+}
+function onTournamentJoin(event) {
+  body.removeEventListener('keydown', function (event) {
+    if (event.code == 'Escape') { onCrossTournamentInfo(); }
+  });
+  body.addEventListener('keydown', function (event) {
+    if (event.code == 'Escape') { onCrossIconJT(); }
+  });
+  tournamentInfo.style.display = 'none';
+  if (temporaryElementsTI) {
+    temporaryElementsTI.forEach(element => element.remove());
+  }
+  mainBlock.style.display = 'none';
+  document.getElementById('joinedTournament').style.display = 'grid';
+  document.getElementById('crossIconJT').addEventListener('click', onCrossIconJT);
+  document.getElementById('nameJT').innerText = docName
+}
+function onCrossIconJT(event) {
+  document.getElementById('joinedTournament').style.display = 'none';
+  body.removeEventListener('keydown', function (event) {
+    if (event.code == 'Escape') { onCrossIconJT(); }
+  });
+  mainBlock.style.display = 'grid';
+  panelNum == 0 ? onbtnHome() : onbtnFavorites()
+}
+function onLeaveTrn(event){
+  db.collection("users_info").doc(uid).collection("active_tournaments").doc(`${docName}`).delete().then(() => {
+    db.collection("global_tournaments").doc(`${docName}`).update({
+      usersInfo: firebase.firestore.FieldValue.arrayRemove(uid),
+      participants: firebase.firestore.FieldValue.arrayRemove(login)
+    });
+  }).then(() => { onCrossIconJT(); getFirebaseUserJT(); getFirebaseData(); });
 }
 function onbtnFavorites(event) {
   clearMenu();
@@ -423,6 +531,9 @@ function onbtnFavorites(event) {
   btnFavorites.style.color = 'black';
   document.getElementById('favoritesPageBlock').style.display = 'grid';
   btnMobFav.parentElement.style["background-color"] = 'rgba(158, 132, 94, 0.4)';
+  panelNum = 1
+  from = 0
+  showTournaments(from)
 }
 function onbtnData(event) {
   clearMenu();
@@ -487,7 +598,7 @@ function onCreateTournament(event) {
   tournamentCreatePanel.style.display = 'grid';
   mainBlock.style.display = 'none';
   tournamentCreatePanel.insertAdjacentHTML('beforeend', `
-    <img src="img/crossIcon.svg" alt="cross" id="crossIcononCreate">
+    <img src="img/crossIcon.svg" alt="cross" class="crossIcons" id="crossIcononCreate">
   <label class="trnCrtPanel" for="creatingTournament" id="creatingTournamentLbl">Creating Tournament</label>
   <input class="trnCrtPanel firstMpage" type="text" id="tournamentNameInputAtCreatePanel" maxlength="30" placeholder="Tournament Name">
   <div class="firstMpage" id="TargetsCreatePanel"><label class="trnCrtPanel" for="trnTargets" id="tournamentTargetsLblAtCreatePanel">Tartgets: </label>
@@ -527,9 +638,9 @@ function onCreateTournament(event) {
   firstMpage = Array.from(document.getElementsByClassName('firstMpage'));
   secondMpage = Array.from(document.getElementsByClassName('secondMpage'));
   tournamentCreateBtn = document.getElementById('tournamentCreateBtn');
-    body.addEventListener('keydown', function(event) {
-   if (event.code == 'Escape') {oncrossIcononCreate()}
-  })
+  body.addEventListener('keydown', function (event) {
+    if (event.code == 'Escape') { oncrossIcononCreate(); }
+  });
   tournamentCreateBtn.addEventListener('click', onTournamentCreateBtn);
   tournamentRequirementsLblAtCreatePanel = document.getElementById('tournamentRequirementsLblAtCreatePanel');
   tournamentDescriptionTextAreaAtCreatePanel = document.getElementById('tournamentDescriptionTextAreaAtCreatePanel');
@@ -570,15 +681,15 @@ function onPrewPageTurn(event) {
   // console.log('Prew Page');
 }
 function onNextPagTurn(event) {
-  if (from > (firebaseTornemnts.length - tournamentsOnThePage - 1)) return;
+  if (from > (trnsToShow.length - tournamentsOnThePage - 1)) return;
   from = from + tournamentsOnThePage;
   showTournaments(from);
   // console.log('Next Page');
 }
 function oncrossIcononCreate(event) {
-  body.removeEventListener('keydown', function(event) {
-    if (event.code == 'Escape') {oncrossIcononCreate()}
-   })
+  body.removeEventListener('keydown', function (event) {
+    if (event.code == 'Escape') { oncrossIcononCreate(); }
+  });
   while (tournamentCreatePanel.firstChild) {
     tournamentCreatePanel.removeChild(tournamentCreatePanel.firstChild);
   }
@@ -587,8 +698,9 @@ function oncrossIcononCreate(event) {
 }
 function onchangeTrnNumsOnPage(event) {
   tournamentsOnThePage = Number(this.value);
-
-  onbtnHome();
+  root.style.setProperty('--tournamnets-on-the-page', `${tournamentsOnThePage}`);
+  from = 0
+  showTournaments(from);
 }
 function outputMessege(msg) {
   blackout.style.display = 'block';
@@ -603,12 +715,21 @@ function outputMessege(msg) {
     blackout.style.display = 'none';
   });
 }
-function onLikebtn(event){
-  // (likeButton.classList.contains("liked")) ? likeButton.classList.remove("liked") : likeButton.classList.add("liked")
-  if (this.classList.contains("liked")){
-    this.classList.remove("liked")
+function onLikebtn(event) {
+  let likedTrnName = this.parentElement.firstChild.firstElementChild.firstElementChild.innerText
+  for (let i = 0; i < firebaseTournaments.length; i++) {
+    if (firebaseTournaments[i].name == likedTrnName) {
+      num = i; break;
+    }
+  }
+  if (this.classList.contains("liked")) {
+    this.classList.remove("liked");
+    db.collection("users_info").doc(`${uid}`).collection("liked_tournaments").doc(likedTrnName).delete()
+    .then(() => {firebaseLikedTrn.splice(firebaseLikedTrn.findIndex((element) => element.name == firebaseTournaments[num].name), 1)})
   } else {
-    this.classList.add("liked")
+    this.classList.add("liked");
+    db.collection("users_info").doc(`${uid}`).collection("liked_tournaments").doc(likedTrnName).set(firebaseTournaments[num])
+    .then(() => {firebaseLikedTrn.push(firebaseTournaments[num])})
   }
 }
 
@@ -639,7 +760,7 @@ function onBtnSignUp(event) {
 function onBtnSignIn(event) {
   noaccLink.removeEventListener('click', onNoaccLink);
   btnSignIn.removeEventListener('click', onBtnSignIn);
-  console.log(email, password)
+  console.log(email, password);
   email = inptUsername.value;
   password = inptPassword.value;
   firebase.auth().signInWithEmailAndPassword(email, password)
@@ -655,40 +776,44 @@ function onBtnSignIn(event) {
       outputFormError(errorMessage);
     });
 }
-function onBtnSignOut(event){
+function onBtnSignOut(event) {
   firebase.auth().signOut().then(() => {
-    onSignOut()
+    onSignOut();
   }).catch((error) => {
-    console.error('sign out fail')
+    console.error('sign out fail');
   });
 }
 var provider = new firebase.auth.GoogleAuthProvider();
-function onGoogleAuth(event){
+function onGoogleAuth(event) {
   firebase.auth()
     .signInWithPopup(provider)
     .then((result) => {
       /** @type {firebase.auth.OAuthCredential} */
       var credential = result.credential;
       var token = credential.accessToken;
-      console.log(credential, token)
+      console.log(credential, token);
       var user = result.user;
       onSignIn();
     }).catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
-      console.error(errorCode, errorMessage)
+      console.error(errorCode, errorMessage);
       var email = error.email;
       var credential = error.credential;
-      console.log(email, credential)
+      console.log(email, credential);
     });
 }
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      var uid = user.uid;
-      email = user.email
-      onSignIn()
-    } else {
-     onSignOut()
-    }
-  });
-  
+let uid;
+let User;
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    uid = user.uid;
+    email = user.email;
+    console.log(user);
+    User = firebase.auth().currentUser;
+    onSignIn();
+  } else {
+    onSignOut();
+  }
+});

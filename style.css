@@ -330,7 +330,13 @@ li a:hover {
     width: 100%;
     height: 100%;
 }
-
+#favoritesPageBlock{
+    display: none;
+    grid-template-rows: 1fr 50px;
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+}
 #profilePageBlock {
     display: none;
     grid-template-columns: 100%;
@@ -398,7 +404,7 @@ li a:hover {
     background-color: rgba(216, 181, 135, 0.6);
 }
 
-#footerPanel {
+.footerPanel {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: 100%;
@@ -410,7 +416,7 @@ li a:hover {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
-#pageNumLbl {
+.pageNumLbl {
     justify-self: center;
     align-self: center;
     display: block;
@@ -425,7 +431,7 @@ li a:hover {
     font-weight: bold;
 }
 
-#tournamentsPanel {
+.tournamentsPanel {
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: repeat(var(--tournamnets-on-the-page), calc(100% / var(--tournamnets-on-the-page)));
@@ -524,20 +530,20 @@ li a:hover {
 
 #crossIcon {
     grid-area: titleAndcloseIcon;
+}
+.crossIcons{
     align-self: baseline;
     justify-self: end;
     padding: 20px 20px 0 0;
     width: 48px;
 }
-
 #tournamentNameInfo {
     grid-area: titleAndcloseIcon;
     font-size: 38px;
     font-weight: bold;
-    align-self: center;
     justify-self: flex-start;
-    margin-left: 10%;
-    margin-right: 50px;
+    margin: 5%;
+    margin-right: 75px;
     letter-spacing: 2px;
     font-family: 'Asap', sans-serif;
 }
@@ -764,7 +770,7 @@ ul {
     transform: translate(-50%, -50%);
 }
 
-#createTournament {
+.createTournament {
     background-color: transparent;
     border: none;
     align-self: center;
@@ -776,7 +782,7 @@ ul {
     height: 40px;
 }
 
-#prewPageTurn {
+.prewPageTurn {
     background-color: transparent;
     border: none;
     align-self: center;
@@ -788,7 +794,7 @@ ul {
     height: 40px;
 }
 
-#nextPagTurn {
+.nextPagTurn {
     background-color: transparent;
     border: none;
     align-self: center;
@@ -815,13 +821,6 @@ ul {
     background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid white;
     border-radius: 5%;
-}
-
-#crossIcononCreate {
-    width: 48px;
-    align-self: flex-start;
-    justify-self: end;
-    margin: 20px;
 }
 
 #creatingTournamentLbl {
@@ -983,7 +982,7 @@ ul {
     border: none;
 }
 
-#numsOfTrnsOnthePage {
+.numsOfTrnsOnthePage {
     background-image: url('img/trnNumsIcon.png');
     background-size: contain;
     background-color: transparent;
@@ -993,12 +992,51 @@ ul {
     appearance: none;
     color: transparent;
 }
+#trnsTOshow{
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+}
 
 .numsOfTrnsOnthePageOpt {
     color: black
 }
 
-
+#joinedTournament{
+    position: fixed;
+    display: none;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 10% 1fr 10%;
+    grid-template-areas: 
+    "NameAndCrossTJ NameAndCrossTJ"
+    "a b"
+    "btnLeave btnLeave";
+    top: 3%;
+    left: 3%;
+    height: 94%;
+    width: 94%;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid white;
+    border-radius: 5%;
+}
+#btnLeaveTrn{
+    grid-area: btnLeave;
+    place-self: center;
+}
+#crossIconJT{
+    grid-area: NameAndCrossTJ;
+}
+#nameJT{
+    grid-area: NameAndCrossTJ;
+    margin-right: 60px;
+}
+#nameJT{
+    font-size: 28px;
+    font-weight: bold;
+    margin: 5%;
+    margin-right: 75px;
+}
 
 @media screen and (min-device-width: 0px) {
     #mainBlock {
