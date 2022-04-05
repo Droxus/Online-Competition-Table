@@ -402,6 +402,9 @@ function onTournamentInfo() {
     }
   } else { tournamentReqLabelInfo.insertAdjacentHTML('afterend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no requirements :(</li>`); }
   temporaryElementsTI = Array.from(document.getElementsByClassName('temporaryElementsTI'));
+  
+  if (firebaseLikedTrn.findIndex((element) => element.name == tournamentNameInfo.innerText) !== -1){
+    document.getElementById('tournamentLikeBtnInfo').classList.add('liked')}
 }
 function onCrossTournamentInfo(event) {
   body.removeEventListener('keydown', function (event) {
@@ -438,7 +441,6 @@ function ontournamentRequirementsInputAtCreatePanel(event) {
 }
 let trnTargets = [];
 let trnRequirements = [];
-let tournamentNameCP, MaxMembers, description;
 function onTournamentCreateBtn() {
   if ((tournamentNameInputAtCreatePanel.value == "")) {
     outputMessege('Enter Tournament Name');
@@ -463,7 +465,8 @@ function onTournamentCreateBtn() {
       if (doc.exists) {
         outputMessege('Tournament with this name exists');
       } else {
-        db.collection("global_tournaments").doc(`${tournamentNameInputAtCreatePanel.value}`).set({
+        docName = tournamentNameInputAtCreatePanel.value
+        let createdTrn = {
           name: tournamentNameInputAtCreatePanel.value,
           targets: trnTargets,
           requirements: trnRequirements,
@@ -474,8 +477,16 @@ function onTournamentCreateBtn() {
           administrator: login,
           participants: "",
           usersInfo: [uid]
-        })
-          .then((docRef) => {
+        }
+        firebaseUser.push(createdTrn)
+        db.collection("global_tournaments").doc(`${tournamentNameInputAtCreatePanel.value}`).set(createdTrn).then(() => {
+          db.collection("users_info").doc(uid).collection("active_tournaments").doc(`${docName}`).set(createdTrn).then(() => {
+            db.collection("global_tournaments").doc(`${docName}`).update({
+              usersInfo: firebase.firestore.FieldValue.arrayUnion(uid),
+              participants: firebase.firestore.FieldValue.arrayUnion(login)
+            });
+          })
+        }).then((docRef) => {
             getFirebaseData();
             oncrossIcononCreate();
           });
@@ -716,7 +727,12 @@ function outputMessege(msg) {
   });
 }
 function onLikebtn(event) {
-  let likedTrnName = this.parentElement.firstChild.firstElementChild.firstElementChild.innerText
+  let likedTrnName
+  if (this.classList.contains("tournamentLikeBtn")){
+    likedTrnName = this.parentElement.firstChild.firstElementChild.firstElementChild.innerText
+  } else{
+    likedTrnName = document.getElementById('tournamentNameInfo').innerText
+  }
   for (let i = 0; i < firebaseTournaments.length; i++) {
     if (firebaseTournaments[i].name == likedTrnName) {
       num = i; break;
@@ -729,7 +745,7 @@ function onLikebtn(event) {
   } else {
     this.classList.add("liked");
     db.collection("users_info").doc(`${uid}`).collection("liked_tournaments").doc(likedTrnName).set(firebaseTournaments[num])
-    .then(() => {firebaseLikedTrn.push(firebaseTournaments[num])})
+    .then(() => {firebaseLikedTrn.push(firebaseTournaments[num])}).then(() => likedTrnName = null)
   }
 }
 
