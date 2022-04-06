@@ -1006,37 +1006,143 @@ ul {
 #joinedTournament{
     position: fixed;
     display: none;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: 10% 1fr 10%;
+    grid-template-columns: 100%;
+    grid-template-rows: 50px 1fr 50px;
     grid-template-areas: 
-    "NameAndCrossTJ NameAndCrossTJ"
-    "a b"
-    "btnLeave btnLeave";
-    top: 3%;
-    left: 3%;
-    height: 94%;
-    width: 94%;
+    "headerJT"
+    "a"
+    "footerJT";
+    top: 1%;
+    left: 2%;
+    height: 98%;
+    width: 96%;
     background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid white;
-    border-radius: 5%;
+    border-radius: 25px;
+}
+#headerJT{
+    grid-area: headerJT;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 60px 1fr 60px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+#footerJT{
+    grid-area: footerJT;
+    display: grid;
+    grid-template-columns: 15% 1fr 15%;
+    grid-template-rows: 100%;
+}
+#btnNavJT{
+    text-align: center;
+    text-transform: uppercase;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #6146d8;
+    background-color: transparent;
+    font-size: 24px;
+    font-weight: bold;
+    border: none;
+    border-left: 1px solid #5a5a5a;
+    border-right: 1px solid #5a5a5a;
+}
+#btnNavJT:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+.pageSwitchJT{
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+}
+.pageSwitchJT:hover{
+    background-color: rgba(255, 255, 255, 0.2);
 }
 #btnLeaveTrn{
-    grid-area: btnLeave;
-    place-self: center;
+    position: inherit;
+    padding: 0;
+    height: 50px;
+    place-content: center;
 }
+
 #crossIconJT{
-    grid-area: NameAndCrossTJ;
+    width: 25px;
+    align-self: center;
+    justify-self: baseline;
+    margin-left: 20px;
+}
+#pageNameJT{
+    align-self: center;
+    justify-self: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 5%;
+    font-family: 'Heebo', sans-serif;
+    color: #2504b8;
 }
 #nameJT{
-    grid-area: NameAndCrossTJ;
-    margin-right: 60px;
-}
-#nameJT{
+    align-self: center;
+    justify-self: center;
     font-size: 28px;
     font-weight: bold;
     margin: 5%;
-    margin-right: 75px;
 }
+#trnIconJT{
+    align-self: center;
+    justify-self: flex-end;
+    width: 42px;
+    margin-right: 20px;
+}
+#trnIconJT:hover{
+    transform: scale(1.5);
+}
+#navPanelJT{
+    position: fixed;
+    display: none;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+.navPanBtnsJT{
+    z-index: 1000;
+    width: 80%;
+    height: 100%;
+    justify-self: center;
+    align-self: baseline;
+    font-size: 28px;
+    color: wheat;
+    background-color: transparent;
+    font-weight: bold;
+}
+#navPanelJTclose{
+    color: red;
+}
+#mainPageJT{
+    display: none;
+}
+#statisticsPageJT{
+    display: none;
+}
+#dataPageJT{
+    display: none;
+}
+#leadersPageJT{
+    display: none;
+}
+#settingsPageJT{
+    display: none;
+    grid-template-columns: 100%;
+    grid-template-rows: 90%, 10%;
+}
+
 
 @media screen and (min-device-width: 0px) {
     #mainBlock {
@@ -1059,14 +1165,12 @@ ul {
     }
 
     #TargetsCreatePanel {
-        justify-self: center;
-        padding: 0;
+        padding: 10%;
         padding-top: 20px;
     }
 
     #RequirementsCreatePanel {
-        justify-self: center;
-        padding: 0;
+        padding: 10%;
     }
 
     #creatingTournamentLbl {

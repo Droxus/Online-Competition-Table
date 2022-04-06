@@ -131,6 +131,13 @@ document.getElementById('btnLogout').addEventListener('click', onBtnSignOut);
 document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
 document.getElementById('tournamentJoinInfo').addEventListener('click', onJTbtn);
 document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn)
+document.getElementById('btnNavJT').addEventListener('click', onBtnNavJT)
+document.getElementById('navPanelJTclose').addEventListener('click', onNavPanelJTclose)
+document.getElementById('navPanelJTmain').addEventListener('click', onNavPanelJTmain)
+document.getElementById('navPanelJTstatistics').addEventListener('click', onNavPanelJTstatistics)
+document.getElementById('navPanelJTdata').addEventListener('click', onNavPanelJTdata)
+document.getElementById('navPanelJTleaders').addEventListener('click', onNavPanelJTleaders)
+document.getElementById('navPanelJTsettings').addEventListener('click', onNavPanelJTsettings)
 trnsTOshow.addEventListener('click', () => {
   if (trnsTOshow.innerText == 'joined'){
     trnsTOshow.innerText = 'liked'
@@ -518,6 +525,7 @@ function onTournamentJoin(event) {
   document.getElementById('joinedTournament').style.display = 'grid';
   document.getElementById('crossIconJT').addEventListener('click', onCrossIconJT);
   document.getElementById('nameJT').innerText = docName
+  document.getElementById('mainPageJT').style.display = 'grid'
 }
 function onCrossIconJT(event) {
   document.getElementById('joinedTournament').style.display = 'none';
@@ -534,6 +542,42 @@ function onLeaveTrn(event){
       participants: firebase.firestore.FieldValue.arrayRemove(login)
     });
   }).then(() => { onCrossIconJT(); getFirebaseUserJT(); getFirebaseData(); });
+}
+function onBtnNavJT(event){
+  document.getElementById('navPanelJT').style.display = 'grid'
+}
+function onNavPanelJTclose(event){
+  document.getElementById('navPanelJT').style.display = 'none'
+}
+function onNavPanelJTmain(event){
+  Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
+  document.getElementById('navPanelJT').style.display = 'none'
+  document.getElementById('mainPageJT').style.display = 'grid'
+  document.getElementById('pageNameJT').innerText = 'Main'
+}
+function onNavPanelJTstatistics(event){
+  Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
+  document.getElementById('navPanelJT').style.display = 'none'
+  document.getElementById('statisticsPageJT').style.display = 'grid'
+  document.getElementById('pageNameJT').innerText = 'Statistics'
+}
+function onNavPanelJTdata(event){
+  Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
+  document.getElementById('navPanelJT').style.display = 'none'
+  document.getElementById('dataPageJT').style.display = 'grid'
+  document.getElementById('pageNameJT').innerText = 'Data'
+}
+function onNavPanelJTleaders(event){
+  Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
+  document.getElementById('navPanelJT').style.display = 'none'
+  document.getElementById('leadersPageJT').style.display = 'grid'
+  document.getElementById('pageNameJT').innerText = 'Leader Board'
+}
+function onNavPanelJTsettings(event){
+  Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
+  document.getElementById('navPanelJT').style.display = 'none'
+  document.getElementById('settingsPageJT').style.display = 'grid'
+  document.getElementById('pageNameJT').innerText = 'Settings'
 }
 function onbtnFavorites(event) {
   clearMenu();
@@ -611,7 +655,7 @@ function onCreateTournament(event) {
   tournamentCreatePanel.insertAdjacentHTML('beforeend', `
     <img src="img/crossIcon.svg" alt="cross" class="crossIcons" id="crossIcononCreate">
   <label class="trnCrtPanel" for="creatingTournament" id="creatingTournamentLbl">Creating Tournament</label>
-  <input class="trnCrtPanel firstMpage" type="text" id="tournamentNameInputAtCreatePanel" maxlength="30" placeholder="Tournament Name">
+  <input class="trnCrtPanel firstMpage" type="text" id="tournamentNameInputAtCreatePanel" maxlength="16" placeholder="Tournament Name">
   <div class="firstMpage" id="TargetsCreatePanel"><label class="trnCrtPanel" for="trnTargets" id="tournamentTargetsLblAtCreatePanel">Tartgets: </label>
   <div id="tournamentTargetsBlockAtCreatePanel">  
       <input type="text" class="trnCrtPanel tournamentTargetsInputAtCreatePanel">

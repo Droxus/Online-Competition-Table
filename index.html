@@ -44,7 +44,6 @@
                         <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
                         <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
                         <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
-                        <option class="numsOfTrnsOnthePageOpt" selected="selected" value=""></option>
                     </select>
                 </div>
             </div>
@@ -60,7 +59,6 @@
                         <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
                         <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
                         <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
-                        <option class="numsOfTrnsOnthePageOpt" selected="selected" value=""></option>
                     </select>
                     <button id="trnsTOshow">joined</button>
                 </div>
@@ -114,9 +112,35 @@
     </div>
     <div id="tournamentCreatePanel"></div>
     <div id="joinedTournament">
-        <img src="img/crossIcon.svg" alt="cross" class="crossIcons" id="crossIconJT">
-        <label id="nameJT" for="nameJT"></label>
-        <button class="btn-grad" id="btnLeaveTrn">Leave</button>
+        <div id="headerJT">
+            <img src="img/backIcon.png" alt="cross" id="crossIconJT">
+            <label id="pageNameJT" for="pageNameJT">Main</label>
+            <img src="img/icons8-test-account-48.png" alt="trnIcon" id="trnIconJT">
+        </div>
+        <div class="pagesJT" id="mainPageJT">
+            <label id="nameJT" for="nameJT"></label>
+        </div>
+        <div class="pagesJT" id="statisticsPageJT"></div>
+        <div class="pagesJT" id="dataPageJT"></div>
+        <div class="pagesJT" id="leadersPageJT"></div>
+        <div class="pagesJT" id="settingsPageJT">
+            <div></div>
+            <button class="btn-grad" id="btnLeaveTrn">Leave</button>
+        </div>
+        <div id="footerJT">
+            <button class="pageSwitchJT" id="pagePrevJT"><</button>
+            <button id="btnNavJT">Navigation</button>
+            <button class="pageSwitchJT" id="pageNextJT">></button>
+            <div id="navPanelJT">
+                <div></div>
+                <button class="navPanBtnsJT" id="navPanelJTmain">MAIN</button>
+                <button class="navPanBtnsJT" id="navPanelJTstatistics">STATISTICS</button>
+                <button class="navPanBtnsJT" id="navPanelJTdata">DATA</button>
+                <button class="navPanBtnsJT" id="navPanelJTleaders">LEADER BOARD</button>
+                <button class="navPanBtnsJT" id="navPanelJTsettings">SETTINGS</button>
+                <button class="navPanBtnsJT" id="navPanelJTclose">CLOSE</button>
+            </div>
+        </div>
     </div>
     <div id="blackout"></div>
 </body>
