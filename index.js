@@ -76,6 +76,7 @@ let numsOfTrnsOnthePage = Array.from(document.getElementsByClassName('numsOfTrns
 let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'));
 let likeButton = Array.from(document.getElementsByClassName("heart-like-button"));
 let tournamentsPanel = Array.from(document.getElementsByClassName('tournamentsPanel'));
+let trnType = 'opened';
 let typeMaxBtns;
 let secondMpage;
 let firstMpage;
@@ -97,17 +98,13 @@ let tournamentRequirementsLblAtCreatePanel;
 let tournamentDescriptionTextAreaAtCreatePanel;
 let creatingTournamentLbl;
 let tournamentNameInputAtCreatePanel;
-let tournamentMaxMembersInputAtCreatePanel;
-let tournamentOpenedTypeInputAtCreatePanel;
-let tournamentInvitedTypeInputAtCreatePanel;
-let tournamentClosedTypeInputAtCreatePanel;
 let tournamentTargetsBlockAtCreatePanel;
 let tournamentRequirementsBlockAtCreatePanel;
 let tournamentRequirementsInputAtCreatePanel;
 let tournamentCreateBtn;
 const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, btnAbout, profile];
 const mobileNavPanelBtns = [btnMobHome, btnMobFav, btnMobData, btnMobStat, btnMobProf];
-let password, email, width, height, temporaryElementsTI, isMobileVersion, docName;
+let password, email, width, height, temporaryElementsTI, docName, nowDate;
 inptUsername.addEventListener('click', onClearError);
 inptPassword.addEventListener('click', onClearError);
 btnHome.addEventListener('click', onbtnHome);
@@ -269,7 +266,6 @@ function getFirebaseUserJT() {
   db.collection("users_info").doc(uid).collection("active_tournaments").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       firebaseUser.push(doc.data());
-      console.log(firebaseUser);
     });
   });
 }
@@ -311,7 +307,6 @@ function showTournaments(from) {
   if (from < 0) return from = 0;
   to = from + tournamentsOnThePage;
   if (to > trnsToShow.length) { to = trnsToShow.length; }
-  console.log(from, to);
   while (tournamentsPanel[panelNum].firstChild) {
     tournamentsPanel[panelNum].removeChild(tournamentsPanel[panelNum].firstChild);
   }
@@ -387,10 +382,10 @@ function onTournamentInfo() {
     tournamentReqLabelInfo.style.display = 'block';
     tournamentBtnsInfo.style.display = 'inline-flex';
   }
-  tournamentAdminLabelInfo.innerText = isMobileVersion ? 'ADMIN' : 'ADMINISTRATOR';
+  tournamentAdminLabelInfo.innerText = document.querySelector('body').offsetWidth < 600 ? 'ADMIN' : 'ADMINISTRATOR';
   if (firebaseTournaments[num].targets[0] !== "" && firebaseTournaments[num].targets.length !== 0) {
     for (let i = 0; i < firebaseTournaments[num].targets.length; i++) {
-      tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li class="temporaryElementsTI tournamentGoalsInfo">${firebaseTournaments[num].targets[i]}</li>`);
+      tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li class="temporaryElementsTI tournamentGoalsInfo">${firebaseTournaments[num].targets[i].name}</li>`);
     }
   } else { tournamentsTargetInfo.insertAdjacentHTML('beforeend', `<li style="list-style-type:none;" class="temporaryElementsTI tournamentGoalsInfo">no goals :(</li>`); }
   tournamentAdminLabelInfo.insertAdjacentHTML('afterend',
@@ -425,49 +420,93 @@ function onCrossTournamentInfo(event) {
 }
 let canMakeNewTarg = true;
 function ontournamentTargetsInputAtCreatePanel(event) {
+  let descript = Array.from(event.target.parentElement.getElementsByClassName('tournamentTargetsDescriptInputAtCreatePanel'))[0]
+  switch (event.target.value) {
+    case 'push-up':
+      descript.value = `By raising and lowering the body using the arms, push-ups exercise the pectoral muscles,
+       triceps, and anterior deltoids, with ancillary benefits to the rest of the deltoids, serratus anterior, 
+       coracobrachialis and the midsection as a whole`
+      break;
+    case 'crunch':
+      descript.value = `The crunch is one of the most popular abdominal exercises. It works the rectus 
+abdominis muscle. It allows both building "six-pack" abs, and tightening the belly. Crunches use 
+the exerciser's own body weight to tone muscle, and are recommended as a low-cost exercise that can be performed at home.`
+      break;
+      case 'pull-up':
+        descript.value = `The pull-up is a closed-chain movement where the body is suspended by the hands and pulls up.
+As this happens, the elbows flex and the shoulders adduct and extend to bring the elbows to the torso.`
+      break;
+      case 'squat':
+        descript.value = `A squat is a strength exercise in which the trainee lowers their hips from a standing position and then stands back up. 
+During the descent of a squat, the hip and knee joints flex while the ankle joint dorsiflexes; 
+conversely the hip and knee joints extend and the ankle joint plantarflexes when standing up.`
+      break;
+      case 'plank':
+        descript.value = `The plank (also called a front hold, hover, or abdominal bridge) is an isometric core strength exercise that
+involves maintaining a position similar to a push-up for the maximum possible time.`
+      break;
+  }
   if (canMakeNewTarg) {
     tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 1].removeEventListener('input', ontournamentTargetsInputAtCreatePanel);
-    tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 1].insertAdjacentHTML('afterend', ' <input type="text" class="trnCrtPanel tournamentTargetsInputAtCreatePanel"><br>');
+    event.target.parentElement.insertAdjacentHTML('afterend', ` <div class="targetsUnityCT"><input list="hotTargets"
+     name="hotTargets" class="trnCrtPanel tournamentTargetsInputAtCreatePanel" placeholder="enter target name" id="browser">
+    <datalist id="hotTargets">
+    <option value="push-up">
+    <option value="crunch">
+    <option value="pull-up">
+    <option value="squat">
+    <option value="plank">
+    </datalist>
+  <select class="trnCrtPanel tournamentTargetsTypeInputAtCreatePanel" placeholder="type">
+    <option value="field">field</option>
+    <option value="slider">slider</option>
+    <option value="clicker">clicker</option>
+  </select>
+  <select class="trnCrtPanel tournamentTargetsApproachInputAtCreatePanel" placeholder="try">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+  <option value="6">6</option>
+  </select>
+    <input type="text" class="trnCrtPanel tournamentTargetsDescriptInputAtCreatePanel" placeholder="enter target description">
+    </div>`);
     tournamentTargetsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'));
     trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'));
     tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 1].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
   }
-  canMakeNewTarg = (tournamentTargetsInputAtCreatePanel.length == 1) || (tournamentTargetsInputAtCreatePanel.length < 5) && (tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 2].value !== "");
+  canMakeNewTarg = ((tournamentTargetsInputAtCreatePanel.length == 1) || (tournamentTargetsInputAtCreatePanel.length < 5)) && (tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 2].value !== "");
 }
 let canMakeNewReq = true;
-function ontournamentRequirementsInputAtCreatePanel(event) {
-  if (canMakeNewReq) {
-    tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length - 1].removeEventListener('input', ontournamentRequirementsInputAtCreatePanel);
-    tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length - 1].insertAdjacentHTML('afterend', ' <input type="text" class ="trnCrtPanel tournamentRequirementsInputAtCreatePanel"><br>');
-    tournamentRequirementsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentRequirementsInputAtCreatePanel'));
-    trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'));
-    tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length - 1].addEventListener('input', ontournamentRequirementsInputAtCreatePanel);
-  }
-  canMakeNewReq = (tournamentRequirementsInputAtCreatePanel.length == 1) || (tournamentRequirementsInputAtCreatePanel.length < 5) &&
-    (tournamentRequirementsInputAtCreatePanel[tournamentRequirementsInputAtCreatePanel.length - 2].value !== "");
-}
 let trnTargets = [];
 let trnRequirements = [];
 function onTournamentCreateBtn() {
   if ((tournamentNameInputAtCreatePanel.value == "")) {
     outputMessege('Enter Tournament Name');
-  } else if (tournamentMaxMembersInputAtCreatePanel.value == "") {
-    outputMessege('Enter Tournament Max Participants');
-  } else if ((tournamentOpenedTypeInputAtCreatePanel.checked == false) &&
-    (tournamentInvitedTypeInputAtCreatePanel.checked == false) &&
-    (tournamentClosedTypeInputAtCreatePanel.checked == false)) {
+  } else if (Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].value == ''){
+    outputMessege('Enter Tournament Target')
+  } else if (document.getElementById('trnStartInputCP').value  == "") {
+    outputMessege('Enter Tournament Start');
+  } else if (trnType == undefined) {
     outputMessege('Enter Tournament Type');
   } else {
-    tournamentTargetsInputAtCreatePanel.forEach(element => trnTargets.push(element.value));
-    trnTargets.pop();
+    // tournamentTargetsInputAtCreatePanel.forEach(element => trnTargets.push(element.value));
+    Array.from(document.getElementById('tournamentTargetsBlockAtCreatePanel').children).forEach(element => {
+      trnTargets.push({
+        name: Array.from(element.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].value,
+        description: Array.from(element.getElementsByClassName('tournamentTargetsDescriptInputAtCreatePanel'))[0].value,
+        approach: Array.from(element.getElementsByClassName('tournamentTargetsApproachInputAtCreatePanel'))[0].value,
+        type: Array.from(element.getElementsByClassName('tournamentTargetsTypeInputAtCreatePanel'))[0].value,
+      })
+    })
+    if ((Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel')).length < 5) || 
+    (Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel')).value == '')){
+      trnTargets.pop();
+    }
     tournamentRequirementsInputAtCreatePanel.forEach(element => trnRequirements.push(element.value));
     trnRequirements.pop();
-    let trnType;
-    if (tournamentClosedTypeInputAtCreatePanel.checked) {
-      trnType = "closed";
-    } else if (tournamentInvitedTypeInputAtCreatePanel.checked) {
-      trnType = "invited";
-    } else { trnType = "opened"; }
+    let startDate = document.getElementById('trnStartInputCP').value
     db.collection("global_tournaments").doc(`${tournamentNameInputAtCreatePanel.value}`).get().then((doc) => {
       if (doc.exists) {
         outputMessege('Tournament with this name exists');
@@ -476,15 +515,31 @@ function onTournamentCreateBtn() {
         let createdTrn = {
           name: tournamentNameInputAtCreatePanel.value,
           targets: trnTargets,
-          requirements: trnRequirements,
           description: tournamentDescriptionTextAreaAtCreatePanel.value,
-          max_members: tournamentMaxMembersInputAtCreatePanel.value,
           type: trnType,
           curr_members: 1,
           administrator: login,
           participants: "",
-          usersInfo: [uid]
+          usersInfo: [uid],
+          date: {
+            round:{
+              day: Number(document.getElementById('roundDaysLength').value),
+              hour: Number(document.getElementById('roundHoursValueCP').innerText) 
+            },
+            start: {
+              day: new Date(startDate).getUTCDate(),
+              hour: new Date(startDate).getUTCHours(),
+              minute: new Date(startDate).getUTCMinutes(),
+              month: new Date(startDate).getUTCMonth()+1,
+              year: new Date(startDate).getUTCFullYear(),
+              allMilleseconds: new Date(startDate).getTime()
+            },
+            seasonLength: Number(document.getElementById('trnSeasonsInputCP').value),
+            seasonNum: 1,
+            dayCurrent: 0
+          }
         }
+        console.log(createdTrn)
         firebaseUser.push(createdTrn)
         db.collection("global_tournaments").doc(`${tournamentNameInputAtCreatePanel.value}`).set(createdTrn).then(() => {
           db.collection("users_info").doc(uid).collection("active_tournaments").doc(`${docName}`).set(createdTrn).then(() => {
@@ -525,9 +580,10 @@ function onTournamentJoin(event) {
   document.getElementById('joinedTournament').style.display = 'grid';
   document.getElementById('crossIconJT').addEventListener('click', onCrossIconJT);
   document.getElementById('nameJT').innerText = docName
-  document.getElementById('mainPageJT').style.display = 'grid'
+  onNavPanelJTmain()
 }
 function onCrossIconJT(event) {
+  clearInterval(timerToNextRound)
   document.getElementById('joinedTournament').style.display = 'none';
   body.removeEventListener('keydown', function (event) {
     if (event.code == 'Escape') { onCrossIconJT(); }
@@ -545,15 +601,49 @@ function onLeaveTrn(event){
 }
 function onBtnNavJT(event){
   document.getElementById('navPanelJT').style.display = 'grid'
+  clearInterval(timerToNextRound)
 }
 function onNavPanelJTclose(event){
   document.getElementById('navPanelJT').style.display = 'none'
 }
+
+let roundOFtrn, toNextRound, hoursToNextRound, minutesToNextRound, secondsToNextRound, seasonNumber
 function onNavPanelJTmain(event){
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('mainPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Main'
+  timersToNextRound()
+  document.getElementById('roundNumJT').innerText = `Round ${Math.floor(roundOFtrn)}`
+  document.getElementById('seasonNumJT').innerText = `Season ${seasonNumber}`
+}
+function timersToNextRound(event){
+  nowDate = new Date()
+  console.log(firebaseTournaments[num].date.start)
+  console.log((nowDate.getTime() - firebaseTournaments[num].date.start.allMilleseconds) / 1000 / 60 / 60)
+  roundOFtrn = ((nowDate.getTime() - firebaseTournaments[num].date.start.allMilleseconds) / 1000 / 60 / 60) /
+  ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour) + 1
+  toNextRound = (Math.ceil(roundOFtrn) - roundOFtrn) * ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour)
+  seasonNumber = Math.ceil(Math.floor(roundOFtrn) / firebaseTournaments[num].date.seasonLength)
+  hoursToNextRound = Math.floor(toNextRound)
+  minutesToNextRound = Math.floor((toNextRound - Math.floor(toNextRound)) * 60)
+  secondsToNextRound = Math.floor((((toNextRound - Math.floor(toNextRound)) * 60) - Math.floor((toNextRound - Math.floor(toNextRound)) * 60)) * 60)
+  Array.from(document.getElementsByClassName('timerDataJT')).forEach(element =>{ 
+    element.innerText = `Next Round ${hoursToNextRound}:${minutesToNextRound}:${secondsToNextRound}`})
+  timerToNextRound = setInterval(() => {
+    console.log('1 sec')
+    secondsToNextRound--
+    if (secondsToNextRound < 1) {
+      minutesToNextRound--; 
+      secondsToNextRound = 60;
+    }
+    if (minutesToNextRound < 1) {
+      hoursToNextRound--;
+      minutesToNextRound = 60
+    }
+    Array.from(document.getElementsByClassName('timerDataJT')).forEach(element =>{
+       element.innerText = `Next Round ${hoursToNextRound}:${minutesToNextRound}:${secondsToNextRound}`
+    })}, 1000)
 }
 function onNavPanelJTstatistics(event){
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
@@ -566,6 +656,65 @@ function onNavPanelJTdata(event){
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('dataPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Data'
+  while (document.getElementById('dataBlocksJT').firstChild) {
+    document.getElementById('dataBlocksJT').removeChild(document.getElementById('dataBlocksJT').firstChild);
+  }
+  console.log(firebaseTournaments[num])
+  for (let i = 0; i < firebaseTournaments[num].targets.length; i++){
+    document.getElementById('dataBlocksJT').insertAdjacentHTML('beforeend', `
+    <div class="dataBlockJT">
+    <label class="dataJTlabels" for="dataJTlabels">${firebaseTournaments[num].targets[i].name}</label>
+    <div class="inputsUnityDataJT">
+    </div></div>`)
+    let type, labelCounter
+      switch (firebaseTournaments[num].targets[i].type) {
+        case 'slider':
+        type = 'range';
+        labelCounter = '<label class="labelCounter">0</label>'
+        break;
+        case 'clicker':
+        type = 'button'
+        labelCounter = '<label class="labelCounter">0</label>'
+        break;
+        default: type = 'number';
+        labelCounter = ''
+          break;
+      }
+    for (let j = 0; j < firebaseTournaments[num].targets[i].approach; j++){    
+      Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
+      <div class="lblAndInputDataJT">
+      ${labelCounter}
+      <input class="dataJTinputs" type="${type}" placeholder="try ${j+1}" value="${type == 'button' ? `try ${j+1}` : ''}">
+      </div>`)
+    }
+    if (labelCounter){
+      if (type == 'range'){
+        Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
+          element => element.addEventListener('input', onSliderDataJTchange))
+      } else {
+        Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
+          element => element.addEventListener('click', onClickerDataJTchange))
+          Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
+            element => element.style["font-size"] = '18px')
+      }
+    }
+  }
+  document.getElementById('dataBlocksJT').insertAdjacentHTML('beforeend', `
+  <div class="dataBlockJT" style="display:flex;">
+  <button class="btn-grad" id="btnResetJTdata">Reset</button>
+  <button class="btn-grad" id="btnEditJTdata">Edit</button>
+  <label class="timerDataJT">0:00:00</label>
+  </div>`)
+  timersToNextRound()
+}
+let localDate = new Date()
+console.log(localDate.getUTCHours())
+let timerToNextRound
+function onSliderDataJTchange(event){
+  event.target.parentElement.firstElementChild.innerText = event.target.value
+} 
+function onClickerDataJTchange(event){
+  event.target.parentElement.firstElementChild.innerText++
 }
 function onNavPanelJTleaders(event){
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
@@ -646,40 +795,72 @@ function clearMenu() {
   document.getElementById('aboutPageBlock').style.display = 'none';
 
 }
-
-isMobileVersion = width < 600;
-
 function onCreateTournament(event) {
   tournamentCreatePanel.style.display = 'grid';
   mainBlock.style.display = 'none';
-  tournamentCreatePanel.insertAdjacentHTML('beforeend', `
-    <img src="img/crossIcon.svg" alt="cross" class="crossIcons" id="crossIcononCreate">
+  tournamentCreatePanel.insertAdjacentHTML('beforeend', ` <div id="headerCT">
+  <img src="img/backIcon.png" alt="cross" id="crossIcononCreate">
   <label class="trnCrtPanel" for="creatingTournament" id="creatingTournamentLbl">Creating Tournament</label>
+</div>
   <input class="trnCrtPanel firstMpage" type="text" id="tournamentNameInputAtCreatePanel" maxlength="16" placeholder="Tournament Name">
   <div class="firstMpage" id="TargetsCreatePanel"><label class="trnCrtPanel" for="trnTargets" id="tournamentTargetsLblAtCreatePanel">Tartgets: </label>
-  <div id="tournamentTargetsBlockAtCreatePanel">  
-      <input type="text" class="trnCrtPanel tournamentTargetsInputAtCreatePanel">
-  </div></div>
-  <div class="firstMpage" id="RequirementsCreatePanel"><label class="trnCrtPanel" for="trnRequirements" id="tournamentRequirementsLblAtCreatePanel">Requirements: </label>
- <div id="tournamentRequirementsBlockAtCreatePanel">
-     <input type="text" class="trnCrtPanel tournamentRequirementsInputAtCreatePanel">
- </div></div>
+  <div id="tournamentTargetsBlockAtCreatePanel">
+  <div class="targetsUnityCT"><input list="hotTargets" name="hotTargets" class="trnCrtPanel tournamentTargetsInputAtCreatePanel" placeholder="enter target name" id="browser">
+  <datalist id="hotTargets">
+    <option value="push-up">
+    <option value="crunch">
+    <option value="pull-up">
+    <option value="squat">
+    <option value="plank">
+  </datalist>
+<select class="trnCrtPanel tournamentTargetsTypeInputAtCreatePanel" placeholder="type">
+  <option value="field">field</option>
+  <option value="slider">slider</option>
+  <option value="clicker">clicker</option>
+</select>
+  <select class="trnCrtPanel tournamentTargetsApproachInputAtCreatePanel" placeholder="try">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+<option value="6">6</option>
+</select>
+<input type="text" class="trnCrtPanel tournamentTargetsDescriptInputAtCreatePanel" placeholder="enter target description">
+  </div></div></div>
+  <div class="secondMpage" id="RequirementsCreatePanel">
+    <div class="dateBlockCT">
+    <label class="trndateLblCP">Tournament Start</label>
+    <input type="datetime-local" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="trnStartInputCP">
+    </div>
+    <div class="dateBlockCT">
+    <label class="trndateLblCP">Tournament Round Length</label>
+    <div>
+    <label class="trndateLblUnderCP">Days</label>
+    <input type="number" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="roundDaysLength" value="1">   
+    </div>
+    <div>
+    <label class="trndateLblUnderCP">Hours</label>
+    <input type="range" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="roundHoursLength" value="0" min="0" max="24">
+    <label class="trndateLblUnderCP" id="roundHoursValueCP">0</label>
+    </div>
+    </div>
+    <div class="dateBlockCT">
+    <label class="trndateLblCP">Tournament Season Length</label>
+    <input type="number" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="trnSeasonsInputCP" value="30">
+    </div>
+ </div>
  <textarea class="trnCrtPanel secondMpage" id="tournamentDescriptionTextAreaAtCreatePanel" name="tournamentDescriptionTextAreaAtCreatePanel"
      cols="30" rows="3" maxlength="100" placeholder="write some short description"></textarea>`);
   let creatTrnSndPage = `
-     <input class="trnCrtPanel secondMpage" type="number" id="tournamentMaxMembersInputAtCreatePanel" placeholder="Max Participants">
-     <form action="#" class="trnCrtPanel secondMpage" id="tournamentTypeInputAtCreatePanel">
-         <fieldset form="tournamentTypeInputAtCreatePanel">
-             <input class="trnCrtPanel" type="radio" id="tournamentOpenedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
-             <label for="opened">Opened</label><br>
-             <input class="trnCrtPanel" type="radio" id="tournamentInvitedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
-             <label for="invited">Invited</label><br>
-             <input class="trnCrtPanel" type="radio" id="tournamentClosedTypeInputAtCreatePanel" name="tournamentTypeInputAtCreatePanel">
-             <label for="closed">Closed</label>
-         </fieldset></form>
+         <div class="firstMpage" id="tournamentTypeInputAtCreatePanel">
+         <button class="trnTypeAtCP" style="background: green;">Opened</button>
+         <button class="trnTypeAtCP">Invited</button>
+         <button class="trnTypeAtCP">Closed</button>
+      </div>
      <button class="trnCrtPanel btn-grad secondMpage" id="tournamentCreateBtn">Create</button>`;
 
-  if (isMobileVersion) {
+  if (document.querySelector('body').offsetWidth < 600) {
     tournamentCreatePanel.insertAdjacentHTML('beforeend', creatTrnSndPage);
     secondMpage = Array.from(document.getElementsByClassName('secondMpage'));
     secondMpage.forEach(element => element.style.display = 'none');
@@ -693,6 +874,26 @@ function onCreateTournament(event) {
   firstMpage = Array.from(document.getElementsByClassName('firstMpage'));
   secondMpage = Array.from(document.getElementsByClassName('secondMpage'));
   tournamentCreateBtn = document.getElementById('tournamentCreateBtn');
+  Array.from(document.getElementsByClassName('trnTypeAtCP')).forEach(element => element.addEventListener('click', (event) => {
+    Array.from(document.getElementsByClassName('trnTypeAtCP')).forEach(element => element.style.background = 'transparent')
+    switch (event.target.innerText) {
+      case 'Closed':
+        event.target.style.background = 'red'
+        trnType = 'closed'
+        break;
+      case 'Invited':
+        event.target.style.background = 'orange'
+        trnType = 'invited'
+      break;
+      default:
+        event.target.style.background = 'green'
+        trnType = 'opened'
+        break;
+      }
+  }))
+  document.getElementById('roundHoursLength').addEventListener('input', (event) => {
+    document.getElementById('roundHoursValueCP').innerText = event.target.value
+  })
   body.addEventListener('keydown', function (event) {
     if (event.code == 'Escape') { oncrossIcononCreate(); }
   });
@@ -701,30 +902,26 @@ function onCreateTournament(event) {
   tournamentDescriptionTextAreaAtCreatePanel = document.getElementById('tournamentDescriptionTextAreaAtCreatePanel');
   creatingTournamentLbl = document.getElementById('creatingTournamentLbl');
   tournamentNameInputAtCreatePanel = document.getElementById('tournamentNameInputAtCreatePanel');
-  tournamentMaxMembersInputAtCreatePanel = document.getElementById('tournamentMaxMembersInputAtCreatePanel');
-  tournamentOpenedTypeInputAtCreatePanel = document.getElementById('tournamentOpenedTypeInputAtCreatePanel');
-  tournamentInvitedTypeInputAtCreatePanel = document.getElementById('tournamentInvitedTypeInputAtCreatePanel');
-  tournamentClosedTypeInputAtCreatePanel = document.getElementById('tournamentClosedTypeInputAtCreatePanel');
   tournamentTargetsBlockAtCreatePanel = document.getElementById('tournamentTargetsBlockAtCreatePanel');
   tournamentRequirementsBlockAtCreatePanel = document.getElementById('tournamentRequirementsBlockAtCreatePanel');
   tournamentRequirementsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentRequirementsInputAtCreatePanel'));
   tournamentTargetsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'));
   tournamentTargetsInputAtCreatePanel[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
-  tournamentRequirementsInputAtCreatePanel[0].addEventListener('input', ontournamentRequirementsInputAtCreatePanel);
   crossIcononCreate = document.getElementById('crossIcononCreate');
   crossIcononCreate.addEventListener('click', oncrossIcononCreate);
   trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'));
 }
 function onTournamentSwitchPageBtn(event) {
-  // console.log(tournamentSwitchPageBtn.innerText);
   if (tournamentSwitchPageBtn.innerText == 'NEXT') {
     tournamentSwitchPageBtn.innerText = 'PREVIOUS';
     firstMpage.forEach(element => element.style.display = 'none');
+    document.getElementById('tournamentTypeInputAtCreatePanel').style.display = 'none'
     secondMpage.forEach(element => element.style.display = 'block');
     tournamentSwitchPageBtn.style["justify-self"] = 'flex-start';
   } else {
     tournamentSwitchPageBtn.innerText = 'NEXT';
     firstMpage.forEach(element => element.style.display = 'block');
+    document.getElementById('tournamentTypeInputAtCreatePanel').style.display = 'flex'
     secondMpage.forEach(element => element.style.display = 'none');
     tournamentSwitchPageBtn.style["justify-self"] = 'center';
   }
@@ -733,13 +930,11 @@ function onPrewPageTurn(event) {
   from = from - tournamentsOnThePage;
   if (from < 0) { from = 0; }
   showTournaments(from);
-  // console.log('Prew Page');
 }
 function onNextPagTurn(event) {
   if (from > (trnsToShow.length - tournamentsOnThePage - 1)) return;
   from = from + tournamentsOnThePage;
   showTournaments(from);
-  // console.log('Next Page');
 }
 function oncrossIcononCreate(event) {
   body.removeEventListener('keydown', function (event) {

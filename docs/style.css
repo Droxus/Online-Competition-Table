@@ -814,23 +814,35 @@ ul {
     position: fixed;
     display: none;
     z-index: 11;
-    top: 3%;
-    left: 3%;
-    height: 94%;
-    width: 94%;
+    top: 1%;
+    left: 2%;
+    height: 98%;
+    width: 96%;
     background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid white;
-    border-radius: 5%;
+    border-radius: 25px;
 }
-
-#creatingTournamentLbl {
-    display: block;
+#headerCT{
     grid-area: labelCP;
-    align-self: flex-end;
-    justify-self: start;
-    margin-left: 2%;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 60px 1fr 60px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+#crossIcononCreate {
+    width: 25px;
+    align-self: center;
+    justify-self: baseline;
+    margin-left: 20px;
+}
+#creatingTournamentLbl {
+    align-self: center;
+    justify-self: center;
+    font-size: 24px;
     font-weight: bold;
-    font-family: 'Asap', sans-serif;
+    margin: 5%;
+    font-family: 'Heebo', sans-serif;
+    color: #2504b8;
 }
 
 #tournamentNameInputAtCreatePanel {
@@ -849,11 +861,10 @@ ul {
 
 #typeMaxBtns {
     display: grid;
-    grid-template-columns: 30% 70%;
     grid-template-rows: 50% 50%;
     grid-template-areas:
-        "typeCP MaxMembCP"
-        "typeCP btnCP";
+        "typeCP"
+        "btnCP";
     font-family: 'Asap', sans-serif;
 }
 
@@ -863,24 +874,37 @@ ul {
     justify-self: center;
     font-weight: bold;
     font-family: 'Asap', sans-serif;
+    color: #2828b1;
 }
 
 #TargetsCreatePanel {
     grid-area: goalsCP;
     font-family: 'Asap', sans-serif;
 }
-
+#trnStartInputCP{
+    width: 250px;
+}
+.trnTypeAtCP{
+    flex: 1;
+    outline: none;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+}
 #RequirementsCreatePanel {
-    grid-area: reqsCP;
+    grid-area: goalsCP;
     font-family: 'Asap', sans-serif;
 }
 
 .tournamentTargetsInputAtCreatePanel {
     display: flex;
     outline: none;
-    background-color: transparent;
+    background-color: rgba(79, 142, 161, 0.1);
+    border: none;
     border: 2px solid rgb(119, 98, 212);
-    border-top: none;
+    grid-area: tournamentTargetsInputAtCreatePanel;
 }
 
 #tournamentRequirementsLblAtCreatePanel {
@@ -894,11 +918,49 @@ ul {
 #tournamentRequirementsBlockAtCreatePanel {
     position: relative;
 }
-
-#tournamentTargetsBlockAtCreatePanel {
-    position: relative;
+.dateBlockCT{
+    margin-bottom: 10%;
 }
-
+.dateBlockCT > *{
+margin: 10px;
+}
+.tournamentDateInputAtCreatePanel{
+    width: 200px;
+    background: transparent;
+    color: #1027c9;
+    font-size: 18px;
+    border: 1px solid blue;
+    outline: none;
+}
+.trndateLblUnderCP{
+    color: #5a5a5a;
+    font-weight: bold;
+}
+.trndateLblCP{
+    font-size: 20px;
+    font-weight: bold;
+    color: #0015ab;
+}
+.targetsUnityCT{
+    display: grid;
+    grid-template-columns: 65% 23% 12%;    
+    grid-template-rows: 4fr 3fr;
+    grid-template-areas: 
+    "tournamentTargetsInputAtCreatePanel tournamentTargetsTypeInputAtCreatePanel tournamentTargetsApproachInputAtCreatePanel"
+    "tournamentTargetsDescriptInputAtCreatePanel tournamentTargetsDescriptInputAtCreatePanel tournamentTargetsDescriptInputAtCreatePanel";
+}
+.tournamentTargetsApproachInputAtCreatePanel{
+    background-color: transparent;
+    border: 2px solid rgb(119, 98, 212);
+    border-left: none;
+    outline: none;
+    font-size: 24px;
+    font-weight: bold;
+    grid-area: tournamentTargetsApproachInputAtCreatePanel;
+}
+.tournamentTargetsApproachInputAtCreatePanel::placeholder{
+    font-size: 20px;
+}
 .tournamentRequirementsInputAtCreatePanel {
     display: flex;
     outline: none;
@@ -906,7 +968,22 @@ ul {
     border: 2px solid rgb(119, 98, 212);
     border-top: none;
 }
-
+.tournamentTargetsTypeInputAtCreatePanel{
+    background-color: transparent;
+    border: 2px solid rgb(119, 98, 212);
+    border-left: none;
+    outline: none;
+    font-size: 20px;
+    font-weight: bold;
+    grid-area: tournamentTargetsTypeInputAtCreatePanel;
+}
+.tournamentTargetsDescriptInputAtCreatePanel{
+    background-color: transparent;
+    border: 2px solid rgb(119, 98, 212);
+    border-top: none;
+    outline: none;
+    grid-area: tournamentTargetsDescriptInputAtCreatePanel;
+}
 #tournamentDescriptionTextAreaAtCreatePanel {
     position: relative;
     display: flex;
@@ -931,23 +1008,41 @@ ul {
 }
 
 #tournamentTypeInputAtCreatePanel {
-    position: relative;
     display: flex;
-    align-self: center;
-    border: none;
     outline: none;
+    margin: 10%;
+    height: 50px;
+    border: 2px solid #0015ab;
+    border-radius: 15px;
 }
 
 #tournamentTypeInputAtCreatePanel fieldset {
     border: none;
 }
-
+.mainLblInfoJT{
+    font-size: 24px;
+    font-weight: bold;
+    color:#2828b1;
+    align-self: center;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-self: center;
+}
+.timerDataJT{
+    flex: 2;
+    font-size: 20px;
+    font-weight: bold;
+    color: green;
+    align-self: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
 #tournamentTypeInputAtCreatePanel fieldset input {
     margin-top: 25px;
 }
 
 #tournamentCreateBtn {
     background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
+    padding: 15px 0px;
+    position: static;
 }
 
 #outputMsgLbl {
@@ -974,9 +1069,16 @@ ul {
     grid-area: btnsm;
     justify-self: center;
     width: 35%;
+    height: 40px;
     background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
 }
-
+#btnResetJTdata{
+    position: inherit;
+    background-image: linear-gradient(to right, #FF5F6D 0%, #ff5b2a 51%, #FF5F6D 100%);
+    flex: 1;
+    padding: 0;
+    height: 40px;
+}
 #trnNumsbtn {
     background-color: transparent;
     border: none;
@@ -1091,7 +1193,7 @@ ul {
     font-weight: bold;
     margin: 5%;
 }
-#trnIconJT{
+.trnIconJT{
     align-self: center;
     justify-self: flex-end;
     width: 42px;
@@ -1133,7 +1235,73 @@ ul {
 }
 #dataPageJT{
     display: none;
+    grid-template-columns: 70% 30%;
 }
+#dataBlocksJT{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    align-content: stretch;
+}
+.dataBlockJT{
+    width: 100%;
+    grid-area: dataBlockJT;
+    text-align: center;
+}
+#btnEditJTdata{
+    position: inherit;
+    height: 40px;
+    flex: 2;
+    padding: 0;
+    background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
+}
+.dataJTinputs{
+    height: 40px;
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    border-radius: 15px;
+    border: 2px solid rgb(119 98 212);
+    font-size: 28px;
+    color: #6859ab;
+    padding: 5px 5px;
+    margin: 0px 1%;
+    text-align: center;
+}
+.lblAndInputDataJT{
+    text-align: center;
+    margin: 0px 1%;
+    flex: 1;
+}
+.dataJTinputs::placeholder{
+    font-size: 20px;
+}
+#dataLeadersBlockJT{
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+.inputsUnityDataJT{
+    display: flex;
+}
+.lblsUnityDataJT{
+    width: fit-content;
+    display: flex;
+}
+.labelCounter{
+    color: #5a5a5a;
+    font-size: 18px;
+    font-weight: bold;
+}
+.dataJTlabels{
+    padding: 10px 0px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #0015ab;
+    text-transform: uppercase;
+    font-family: 'Asap', sans-serif;;
+}
+
 #leadersPageJT{
     display: none;
 }
@@ -1150,7 +1318,7 @@ ul {
     }
 
     #tournamentCreatePanel {
-        grid-template-rows: 10% 10% 35% 35% 10%;
+        grid-template-rows: 50px 50px 5fr 2fr 75px;
         grid-template-columns: 100%;
         grid-template-areas:
             "labelCP"
@@ -1160,17 +1328,14 @@ ul {
             "btnsm";
     }
 
-    #crossIcononCreate {
-        grid-area: labelCP;
-    }
-
     #TargetsCreatePanel {
-        padding: 10%;
+        padding: 5%;
         padding-top: 20px;
     }
 
     #RequirementsCreatePanel {
-        padding: 10%;
+        padding: 0% 5%;
+        grid-area: goalsCP;
     }
 
     #creatingTournamentLbl {
@@ -1191,14 +1356,12 @@ ul {
     #tournamentTargetsLblAtCreatePanel {
         font-size: 20px;
         letter-spacing: 1px;
+        padding-bottom: 5%;
     }
 
     .tournamentTargetsInputAtCreatePanel {
-        width: 100%;
-        height: 30px;
         font-size: 20px;
     }
-
     #tournamentRequirementsLblAtCreatePanel {
         font-size: 20px;
     }
@@ -1210,10 +1373,10 @@ ul {
     }
 
     #tournamentDescriptionTextAreaAtCreatePanel {
-        height: 80%;
-        width: 80%;
+        height: 50%;
+        width: 90%;
         font-size: 16px;
-        grid-area: goalsCP;
+        grid-area: reqsCP;
     }
 
     #tournamentMaxMembersInputAtCreatePanel {
@@ -1226,9 +1389,7 @@ ul {
 
     #tournamentTypeInputAtCreatePanel {
         font-size: 18px;
-        width: 125px;
         grid-area: reqsCP;
-        justify-self: flex-start;
     }
 
     #tournamentCreateBtn {
@@ -1236,6 +1397,7 @@ ul {
         grid-area: btnsm;
         width: 35%;
         justify-self: flex-end;
+        height: 40px;
     }
 
     .mobileNavPanel {
@@ -1289,6 +1451,12 @@ ul {
     #tournamentNameInfo {
         font-size: 28px;
     }
+    #dataLeadersBlockJT{
+        display: none;
+    }
+    #dataPageJT {
+        grid-template-columns: 100% 0%;
+    }
 
     @media screen and (min-device-width: 600px) {
         #mainBlock {
@@ -1296,17 +1464,13 @@ ul {
         }
 
         #tournamentCreatePanel {
-            grid-template-rows: 10% 10% 50% 30%;
+            grid-template-rows: 50px 10% 50% 30%;
             grid-template-columns: 50% 50%;
             grid-template-areas:
-                "labelCP closeIconCP"
+                "labelCP labelCP"
                 "titleCP titleCP"
                 "goalsCP reqsCP"
                 "descript typeMaxCreate";
-        }
-
-        #crossIcononCreate {
-            grid-area: closeIconCP;
         }
 
         #TargetsCreatePanel {
@@ -1315,14 +1479,8 @@ ul {
 
         #RequirementsCreatePanel {
             padding: 10%;
+            grid-area: reqsCP;
         }
-
-        #creatingTournamentLbl {
-            font-size: 42px;
-            letter-spacing: 3px;
-            width: 500px;
-        }
-
         #typeMaxBtns {
             grid-area: typeMaxCreate;
         }
@@ -1338,10 +1496,8 @@ ul {
         }
 
         .tournamentTargetsInputAtCreatePanel {
-            height: 50px;
             font-size: 24px;
         }
-
         #tournamentRequirementsLblAtCreatePanel {
             font-size: 28px;
         }
@@ -1358,26 +1514,18 @@ ul {
             font-size: 24px;
         }
 
-        #tournamentMaxMembersInputAtCreatePanel {
-            grid-area: MaxMembCP;
-            justify-self: center;
-            width: 200px;
-            height: 50px;
-            font-size: 24px;
-        }
-
         #tournamentTypeInputAtCreatePanel {
             grid-area: typeCP;
             justify-self: center;
-            width: 200px;
+            width: 50%;
             font-size: 28px;
         }
 
         #tournamentCreateBtn {
             grid-area: btnCP;
             justify-self: center;
-            padding: 15px 80px;
-            width: 20%;
+            align-self: center;
+            width: 50%;
         }
 
         .headerBlock {
@@ -1445,7 +1593,12 @@ ul {
         #tournamentNameInfo {
             font-size: 34px;
         }
-
+        #dataLeadersBlockJT{
+            display: none;
+        }
+        #dataPageJT {
+            grid-template-columns: 100% 0%;
+        }
         @media screen and (min-device-width: 1100px) {
             .profile {
                 font-size: 24px;
@@ -1499,6 +1652,12 @@ ul {
 
             #tournamentNameInfo {
                 font-size: 38px;
+            }
+            #dataLeadersBlockJT{
+                display: grid;
+            }
+            #dataPageJT {
+                grid-template-columns: 70% 30%;
             }
         }
     }
