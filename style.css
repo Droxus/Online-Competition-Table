@@ -1298,6 +1298,58 @@ margin: 10px;
     background: transparent;
     border: none;
 }
+.moveLeftDateInput{
+    animation: 0.3s linear 0s forwards moveLeftDate;
+}
+.moveRightDateInput{
+    animation: 0.3s linear 0s forwards moveRightDate;
+}
+.moveFromLeftDateInput{
+    animation: 0.3s linear 0s forwards moveFromLeftDate;
+}
+.moveFromRightDateInput{
+    animation: 0.3s linear 0s forwards moveFromRightDate;
+}
+@keyframes moveLeftDate {
+    from {
+        transform: translate(0, 0);
+        width: 90%;
+    }
+    to{
+        transform: translate(-150%, 0);
+        width: 35%;
+    }
+}
+@keyframes moveRightDate {
+    from {
+        transform: translate(0, 0);
+        width: 90%;
+    }
+    to{
+        transform: translate(150%, 0);
+        width: 35%;
+    }
+}
+@keyframes moveFromLeftDate {
+    from {
+        transform: translate(-150%, 0);
+        width: 35%;
+    }
+    to{
+        transform: translate(0, 0);
+        width: 90%;
+    }
+}
+@keyframes moveFromRightDate {
+    from {
+        transform: translate(150%, 0);
+        width: 35%;
+    }
+    to{
+        transform: translate(0, 0);
+        width: 90%;
+    }
+}
 .btnsRowRight{
     grid-area: btnsRowRight;
     background: transparent;
