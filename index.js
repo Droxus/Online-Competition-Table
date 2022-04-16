@@ -315,7 +315,9 @@ function showTournaments(from) {
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
           <div id="tournamentDescriptionBlock"><label class="tournamentDescription" for="tournamentDescription">${trnsToShow[i].description}</label></div>
           <div id="tournamentTypeBlock"><label class="tournamentType" for="tournamentType">type: ${trnsToShow[i].type}</label></div>
-          <div id="tournamentMaxMembersBlock"><label class="tournamentMaxMembers" for="tournamentMaxMembers">${trnsToShow[i].curr_members} / ${trnsToShow[i].max_members}</label></div>
+          <div id="tournamentMaxMembersBlock"><label class="tournamentMaxMembers" for="tournamentMaxMembers">
+          ${trnsToShow[i].curr_members}  <img src="img/usersGroupIcon.png" alt="usersGroup" width="24px"
+           style="position: absolute; margin: -2px 10px; opacity: 0.7;"></label></div>
           </div></div>`);
           if (firebaseLikedTrn.findIndex((element) => element.name == trnsToShow[i].name) !== -1){
             tournamentsPanel[panelNum].lastChild.insertAdjacentHTML('beforeend', `<div class="heart-like-button tournamentLikeBtn liked"></div>`)
@@ -462,14 +464,7 @@ involves maintaining a position similar to a push-up for the maximum possible ti
     <option value="slider">slider</option>
     <option value="clicker">clicker</option>
   </select>
-  <select class="trnCrtPanel tournamentTargetsApproachInputAtCreatePanel" placeholder="try">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-  <option value="6">6</option>
-  </select>
+  <input type="number" class="trnCrtPanel tournamentTargetsApproachInputAtCreatePanel" placeholder="try">
     <input type="text" class="trnCrtPanel tournamentTargetsDescriptInputAtCreatePanel" placeholder="enter target description">
     </div>`);
     tournamentTargetsInputAtCreatePanel = Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'));
@@ -488,15 +483,21 @@ function onTournamentCreateBtn() {
     outputMessege('Enter Tournament Target')
   } else if (document.getElementById('trnStartInputCP').value  == "") {
     outputMessege('Enter Tournament Start');
+  } else if (document.getElementById('trnEndInputCP').value  == "") {
+    outputMessege('Enter Tournament End');
+  } else if (document.getElementById('trnSeasonsInputCP').value  == "") {
+    outputMessege('Enter Season Length');
   } else if (trnType == undefined) {
     outputMessege('Enter Tournament Type');
   } else {
-    // tournamentTargetsInputAtCreatePanel.forEach(element => trnTargets.push(element.value));
+    
     Array.from(document.getElementById('tournamentTargetsBlockAtCreatePanel').children).forEach(element => {
+      let tournamentTargetsApproachInputAtCreatePanel =
+      Math.abs(Math.floor(Array.from(element.getElementsByClassName('tournamentTargetsApproachInputAtCreatePanel'))[0].value))
       trnTargets.push({
         name: Array.from(element.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].value,
         description: Array.from(element.getElementsByClassName('tournamentTargetsDescriptInputAtCreatePanel'))[0].value,
-        approach: Array.from(element.getElementsByClassName('tournamentTargetsApproachInputAtCreatePanel'))[0].value,
+        approach: tournamentTargetsApproachInputAtCreatePanel,
         type: Array.from(element.getElementsByClassName('tournamentTargetsTypeInputAtCreatePanel'))[0].value,
       })
     })
@@ -507,6 +508,8 @@ function onTournamentCreateBtn() {
     tournamentRequirementsInputAtCreatePanel.forEach(element => trnRequirements.push(element.value));
     trnRequirements.pop();
     let startDate = document.getElementById('trnStartInputCP').value
+    let endDate = document.getElementById('trnEndInputCP').value
+    let trnSeasonsInputCP = Math.abs(Math.floor(document.getElementById('trnSeasonsInputCP').value))
     db.collection("global_tournaments").doc(`${tournamentNameInputAtCreatePanel.value}`).get().then((doc) => {
       if (doc.exists) {
         outputMessege('Tournament with this name exists');
@@ -523,8 +526,10 @@ function onTournamentCreateBtn() {
           usersInfo: [uid],
           date: {
             round:{
-              day: Number(document.getElementById('roundDaysLength').value),
-              hour: Number(document.getElementById('roundHoursValueCP').innerText) 
+              day: Math.floor(roundLengthDays),
+              hour: Math.floor(roundLengthHours),
+              minute: Math.floor(roundLengthMinutes),
+              milleseconds: Number(roundLengthMS)
             },
             start: {
               day: new Date(startDate).getUTCDate(),
@@ -534,9 +539,17 @@ function onTournamentCreateBtn() {
               year: new Date(startDate).getUTCFullYear(),
               allMilleseconds: new Date(startDate).getTime()
             },
-            seasonLength: Number(document.getElementById('trnSeasonsInputCP').value),
+            end: {
+              day: new Date(endDate).getUTCDate(),
+              hour: new Date(endDate).getUTCHours(),
+              minute: new Date(endDate).getUTCMinutes(),
+              month: new Date(endDate).getUTCMonth()+1,
+              year: new Date(endDate).getUTCFullYear(),
+              allMilleseconds: new Date(endDate).getTime()
+            },
+            seasonLength: Number(trnSeasonsInputCP),
             seasonNum: 1,
-            dayCurrent: 0
+            roundCurrent: 0
           }
         }
         console.log(createdTrn)
@@ -601,7 +614,6 @@ function onLeaveTrn(event){
 }
 function onBtnNavJT(event){
   document.getElementById('navPanelJT').style.display = 'grid'
-  clearInterval(timerToNextRound)
 }
 function onNavPanelJTclose(event){
   document.getElementById('navPanelJT').style.display = 'none'
@@ -619,8 +631,6 @@ function onNavPanelJTmain(event){
 }
 function timersToNextRound(event){
   nowDate = new Date()
-  console.log(firebaseTournaments[num].date.start)
-  console.log((nowDate.getTime() - firebaseTournaments[num].date.start.allMilleseconds) / 1000 / 60 / 60)
   roundOFtrn = ((nowDate.getTime() - firebaseTournaments[num].date.start.allMilleseconds) / 1000 / 60 / 60) /
   ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour) + 1
   toNextRound = (Math.ceil(roundOFtrn) - roundOFtrn) * ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour)
@@ -629,20 +639,21 @@ function timersToNextRound(event){
   minutesToNextRound = Math.floor((toNextRound - Math.floor(toNextRound)) * 60)
   secondsToNextRound = Math.floor((((toNextRound - Math.floor(toNextRound)) * 60) - Math.floor((toNextRound - Math.floor(toNextRound)) * 60)) * 60)
   Array.from(document.getElementsByClassName('timerDataJT')).forEach(element =>{ 
-    element.innerText = `Next Round ${hoursToNextRound}:${minutesToNextRound}:${secondsToNextRound}`})
-  timerToNextRound = setInterval(() => {
+    element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`})
+  clearInterval(timerToNextRound)
+    timerToNextRound = setInterval(() => {
     console.log('1 sec')
     secondsToNextRound--
-    if (secondsToNextRound < 1) {
+    if (secondsToNextRound < 0) {
       minutesToNextRound--; 
-      secondsToNextRound = 60;
+      secondsToNextRound = 59;
     }
-    if (minutesToNextRound < 1) {
+    if (minutesToNextRound < 0) {
       hoursToNextRound--;
-      minutesToNextRound = 60
+      minutesToNextRound = 59
     }
     Array.from(document.getElementsByClassName('timerDataJT')).forEach(element =>{
-       element.innerText = `Next Round ${hoursToNextRound}:${minutesToNextRound}:${secondsToNextRound}`
+       element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`
     })}, 1000)
 }
 function onNavPanelJTstatistics(event){
@@ -680,11 +691,15 @@ function onNavPanelJTdata(event){
         labelCounter = ''
           break;
       }
-    for (let j = 0; j < firebaseTournaments[num].targets[i].approach; j++){    
+      let approachLength
+      firebaseTournaments[num].targets[i].approach == '' ? approachLength = 1 : approachLength = firebaseTournaments[num].targets[i].approach
+    for (let j = 0; j < approachLength; j++){    
       Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
       <div class="lblAndInputDataJT">
       ${labelCounter}
+      <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
       <input class="dataJTinputs" type="${type}" placeholder="try ${j+1}" value="${type == 'button' ? `try ${j+1}` : ''}">
+      <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
       </div>`)
     }
     if (labelCounter){
@@ -699,12 +714,6 @@ function onNavPanelJTdata(event){
       }
     }
   }
-  document.getElementById('dataBlocksJT').insertAdjacentHTML('beforeend', `
-  <div class="dataBlockJT" style="display:flex;">
-  <button class="btn-grad" id="btnResetJTdata">Reset</button>
-  <button class="btn-grad" id="btnEditJTdata">Edit</button>
-  <label class="timerDataJT">0:00:00</label>
-  </div>`)
   timersToNextRound()
 }
 let localDate = new Date()
@@ -818,32 +827,20 @@ function onCreateTournament(event) {
   <option value="slider">slider</option>
   <option value="clicker">clicker</option>
 </select>
-  <select class="trnCrtPanel tournamentTargetsApproachInputAtCreatePanel" placeholder="try">
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-  <option value="5">5</option>
-<option value="6">6</option>
-</select>
+  <input type="number" class="trnCrtPanel tournamentTargetsApproachInputAtCreatePanel" placeholder="try">
 <input type="text" class="trnCrtPanel tournamentTargetsDescriptInputAtCreatePanel" placeholder="enter target description">
   </div></div></div>
   <div class="secondMpage" id="RequirementsCreatePanel">
     <div class="dateBlockCT">
-    <label class="trndateLblCP">Tournament Start</label>
+    <label class="trndateLblCP">Start</label>
     <input type="datetime-local" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="trnStartInputCP">
     </div>
     <div class="dateBlockCT">
-    <label class="trndateLblCP">Tournament Round Length</label>
-    <div>
-    <label class="trndateLblUnderCP">Days</label>
-    <input type="number" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="roundDaysLength" value="1">   
+    <label class="trndateLblCP">End</label>
+    <input type="datetime-local" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="trnEndInputCP">
     </div>
-    <div>
-    <label class="trndateLblUnderCP">Hours</label>
-    <input type="range" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="roundHoursLength" value="0" min="0" max="24">
-    <label class="trndateLblUnderCP" id="roundHoursValueCP">0</label>
-    </div>
+    <div class="dateBlockCT">
+    <label class="trndateLblCP" id="roundLength" style="color: grey;">Round</label>
     </div>
     <div class="dateBlockCT">
     <label class="trndateLblCP">Tournament Season Length</label>
@@ -854,9 +851,9 @@ function onCreateTournament(event) {
      cols="30" rows="3" maxlength="100" placeholder="write some short description"></textarea>`);
   let creatTrnSndPage = `
          <div class="firstMpage" id="tournamentTypeInputAtCreatePanel">
-         <button class="trnTypeAtCP" style="background: green;">Opened</button>
-         <button class="trnTypeAtCP">Invited</button>
-         <button class="trnTypeAtCP">Closed</button>
+         <button class="trnTypeAtCP" style="background: green; color: beige;">Opened</button>
+         <button class="trnTypeAtCP" style="color: black;">Invited</button>
+         <button class="trnTypeAtCP" style="color: black;">Closed</button>
       </div>
      <button class="trnCrtPanel btn-grad secondMpage" id="tournamentCreateBtn">Create</button>`;
 
@@ -875,7 +872,10 @@ function onCreateTournament(event) {
   secondMpage = Array.from(document.getElementsByClassName('secondMpage'));
   tournamentCreateBtn = document.getElementById('tournamentCreateBtn');
   Array.from(document.getElementsByClassName('trnTypeAtCP')).forEach(element => element.addEventListener('click', (event) => {
-    Array.from(document.getElementsByClassName('trnTypeAtCP')).forEach(element => element.style.background = 'transparent')
+    Array.from(document.getElementsByClassName('trnTypeAtCP')).forEach(element => {
+      element.style.background = 'transparent'; element.style.color = 'black';})
+
+    event.target.style.color = 'beige'
     switch (event.target.innerText) {
       case 'Closed':
         event.target.style.background = 'red'
@@ -891,8 +891,11 @@ function onCreateTournament(event) {
         break;
       }
   }))
-  document.getElementById('roundHoursLength').addEventListener('input', (event) => {
-    document.getElementById('roundHoursValueCP').innerText = event.target.value
+  document.getElementById('trnStartInputCP').addEventListener('input', (event) => {
+    roundLength()
+  })
+  document.getElementById('trnEndInputCP').addEventListener('input', (event) => {
+    roundLength()
   })
   body.addEventListener('keydown', function (event) {
     if (event.code == 'Escape') { oncrossIcononCreate(); }
@@ -910,6 +913,19 @@ function onCreateTournament(event) {
   crossIcononCreate = document.getElementById('crossIcononCreate');
   crossIcononCreate.addEventListener('click', oncrossIcononCreate);
   trnCrtPanel = Array.from(document.getElementsByClassName('trnCrtPanel'));
+}
+let roundLengthMS, roundLengthDays, roundLengthHours, roundLengthMinutes
+function roundLength(){
+  if (document.getElementById('trnEndInputCP').value !== '' && document.getElementById('trnStartInputCP').value !== ''){
+    roundLengthMS = (new Date(document.getElementById('trnEndInputCP').value).getTime() - 
+    new Date(document.getElementById('trnStartInputCP').value).getTime()) / document.getElementById('trnSeasonsInputCP').value
+    roundLengthDays = roundLengthMS / 1000 / 60 / 60 / 24
+    roundLengthHours = (roundLengthDays - Math.floor(roundLengthDays)) * 24
+    roundLengthMinutes = (roundLengthHours - Math.floor(roundLengthHours)) * 60
+    console.log(new Date(document.getElementById('trnEndInputCP').value).getTime() - new Date(document.getElementById('trnStartInputCP').value).getTime())
+    document.getElementById('roundLength').innerText = `Round ${Math.floor(roundLengthDays)} Days ${Math.floor(roundLengthHours)} hours ${Math.floor(roundLengthMinutes)} minutes`
+    
+  }
 }
 function onTournamentSwitchPageBtn(event) {
   if (tournamentSwitchPageBtn.innerText == 'NEXT') {
