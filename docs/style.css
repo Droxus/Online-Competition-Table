@@ -876,7 +876,9 @@ ul {
     font-family: 'Asap', sans-serif;
     color: #2828b1;
 }
-
+#trnEndInputCP{
+    width: 250px;
+}
 #TargetsCreatePanel {
     grid-area: goalsCP;
     font-family: 'Asap', sans-serif;
@@ -1034,6 +1036,7 @@ margin: 10px;
     color: green;
     align-self: center;
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
 }
 #tournamentTypeInputAtCreatePanel fieldset input {
     margin-top: 25px;
@@ -1077,7 +1080,7 @@ margin: 10px;
     background-image: linear-gradient(to right, #FF5F6D 0%, #ff5b2a 51%, #FF5F6D 100%);
     flex: 1;
     padding: 0;
-    height: 40px;
+    height: 45px;
 }
 #trnNumsbtn {
     background-color: transparent;
@@ -1236,6 +1239,12 @@ margin: 10px;
 #dataPageJT{
     display: none;
     grid-template-columns: 70% 30%;
+    grid-template-rows: 1fr 50px;
+    grid-template-areas: "dataBlocksJT dataLeadersBlockJT"
+    "footerDateBlock dataLeadersBlockJT";
+}
+#footerDateBlock{
+    grid-area: footerDateBlock;
 }
 #dataBlocksJT{
     display: flex;
@@ -1244,6 +1253,7 @@ margin: 10px;
     align-items: center;
     flex-direction: column;
     align-content: stretch;
+    grid-area: dataBlocksJT;
 }
 .dataBlockJT{
     width: 100%;
@@ -1252,14 +1262,14 @@ margin: 10px;
 }
 #btnEditJTdata{
     position: inherit;
-    height: 40px;
+    height: 45px;
     flex: 2;
     padding: 0;
     background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
 }
 .dataJTinputs{
     height: 40px;
-    width: 100%;
+    width: 90%;
     background-color: transparent;
     outline: none;
     border-radius: 15px;
@@ -1269,17 +1279,36 @@ margin: 10px;
     padding: 5px 5px;
     margin: 0px 1%;
     text-align: center;
+    grid-area: dataJTinputs;
+    align-self: center;
+    justify-self: center;
 }
 .lblAndInputDataJT{
     text-align: center;
     margin: 0px 1%;
     flex: 1;
+    display: grid;
+    grid-template-columns: 15% 70% 15%;
+    grid-template-rows: 20px 1fr;
+    grid-template-areas: "labelCounter labelCounter labelCounter"
+    "btnsRowLeft dataJTinputs btnsRowRight";
+}
+.btnsRowLeft{
+    grid-area: btnsRowLeft;
+    background: transparent;
+    border: none;
+}
+.btnsRowRight{
+    grid-area: btnsRowRight;
+    background: transparent;
+    border: none;
 }
 .dataJTinputs::placeholder{
     font-size: 20px;
 }
 #dataLeadersBlockJT{
     border-left: 1px solid rgba(255, 255, 255, 0.3);
+    grid-area: dataLeadersBlockJT;
 }
 .inputsUnityDataJT{
     display: flex;
@@ -1292,6 +1321,7 @@ margin: 10px;
     color: #5a5a5a;
     font-size: 18px;
     font-weight: bold;
+    grid-area: labelCounter;
 }
 .dataJTlabels{
     padding: 10px 0px;
