@@ -715,52 +715,70 @@ function onNavPanelJTdata(event){
     }
   }
   
+  let targetName
   Array.from(document.getElementsByClassName('btnsRowLeft')).forEach(element => element.addEventListener('click', (event) => {
-    if (nowAproach > 1){
+    nowAproach = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')).findIndex((element) => {
+      if (element.style.display !== 'none') {
+        return element
+      }
+    })
+    console.log(nowAproach)
+    if (nowAproach < 0){
+      nowAproach = 0
+    }
+    if (nowAproach > 0){
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromRightDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromLeftDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveRightDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveLeftDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.add('moveLeftDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].style.display = 'block'
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromRightDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromLeftDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveRightDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveLeftDateInput')
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.add('moveLeftDateInput')
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].style.display = 'block'
-
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].classList.remove('moveFromRightDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].classList.remove('moveFromLeftDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].classList.remove('moveRightDateInput')
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].classList.remove('moveLeftDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].classList.add('moveFromRightDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].removeEventListener('animationend', onAnimationInputMoveRight)
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 2].removeEventListener('animationend', onAnimationInputMoveLeft)
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveRight)
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveLeft)
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].addEventListener('animationend', onAnimationInputMoveLeft)
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromLeftDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveRightDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveLeftDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.add('moveFromRightDateInput')
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveRight)
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveLeft)
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight)
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveLeft)
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].addEventListener('animationend', onAnimationInputMoveLeft)
     }
   }))
   Array.from(document.getElementsByClassName('btnsRowRight')).forEach(element => element.addEventListener('click', (event) => {
-    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach+1){
-    event.target.parentElement.parentElement.insertAdjacentHTML('beforeend', `<input class="dataJTinputs" type="number" placeholder="try ${nowAproach + 1}"
+    nowAproach = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')).findIndex((element) => {
+      if (element.style.display !== 'none') {
+        return element
+      }
+    })
+    console.log(nowAproach)
+    if (nowAproach < 0){
+      nowAproach = 0
+    }
+    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach+2){
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="number" placeholder="try ${nowAproach + 2}"
     style="transform: translate(-150%, 0); width: 35%;"></input>`)}
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromRightDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromLeftDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveLeftDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveRightDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.add('moveRightDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromRightDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromLeftDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveLeftDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveRightDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.add('moveFromLeftDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].style.display = 'block'
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.add('moveRightDateInput')
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveFromRightDateInput')
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveFromLeftDateInput')
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveLeftDateInput')
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveRightDateInput')
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.add('moveFromLeftDateInput')
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].style.display = 'block'
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveRight)
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveLeft)
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight)
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveLeft)
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveRight)
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveLeft)
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].addEventListener('animationend', onAnimationInputMoveRight)
+    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].addEventListener('animationend', onAnimationInputMoveRight)
 
   }))
   timersToNextRound()
 }
-let nowAproach = 1
+let nowAproach = 0;
 function onAnimationInputMoveRight(event){
   event.target.style.display = 'none'
   nowAproach++
