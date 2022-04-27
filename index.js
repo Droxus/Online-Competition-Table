@@ -144,6 +144,7 @@ trnsTOshow.addEventListener('click', () => {
     showTournaments(from)
   } 
 })
+document.getElementById('btnEditJTdata').addEventListener('click', onSaveTournamentDate)
 
 // let counterDegGradBg = 0;
 // setInterval(() =>{
@@ -596,6 +597,7 @@ function onTournamentJoin(event) {
   onNavPanelJTmain()
 }
 function onCrossIconJT(event) {
+  onSaveTournamentDate()
   clearInterval(timerToNextRound)
   document.getElementById('joinedTournament').style.display = 'none';
   body.removeEventListener('keydown', function (event) {
@@ -642,7 +644,6 @@ function timersToNextRound(event){
     element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`})
   clearInterval(timerToNextRound)
     timerToNextRound = setInterval(() => {
-    console.log('1 sec')
     secondsToNextRound--
     if (secondsToNextRound < 0) {
       minutesToNextRound--; 
@@ -698,7 +699,7 @@ function onNavPanelJTdata(event){
       <div class="lblAndInputDataJT">
       ${labelCounter}
       <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
-      <input class="dataJTinputs" type="${type}" placeholder="try ${j+1}" value="${type == 'button' ? `try ${j+1}` : ''}">
+      <input class="dataJTinputs" type="${type}" placeholder="try ${j+1}">
       <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
       </div>`)
     }
@@ -714,15 +715,12 @@ function onNavPanelJTdata(event){
       }
     }
   }
-  
-  let targetName
   Array.from(document.getElementsByClassName('btnsRowLeft')).forEach(element => element.addEventListener('click', (event) => {
     nowAproach = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')).findIndex((element) => {
       if (element.style.display !== 'none') {
         return element
       }
     })
-    console.log(nowAproach)
     if (nowAproach < 0){
       nowAproach = 0
     }
@@ -751,7 +749,6 @@ function onNavPanelJTdata(event){
         return element
       }
     })
-    console.log(nowAproach)
     if (nowAproach < 0){
       nowAproach = 0
     }
@@ -788,7 +785,6 @@ function onAnimationInputMoveLeft(event){
         nowAproach--
 }
 let localDate = new Date()
-console.log(localDate.getUTCHours())
 let timerToNextRound
 function onSliderDataJTchange(event){
   event.target.parentElement.firstElementChild.innerText = event.target.value
@@ -807,6 +803,24 @@ function onNavPanelJTsettings(event){
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('settingsPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Settings'
+}
+function onSaveTournamentDate(){
+  for (let i = 0; i < roundOFtrn; i++){
+    firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = 0
+  }
+  console.log(firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round)
+  firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1] = { }
+  for (let i = 0; i < firebaseTournaments[num].targets.length; i++){
+    let arr = [ ]
+    for (let j = 0; j < Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs').length; j++){
+      arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs')[j].value))
+    }
+    firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] = arr
+  }
+  console.log(firebaseTournaments[num])
+  db.collection("global_tournaments").doc(`${docName}`).set(firebaseTournaments[num]).then(() => {
+    console.log('Saved')
+  })
 }
 function onbtnFavorites(event) {
   clearMenu();
