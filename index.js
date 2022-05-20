@@ -272,12 +272,17 @@ function getFirebaseUserJT() {
 }
 function getFirebaseData() {
   firebaseTournaments = [];
+  console.log(firebaseTournaments)
   blackout.style.display = 'block';
   db.collection("global_tournaments").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       firebaseTournaments.push(doc.data());
+      
     });
-  }).then(() => onbtnHome());
+    while (querySnapshot.docs.length < firebaseTournaments.length){
+      firebaseTournaments.pop()
+    }
+  }).then(() =>{ console.log(firebaseTournaments) ; onbtnHome()});
 }
 let tournamentsOnThePage = 5;
 function onbtnHome(event) {
@@ -347,12 +352,6 @@ function onTournament(event) {
     }
   }
   docName = this.firstElementChild.innerText
-  // for (let i = 0; i < firebaseTournaments[num].usersInfo.length; i++){
-  //   if (firebaseTournaments[num].usersInfo[i] == uid){
-  //     return onTournamentJoin()
-  //   }
-  // } 
-  // return onTournamentInfo()
   for (let i = 0; i < firebaseUser.length; i++) {
     if (firebaseUser[i].name == firebaseTournaments[num].name) {
       return onTournamentJoin();
@@ -600,6 +599,7 @@ function onCrossIconJT(event) {
   onSaveTournamentDate()
   clearInterval(timerToNextRound)
   document.getElementById('joinedTournament').style.display = 'none';
+  document.getElementById('navPanelJT').style.display = 'none'
   body.removeEventListener('keydown', function (event) {
     if (event.code == 'Escape') { onCrossIconJT(); }
   });
@@ -633,10 +633,11 @@ function onNavPanelJTmain(event){
 }
 function timersToNextRound(event){
   nowDate = new Date()
-  roundOFtrn = ((nowDate.getTime() - firebaseTournaments[num].date.start.allMilleseconds) / 1000 / 60 / 60) /
-  ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour) + 1
+  seasonNumber = Math.ceil(Math.floor(((nowDate.getTime() - firebaseTournaments[num].date.start.allMilleseconds) / 1000 / 60 / 60) /
+  ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour) + 1) / firebaseTournaments[num].date.seasonLength)
+  roundOFtrn = (((nowDate.getTime() - firebaseTournaments[num].date.start.allMilleseconds) / 1000 / 60 / 60) /
+  ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour) + 1) - ((seasonNumber-1) * firebaseTournaments[num].date.seasonLength)
   toNextRound = (Math.ceil(roundOFtrn) - roundOFtrn) * ((firebaseTournaments[num].date.round.day * 24) + firebaseTournaments[num].date.round.hour)
-  seasonNumber = Math.ceil(Math.floor(roundOFtrn) / firebaseTournaments[num].date.seasonLength)
   hoursToNextRound = Math.floor(toNextRound)
   minutesToNextRound = Math.floor((toNextRound - Math.floor(toNextRound)) * 60)
   secondsToNextRound = Math.floor((((toNextRound - Math.floor(toNextRound)) * 60) - Math.floor((toNextRound - Math.floor(toNextRound)) * 60)) * 60)
@@ -656,6 +657,16 @@ function timersToNextRound(event){
     Array.from(document.getElementsByClassName('timerDataJT')).forEach(element =>{
        element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`
     })}, 1000)
+    if  (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1] == undefined){
+      let round = []
+      firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1] = 0
+      firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1] = {round}
+      console.log(firebaseTournaments[num].UsersInfo[uid])
+    }
+    for (let i = 0; i < firebaseTournaments[num].date.seasonLength; i++){
+      firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = 0
+    }
+    firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1] = { }
 }
 function onNavPanelJTstatistics(event){
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
@@ -693,13 +704,26 @@ function onNavPanelJTdata(event){
           break;
       }
       let approachLength
-      firebaseTournaments[num].targets[i].approach == '' ? approachLength = 1 : approachLength = firebaseTournaments[num].targets[i].approach
+      for (let i = 0; i < roundOFtrn; i++){
+        firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = 0
+      }
+      if ((firebaseTournaments[num].targets[i].approach !== '') && (firebaseTournaments[num].targets[i].approach !== 0)){
+        approachLength = firebaseTournaments[num].targets[i].approach
+        console.log(approachLength)
+      } else if (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined){
+        approachLength = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name].length
+        console.log(approachLength)
+      } else {
+        approachLength = 1
+        console.log(approachLength)
+      }
     for (let j = 0; j < approachLength; j++){    
       Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
       <div class="lblAndInputDataJT">
       ${labelCounter}
       <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
-      <input class="dataJTinputs" type="${type}" placeholder="try ${j+1}">
+      <input class="dataJTinputs" type="${type}" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
+        firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
       <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
       </div>`)
     }
@@ -805,11 +829,6 @@ function onNavPanelJTsettings(event){
   document.getElementById('pageNameJT').innerText = 'Settings'
 }
 function onSaveTournamentDate(){
-  for (let i = 0; i < roundOFtrn; i++){
-    firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = 0
-  }
-  console.log(firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round)
-  firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1] = { }
   for (let i = 0; i < firebaseTournaments[num].targets.length; i++){
     let arr = [ ]
     for (let j = 0; j < Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs').length; j++){
@@ -817,7 +836,6 @@ function onSaveTournamentDate(){
     }
     firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] = arr
   }
-  console.log(firebaseTournaments[num])
   db.collection("global_tournaments").doc(`${docName}`).set(firebaseTournaments[num]).then(() => {
     console.log('Saved')
   })
