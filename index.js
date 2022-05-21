@@ -623,6 +623,7 @@ function onNavPanelJTclose(event){
 
 let roundOFtrn, toNextRound, hoursToNextRound, minutesToNextRound, secondsToNextRound, seasonNumber
 function onNavPanelJTmain(event){
+  onSaveTournamentDate()
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('mainPageJT').style.display = 'grid'
@@ -669,6 +670,7 @@ function timersToNextRound(event){
     firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1] = { }
 }
 function onNavPanelJTstatistics(event){
+  onSaveTournamentDate()
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('statisticsPageJT').style.display = 'grid'
@@ -689,20 +691,6 @@ function onNavPanelJTdata(event){
     <label class="dataJTlabels" for="dataJTlabels">${firebaseTournaments[num].targets[i].name}</label>
     <div class="inputsUnityDataJT">
     </div></div>`)
-    let type, labelCounter
-      switch (firebaseTournaments[num].targets[i].type) {
-        case 'slider':
-        type = 'range';
-        labelCounter = '<label class="labelCounter">0</label>'
-        break;
-        case 'clicker':
-        type = 'button'
-        labelCounter = '<label class="labelCounter">0</label>'
-        break;
-        default: type = 'number';
-        labelCounter = ''
-          break;
-      }
       let approachLength
       for (let i = 0; i < roundOFtrn; i++){
         firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = 0
@@ -717,27 +705,46 @@ function onNavPanelJTdata(event){
         approachLength = 1
         console.log(approachLength)
       }
-    for (let j = 0; j < approachLength; j++){    
-      Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
-      <div class="lblAndInputDataJT">
-      ${labelCounter}
-      <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
-      <input class="dataJTinputs" type="${type}" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
-        firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
-      <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
-      </div>`)
-    }
-    if (labelCounter){
-      if (type == 'range'){
-        Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
-          element => element.addEventListener('input', onSliderDataJTchange))
-      } else {
-        Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
-          element => element.addEventListener('click', onClickerDataJTchange))
+      if (firebaseTournaments[num].targets[i].type == 'slider'){
+        for (let j = 0; j < approachLength; j++){    
+          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
+          <div class="lblAndInputDataJT">
+          <label class="labelCounter">0</label>
+          <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
+          <input class="dataJTinputs" type="range" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
+            firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
+          <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
+          </div>`)
           Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
-            element => element.style["font-size"] = '18px')
+            element => element.addEventListener('input', onSliderDataJTchange))
+        }
+      } else if (firebaseTournaments[num].targets[i].type == 'clicker'){
+        for (let j = 0; j < approachLength; j++){    
+          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
+          <div class="lblAndInputDataJT">
+          <label class="labelCounter">0</label>
+          <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
+          <input class="dataJTinputs" type="button" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
+            firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
+          <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
+          </div>`)
+          Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
+            element => element.addEventListener('click', onClickerDataJTchange))
+            Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
+              element => element.style["font-size"] = '18px')
+        }
+      } else {
+        for (let j = 0; j < approachLength; j++){    
+          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
+          <div class="lblAndInputDataJT">
+          <label class="labelCounter">0</label>
+          <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
+          <input class="dataJTinputs" type="number" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
+            firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
+          <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
+          </div>`)
+        }
       }
-    }
   }
   Array.from(document.getElementsByClassName('btnsRowLeft')).forEach(element => element.addEventListener('click', (event) => {
     nowAproach = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')).findIndex((element) => {
@@ -776,9 +783,16 @@ function onNavPanelJTdata(event){
     if (nowAproach < 0){
       nowAproach = 0
     }
-    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach+2){
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="number" placeholder="try ${nowAproach + 2}"
+    let type
+
+    console.log(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs'))
+    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach+2){  
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
     style="transform: translate(-150%, 0); width: 35%;"></input>`)}
+    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach] !== undefined){
+      type = event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].type
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].type = type
+    }
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromRightDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromLeftDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveLeftDateInput')
@@ -817,28 +831,33 @@ function onClickerDataJTchange(event){
   event.target.parentElement.firstElementChild.innerText++
 }
 function onNavPanelJTleaders(event){
+  onSaveTournamentDate()
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('leadersPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Leader Board'
 }
 function onNavPanelJTsettings(event){
+  onSaveTournamentDate()
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('settingsPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Settings'
 }
 function onSaveTournamentDate(){
-  for (let i = 0; i < firebaseTournaments[num].targets.length; i++){
-    let arr = [ ]
-    for (let j = 0; j < Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs').length; j++){
-      arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs')[j].value))
+  console.log(Array.from(document.getElementsByClassName('dataBlockJT'))[0])
+  if ((document.getElementById('dataPageJT').style.display !== 'none') && (Array.from(document.getElementsByClassName('dataBlockJT'))[0] !== undefined)){
+    for (let i = 0; i < firebaseTournaments[num].targets.length; i++){
+      let arr = [ ]
+      for (let j = 0; j < Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs').length; j++){
+        arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs')[j].value))
+      }
+      firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] = arr
     }
-    firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] = arr
+    db.collection("global_tournaments").doc(`${docName}`).set(firebaseTournaments[num]).then(() => {
+      console.log('Saved')
+    })
   }
-  db.collection("global_tournaments").doc(`${docName}`).set(firebaseTournaments[num]).then(() => {
-    console.log('Saved')
-  })
 }
 function onbtnFavorites(event) {
   clearMenu();
