@@ -277,7 +277,6 @@ function getFirebaseData() {
   db.collection("global_tournaments").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       firebaseTournaments.push(doc.data());
-      
     });
     while (querySnapshot.docs.length < firebaseTournaments.length){
       firebaseTournaments.pop()
@@ -660,14 +659,13 @@ function timersToNextRound(event){
     })}, 1000)
     if  (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1] == undefined){
       let round = []
-      firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1] = 0
       firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1] = {round}
       console.log(firebaseTournaments[num].UsersInfo[uid])
+      for (let i = 0; i < firebaseTournaments[num].date.seasonLength; i++){
+        if (typeof firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] !== 'object')
+        firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = { }
+      } 
     }
-    for (let i = 0; i < firebaseTournaments[num].date.seasonLength; i++){
-      firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = 0
-    }
-    firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1] = { }
 }
 function onNavPanelJTstatistics(event){
   onSaveTournamentDate()
@@ -691,43 +689,42 @@ function onNavPanelJTdata(event){
     <label class="dataJTlabels" for="dataJTlabels">${firebaseTournaments[num].targets[i].name}</label>
     <div class="inputsUnityDataJT">
     </div></div>`)
-      let approachLength
-      for (let i = 0; i < roundOFtrn; i++){
-        firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[i] = 0
-      }
+      let approachLength, valueInput
       if ((firebaseTournaments[num].targets[i].approach !== '') && (firebaseTournaments[num].targets[i].approach !== 0)){
         approachLength = firebaseTournaments[num].targets[i].approach
-        console.log(approachLength)
-      } else if (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined){
+      }  else if (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined){
         approachLength = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name].length
-        console.log(approachLength)
       } else {
         approachLength = 1
-        console.log(approachLength)
       }
+      Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
+      <div class="lblAndInputDataJT">
+      <label class="labelCounter">0</label>
+      <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
+      <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
+      </div>`)
       if (firebaseTournaments[num].targets[i].type == 'slider'){
-        for (let j = 0; j < approachLength; j++){    
-          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
-          <div class="lblAndInputDataJT">
-          <label class="labelCounter">0</label>
-          <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
-          <input class="dataJTinputs" type="range" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
-            firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
-          <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
-          </div>`)
+        for (let j = 0; j < approachLength; j++){  
+          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined)
+      && (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
+      (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
+       valueInput = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
+     } else {valueInput = ''}  
+         
+          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
+          <input class="dataJTinputs" type="range" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
           Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
             element => element.addEventListener('input', onSliderDataJTchange))
         }
       } else if (firebaseTournaments[num].targets[i].type == 'clicker'){
         for (let j = 0; j < approachLength; j++){    
-          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
-          <div class="lblAndInputDataJT">
-          <label class="labelCounter">0</label>
-          <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
-          <input class="dataJTinputs" type="button" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
-            firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
-          <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
-          </div>`)
+          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined)
+      && (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
+      (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
+       valueInput = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
+     } else {valueInput = ''}
+          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
+          <input class="dataJTinputs" type="button" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
           Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
             element => element.addEventListener('click', onClickerDataJTchange))
             Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
@@ -735,14 +732,16 @@ function onNavPanelJTdata(event){
         }
       } else {
         for (let j = 0; j < approachLength; j++){    
-          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
-          <div class="lblAndInputDataJT">
-          <label class="labelCounter">0</label>
-          <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
-          <input class="dataJTinputs" type="number" placeholder="try ${j+1}" value="${firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined ? 
-            firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] : ''}">
-          <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
-          </div>`)
+          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined)
+      && (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
+      (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
+       valueInput = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
+     } else {valueInput = ''}
+          Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
+          <input class="dataJTinputs" type="number" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
+          console.log(firebaseTournaments[num])
+          console.log(firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1])
+          console.log(Math.floor(roundOFtrn)-1)
         }
       }
   }
@@ -784,8 +783,6 @@ function onNavPanelJTdata(event){
       nowAproach = 0
     }
     let type
-
-    console.log(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs'))
     if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach+2){  
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
     style="transform: translate(-150%, 0); width: 35%;"></input>`)}
@@ -845,7 +842,6 @@ function onNavPanelJTsettings(event){
   document.getElementById('pageNameJT').innerText = 'Settings'
 }
 function onSaveTournamentDate(){
-  console.log(Array.from(document.getElementsByClassName('dataBlockJT'))[0])
   if ((document.getElementById('dataPageJT').style.display !== 'none') && (Array.from(document.getElementsByClassName('dataBlockJT'))[0] !== undefined)){
     for (let i = 0; i < firebaseTournaments[num].targets.length; i++){
       let arr = [ ]
