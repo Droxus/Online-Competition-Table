@@ -1392,7 +1392,26 @@ margin: 10px;
     grid-template-columns: 100%;
     grid-template-rows: 90%, 10%;
 }
-
+.btnDataPlus{
+    width: 50%;
+    height: 100%;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.btnDataMinus{
+    width: 50%;
+    height: 100%;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    align-content: space-around;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
 @media screen and (min-device-width: 0px) {
     #mainBlock {

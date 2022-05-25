@@ -145,6 +145,7 @@ trnsTOshow.addEventListener('click', () => {
   } 
 })
 document.getElementById('btnEditJTdata').addEventListener('click', onSaveTournamentDate)
+document.getElementById('btnResetJTdata').addEventListener('click', onResetTournamentDate)
 
 // let counterDegGradBg = 0;
 // setInterval(() =>{
@@ -690,61 +691,71 @@ function onNavPanelJTdata(event){
     <div class="inputsUnityDataJT">
     </div></div>`)
       let approachLength, valueInput
+      console.log(firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1])
       if ((firebaseTournaments[num].targets[i].approach !== '') && (firebaseTournaments[num].targets[i].approach !== 0)){
         approachLength = firebaseTournaments[num].targets[i].approach
-      }  else if (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined){
+      }  else if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1] !== {})
+       &&  (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined)){
         approachLength = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name].length
       } else {
         approachLength = 1
       }
       Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
       <div class="lblAndInputDataJT">
-      <label class="labelCounter">0</label>
       <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
       <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
       </div>`)
       if (firebaseTournaments[num].targets[i].type == 'slider'){
         for (let j = 0; j < approachLength; j++){  
-          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined)
+          valueInput = ''
+          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined)
       && (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
       (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
        valueInput = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
-     } else {valueInput = ''}  
-         
+     } else {valueInput = 0}  
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
-          <input class="dataJTinputs" type="range" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
-          Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
-            element => element.addEventListener('input', onSliderDataJTchange))
+          <input class="dataJTinputs" type="range" min="0" max="100" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
+     console.log()
+          Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
+          <label class="labelCounter" style="display:${j < 1 ? 'block' : 'none'};">0</label>`)
+          Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input'))[j].addEventListener('input', (event) =>
+             {event.target.parentElement.getElementsByClassName('labelCounter')[j].innerText = event.target.value})
         }
       } else if (firebaseTournaments[num].targets[i].type == 'clicker'){
         for (let j = 0; j < approachLength; j++){    
-          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined)
+          valueInput = ''
+          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined)
       && (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
       (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
        valueInput = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
      } else {valueInput = ''}
+     console.log(valueInput)
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
-          <input class="dataJTinputs" type="button" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
-          Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
-            element => element.addEventListener('click', onClickerDataJTchange))
-            Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input')).forEach(
-              element => element.style["font-size"] = '18px')
+          <button class="dataJTinputs"  placeholder="try ${j+1}" style="display:${j < 1 ? 'flex' : 'none'};">
+          <div class="btnDataMinus">-</div><label class="btnDataCounter">${valueInput}</label><div class="btnDataPlus">+</div></button>`)
+          Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnDataMinus')).forEach(
+            element => element.addEventListener('click', (event) => {event.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[j].innerText < 1 ?
+              0 : event.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[j].innerText--}))
+          Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnDataPlus')).forEach(
+            element => element.addEventListener('click', (event) => {event.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[j].innerText++}))
         }
       } else {
-        for (let j = 0; j < approachLength; j++){    
-          if ((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined)
-      && (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-      (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
-       valueInput = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
-     } else {valueInput = ''}
+        for (let j = 0; j < approachLength; j++){
+          valueInput = ''
+          if (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined){
+            if (((firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined && 
+            (firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0)) &&
+            firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
+              valueInput = firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
+              console.log(firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name])
+            } } else {valueInput = ''}
+            console.log(valueInput)
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="number" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
-          console.log(firebaseTournaments[num])
-          console.log(firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1])
-          console.log(Math.floor(roundOFtrn)-1)
         }
       }
   }
+
   Array.from(document.getElementsByClassName('btnsRowLeft')).forEach(element => element.addEventListener('click', (event) => {
     nowAproach = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')).findIndex((element) => {
       if (element.style.display !== 'none') {
@@ -760,7 +771,15 @@ function onNavPanelJTdata(event){
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveRightDateInput')
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveLeftDateInput')
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.add('moveLeftDateInput')
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].style.display = 'block'
+      if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].tagName == 'BUTTON'){
+        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].style.display = 'flex'
+      } else {
+        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].style.display = 'block'
+      }
+      if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].type == 'range'){
+        event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach - 1].style.display = 'block'
+        event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach].style.display = 'none'
+      }
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromRightDateInput')
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromLeftDateInput')
       event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveRightDateInput')
@@ -783,13 +802,31 @@ function onNavPanelJTdata(event){
       nowAproach = 0
     }
     let type
-    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach+2){  
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
-    style="transform: translate(-150%, 0); width: 35%;"></input>`)}
     if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach] !== undefined){
       type = event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].type
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].type = type
     }
+    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach+2){  
+      if (type == 'number'){
+        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
+      style="transform: translate(-150%, 0); width: 35%;"></input>`)} else 
+      if (type == 'submit') {
+        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `
+          <button class="dataJTinputs" style="display:flex;">
+          <div class="btnDataMinus">-</div> <label class="btnDataCounter"></label> <div class="btnDataPlus">+</div></button>`)
+          Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].getElementsByClassName('btnDataMinus')).forEach(
+            element => element.addEventListener('click', (event) => { 
+              event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText < 1 ?
+              0 : event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText--; }))
+              Array.from(event.target.parentElement.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].getElementsByClassName('btnDataPlus')).forEach(
+            element => element.addEventListener('click', (event) => {event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++}))   
+      } else {
+        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
+        style="transform: translate(-150%, 0); width: 35%;"></input>`)
+        event.target.parentElement.parentElement.parentElement.getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
+          <label class="labelCounter" style="display: block;">0</label>`)
+          event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach+1].addEventListener('input', (event) =>
+          {event.target.parentElement.getElementsByClassName('labelCounter')[nowAproach].innerText = event.target.value})
+      } }
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromRightDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromLeftDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveLeftDateInput')
@@ -800,7 +837,15 @@ function onNavPanelJTdata(event){
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveLeftDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveRightDateInput')
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.add('moveFromLeftDateInput')
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].style.display = 'block'
+    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].tagName == 'BUTTON'){
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].style.display = 'flex'
+    } else {
+      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].style.display = 'block'
+    }
+    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].type == 'range'){
+      event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach].style.display = 'none'
+      event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach + 1].style.display = 'block'
+    }
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveRight)
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveLeft)
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight)
@@ -824,9 +869,6 @@ let timerToNextRound
 function onSliderDataJTchange(event){
   event.target.parentElement.firstElementChild.innerText = event.target.value
 } 
-function onClickerDataJTchange(event){
-  event.target.parentElement.firstElementChild.innerText++
-}
 function onNavPanelJTleaders(event){
   onSaveTournamentDate()
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
@@ -846,7 +888,15 @@ function onSaveTournamentDate(){
     for (let i = 0; i < firebaseTournaments[num].targets.length; i++){
       let arr = [ ]
       for (let j = 0; j < Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs').length; j++){
-        arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs')[j].value))
+        if (firebaseTournaments[num].targets[i].type == 'clicker'){
+          arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('btnDataCounter')[j].innerText))
+          console.log(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('btnDataCounter')[j].innerText))
+        } else if (firebaseTournaments[num].targets[i].type == 'slider') { 
+          arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('labelCounter')[j].innerText))
+        } 
+        else {
+          arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs')[j].value))
+        }
       }
       firebaseTournaments[num].UsersInfo[uid].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] = arr
     }
@@ -854,6 +904,23 @@ function onSaveTournamentDate(){
       console.log('Saved')
     })
   }
+}
+function onResetTournamentDate(){
+  Array.from(document.getElementsByClassName('dataJTinputs')).forEach((element) => {
+    console.log(element.tagName)
+    if (element.tagName == 'BUTTON'){
+      element.getElementsByClassName('btnDataCounter')[0].innerText = ''
+    } else {
+      if (element.type == 'range'){
+        element.value = 0
+        Array.from(element.parentElement.parentElement.getElementsByClassName('labelCounter')).forEach((element2) =>{
+          element2.innerText = 0
+        })
+      } else {
+        element.value = '';
+      }
+    }
+  })
 }
 function onbtnFavorites(event) {
   clearMenu();
