@@ -1289,8 +1289,9 @@ margin: 10px;
     flex: 1;
     display: grid;
     grid-template-columns: 15% 70% 15%;
-    grid-template-rows: 20px 1fr;
-    grid-template-areas: "labelCounter labelCounter labelCounter"
+    grid-template-rows: 25px 15px 1fr;
+    grid-template-areas: "nowApproach nowApproach nowApproach" 
+    "labelCounter labelCounter labelCounter"
     "btnsRowLeft dataJTinputs btnsRowRight";
 }
 .btnsRowLeft{
@@ -1412,7 +1413,60 @@ margin: 10px;
     flex-wrap: wrap;
     justify-content: center;
 }
-
+.nowApproach{
+    grid-area: nowApproach;
+    border: 2px solid #0015ab;
+    width: 40px;
+    border-radius: 35px;
+    place-self: center;
+    color: #494949;
+    font-weight: bold;
+}
+#allApproachesOfThisTarget{
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 100px 1fr;
+    grid-template-columns: 1fr 50px;
+    grid-template-areas: "targetName crossApproachesPanel"
+    "inputsOfAproach inputsOfAproach";
+}
+#thisTargetName{
+    place-self: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: #ffe8b4;
+    text-transform: uppercase;
+    font-family: 'Asap', sans-serif;
+}
+#thisApproaches{
+    grid-area: inputsOfAproach;
+    display: flex;
+    align-content: space-around;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    
+}
+.inputsAproachesPanel{
+    height: 40px;
+    width: auto;
+    background-color: transparent;
+    outline: none;
+    border-radius: 15px;
+    border: 2px solid #ffe8b4;
+    font-size: 28px;
+    color: #ffeec6;
+    padding: 5px 5px;
+    margin: 0px 1%;
+    text-align: center;
+    align-self: center;
+    justify-self: center;
+    width: 45%;
+}
+.inputsAproachesPanel::placeholder{
+    color: #a09781;
+}
 @media screen and (min-device-width: 0px) {
     #mainBlock {
         grid-template-rows: 1fr 50px;
