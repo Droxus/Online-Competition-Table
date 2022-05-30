@@ -133,11 +133,24 @@
                 <button class="btn-grad" id="btnEditJTdata">Save</button>
                 <label class="timerDataJT">0:00:00</label>
                 </div>
-            <div id="dataLeadersBlockJT">
+        </div>
+        <div class="pagesJT" id="leadersPageJT">
+            <div id="dataLeadersTable">
 
             </div>
+            <div id="dataLeadersFooter">
+                <label id="lblLeadersSeason">Season</label>
+                <select class="selectorsLeadersBoard" id="sesondLeaderSwitch"></select>
+                <label id="lblLeadersRound">Round</label>
+                <select class="selectorsLeadersBoard" id="roundLeaderSwitch"></select>
+                <select class="selectorsLeadersBoard" id="approachLeaderSwitch">
+                    <option value="sum">sum</option>
+                    <option value="max">max</option>
+                    <option value="min">min</option>
+                    <option value="avg" selected="selected">avg</option>
+                </select>
+            </div>
         </div>
-        <div class="pagesJT" id="leadersPageJT"></div>
         <div class="pagesJT" id="settingsPageJT">
             <div></div>
             <button class="btn-grad" id="btnLeaveTrn">Leave</button>

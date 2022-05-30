@@ -196,6 +196,12 @@ function getNickName() {
       displayName: login
     }).then(() => console.log(User.displayName));
   } else { login = User.displayName; nickForLabel.innerHTML = login; }
+  let nick = db.collection("users_info").doc(uid).nickName
+  if (((nick == null) || (nick == undefined)) || (nick == '')){
+    db.collection("users_info").doc(uid).update({
+      nickName: login
+    })
+  }
 }
 function onSignIn() {
   password = null;
@@ -229,6 +235,7 @@ function onClearError() {
 let firebaseTournaments = [];
 let firebaseUser = [];
 let firebaseLikedTrn = []
+let firebaseUserData = []
 let from = 0;
 function getFirebaseData() {
   firebaseTournaments = [];
@@ -240,6 +247,12 @@ function getFirebaseData() {
     while (querySnapshot.docs.length < firebaseTournaments.length){
       firebaseTournaments.pop()
     }
+  }).then(() => {
+    db.collection("users_info").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        firebaseUserData.push(doc.data());
+      })
+    })
   }).then(() =>{getFirebaseLikedTrn()});
 }
 function getFirebaseLikedTrn(){
@@ -257,10 +270,7 @@ function getFirebaseLikedTrn(){
             firebaseLikedTrn.push(firebaseTournaments[i])
           }
         }}
-        console.log('aaaaaaaaa')
       }
-      console.log(arr)
-      console.log(firebaseLikedTrn)
       getFirebaseUserJT()
     })
   };
@@ -281,10 +291,7 @@ function getFirebaseUserJT() {
           firebaseUser.push(firebaseTournaments[i])
         }
       }}
-      console.log('aaaaaaaaa')
     }
-    console.log(arr)
-    console.log(firebaseUser)
     onbtnHome()
   })
 }
@@ -363,13 +370,17 @@ function onTournament(event) {
   }
   return onTournamentInfo();
 }
+let escapeFuseSpam = false
 function onTournamentInfo() {
   mainBlock.style.display = 'none';
   tournamentInfo.style.display = 'grid';
   root.style.setProperty('--like-btn-size-scale', '0.33');
-  body.addEventListener('keydown', function (event) {
-    if (event.code == 'Escape') { onCrossTournamentInfo(); }
-  });
+  body.addEventListener('keyup', function (event) {
+    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
+      escapeFuseSpam = true
+      onCrossTournamentInfo();
+      setTimeout(() => {escapeFuseSpam = false}, 1000)
+  }});
   tournamentNameInfo.innerText = firebaseTournaments[num].name;
   if (firebaseTournaments[num].type == "closed") {
     tournamentGoalsLabelInfo.style.display = 'none';
@@ -415,8 +426,12 @@ function onTournamentInfo() {
     document.getElementById('tournamentLikeBtnInfo').classList.add('liked')}
 }
 function onCrossTournamentInfo(event) {
-  body.removeEventListener('keydown', function (event) {
-    if (event.code == 'Escape') { onCrossTournamentInfo(); }
+  body.removeEventListener('keyup', function (event) {
+    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
+      escapeFuseSpam = true
+      onCrossTournamentInfo();
+      setTimeout(() => {escapeFuseSpam = false}, 1000)
+  }
   });
   mainBlock.style.display = 'grid';
   tournamentInfo.style.display = 'none';
@@ -591,12 +606,19 @@ function onJTbtn(event) {
   }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); });
 }
 function onTournamentJoin(event) {
-  body.removeEventListener('keydown', function (event) {
-    if (event.code == 'Escape') { onCrossTournamentInfo(); }
+  body.removeEventListener('keyup', function (event) {
+    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
+      escapeFuseSpam = true
+      onCrossTournamentInfo();
+      setTimeout(() => {escapeFuseSpam = false}, 1000)
+  }
   });
-  body.addEventListener('keydown', function (event) {
-    if (event.code == 'Escape') { onCrossIconJT(); }
-  });
+  body.addEventListener('keyup', function (event) {
+    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
+      escapeFuseSpam = true
+      onCrossIconJT();
+      setTimeout(() => {escapeFuseSpam = false}, 1000)
+  }});
   tournamentInfo.style.display = 'none';
   if (temporaryElementsTI) {
     temporaryElementsTI.forEach(element => element.remove());
@@ -612,8 +634,16 @@ function onCrossIconJT(event) {
   clearInterval(timerToNextRound)
   document.getElementById('joinedTournament').style.display = 'none';
   document.getElementById('navPanelJT').style.display = 'none'
-  body.removeEventListener('keydown', function (event) {
-    if (event.code == 'Escape') { onCrossIconJT(); }
+  document.getElementById('pageNextJT').removeEventListener('click', () => {firstTarget++; lastTarget++;
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  document.getElementById('pagePrevJT').removeEventListener('click', () => {firstTarget--; lastTarget--; 
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  body.removeEventListener('keyup', function (event) {
+    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
+      escapeFuseSpam = true
+      onCrossIconJT();
+      setTimeout(() => {escapeFuseSpam = false}, 1000)
+  }
   });
   mainBlock.style.display = 'grid';
   if ((document.getElementById('allApproachesOfThisTarget') !== undefined) && (document.getElementById('allApproachesOfThisTarget') !== null)){
@@ -622,12 +652,14 @@ function onCrossIconJT(event) {
   panelNum == 0 ? onbtnHome() : onbtnFavorites()
 }
 function onLeaveTrn(event){
-  db.collection("users_info").doc(uid).collection("active_tournaments").doc(`${docName}`).delete().then(() => {
+  db.collection("users_info").doc(uid).update({
+    joined_tournaments: firebase.firestore.FieldValue.arrayRemove(`${docName}`)
+  }).then(() => {
     db.collection("global_tournaments").doc(`${docName}`).update({
       usersInfo: firebase.firestore.FieldValue.arrayRemove(uid),
       participants: firebase.firestore.FieldValue.arrayRemove(login)
     });
-  }).then(() => { onCrossIconJT(); getFirebaseUserJT(); getFirebaseData(); });
+  }).then(() => { onCrossIconJT(); getFirebaseData(); });
 }
 function onBtnNavJT(event){
   document.getElementById('navPanelJT').style.display = 'grid'
@@ -646,6 +678,10 @@ function onNavPanelJTmain(event){
   timersToNextRound()
   document.getElementById('roundNumJT').innerText = `Round ${Math.floor(roundOFtrn)}`
   document.getElementById('seasonNumJT').innerText = `Season ${seasonNumber}`
+  document.getElementById('pageNextJT').removeEventListener('click', () => {firstTarget++; lastTarget++;
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  document.getElementById('pagePrevJT').removeEventListener('click', () => {firstTarget--; lastTarget--; 
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
 }
 function timersToNextRound(event){
   nowDate = new Date()
@@ -684,8 +720,8 @@ function timersToNextRound(event){
       let round = []
       firebaseTournaments[num].season[seasonNumber-1] = {round}
       for (let i = 0; i < firebaseTournaments[num].date.seasonLength; i++){
-        if (typeof firebaseTournaments[num].season[seasonNumber-1].round[i] !== 'object')
-        firebaseTournaments[num].season[seasonNumber-1].round[i] = { }
+        if (typeof firebaseTournaments[num].season[seasonNumber-1].round[i].UsersInfo[uid] !== 'object')
+        firebaseTournaments[num].season[seasonNumber-1].round[i].UsersInfo[uid] = { }
       } 
     }
 }
@@ -695,6 +731,10 @@ function onNavPanelJTstatistics(event){
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('statisticsPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Statistics'
+  document.getElementById('pageNextJT').removeEventListener('click', () => {firstTarget++; lastTarget++;
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  document.getElementById('pagePrevJT').removeEventListener('click', () => {firstTarget--; lastTarget--; 
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
 }
 function onNavPanelJTdata(event){
   timersToNextRound()
@@ -702,6 +742,10 @@ function onNavPanelJTdata(event){
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('dataPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Data'
+  document.getElementById('pageNextJT').removeEventListener('click', () => {firstTarget++; lastTarget++;
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  document.getElementById('pagePrevJT').removeEventListener('click', () => {firstTarget--; lastTarget--; 
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
   while (document.getElementById('dataBlocksJT').firstChild) {
     document.getElementById('dataBlocksJT').removeChild(document.getElementById('dataBlocksJT').firstChild);
   }
@@ -714,10 +758,12 @@ function onNavPanelJTdata(event){
       let approachLength, valueInput
       if ((firebaseTournaments[num].targets[i].approach !== '') && (firebaseTournaments[num].targets[i].approach !== 0)){
         approachLength = firebaseTournaments[num].targets[i].approach
-      }  else if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1] !== {})
-       &&  (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined)){
-        approachLength = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name].length
-      } else {
+      }  else if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== {})
+      &&  (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== undefined)) {
+        if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== {})
+       &&  (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== undefined)){
+        approachLength = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length
+      }} else {
         approachLength = 1
       }
       Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
@@ -729,11 +775,12 @@ function onNavPanelJTdata(event){
       if (firebaseTournaments[num].targets[i].type == 'slider'){
         for (let j = 0; j < approachLength; j++){  
           valueInput = ''
-          if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined)
-      && (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
-       valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
-     } else {valueInput = 0}  
+          if (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== undefined){
+          if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== undefined)
+      && (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
+      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')){
+       valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j]
+     }} else {valueInput = 0}  
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="range" min="0" max="100" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
           Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
@@ -744,11 +791,12 @@ function onNavPanelJTdata(event){
       } else if (firebaseTournaments[num].targets[i].type == 'clicker'){
         for (let j = 0; j < approachLength; j++){    
           valueInput = ''
-          if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined)
-      && (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
-       valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
-     } else {valueInput = ''}
+          if (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== undefined){
+          if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== undefined)
+      && (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
+      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')){
+       valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j]
+     }} else {valueInput = ''}
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <button class="dataJTinputs"  placeholder="try ${j+1}" style="display:${j < 1 ? 'flex' : 'none'};">
           <div class="btnDataMinus">-</div><label class="btnDataCounter">${valueInput}</label><div class="btnDataPlus">+</div></button>`)
@@ -761,12 +809,13 @@ function onNavPanelJTdata(event){
       } else {
         for (let j = 0; j < approachLength; j++){
           valueInput = ''
-          if (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name] !== undefined){
-            if (((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== undefined && 
-            (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== 0)) &&
-            firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j] !== '')){
-              valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1][firebaseTournaments[num].targets[i].name][j]
-            } } else {valueInput = ''}
+          if (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== undefined){
+          if (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== undefined){
+            if (((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined && 
+            (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0)) &&
+            firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')){
+              valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j]
+            } }} else {valueInput = ''}
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="number" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
         }
@@ -952,15 +1001,127 @@ function onAnimationInputMoveLeft(event){
 }
 let localDate = new Date()
 let timerToNextRound
-function onSliderDataJTchange(event){
-  event.target.parentElement.firstElementChild.innerText = event.target.value
-} 
 function onNavPanelJTleaders(event){
   onSaveTournamentDate()
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('leadersPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Leader Board'
+  document.getElementById('pageNextJT').addEventListener('click', () => {firstTarget++; lastTarget++;
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  document.getElementById('pagePrevJT').addEventListener('click', () => {firstTarget--; lastTarget--; 
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  while (document.getElementById('dataLeadersTable').firstChild) {
+    document.getElementById('dataLeadersTable').removeChild(document.getElementById('dataLeadersTable').firstChild);
+  }
+
+  for (let i = 0; i < firebaseTournaments[num].season.length; i++){
+    if (i == firebaseTournaments[num].season.length-1){
+      document.getElementById('sesondLeaderSwitch').insertAdjacentHTML('afterbegin', `
+      <option selected="selected" value="${i+1}">${i+1}</option>`)
+    } else {
+      document.getElementById('sesondLeaderSwitch').insertAdjacentHTML('afterbegin', `
+      <option value="${i+1}">${i+1}</option>`)
+    }
+  }
+  document.getElementById('sesondLeaderSwitch').addEventListener('change', (event) => dataLeadersTableDraw(event.target.value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value))
+  for (let i = 0; i < firebaseTournaments[num].date.seasonLength; i++){
+    if (i == Math.floor(roundOFtrn)-1){
+      document.getElementById('roundLeaderSwitch').insertAdjacentHTML('afterbegin', `
+      <option selected="selected" value="${i+1}">${i+1}</option>`)
+    } else {
+      document.getElementById('roundLeaderSwitch').insertAdjacentHTML('afterbegin', `
+      <option value="${i+1}">${i+1}</option>`)
+    }
+  }
+  firstTarget = 0
+  lastTarget = 4
+  document.getElementById('roundLeaderSwitch').addEventListener('change', (event) => dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, event.target.value-1, document.getElementById('approachLeaderSwitch').value))
+  dataLeadersTableDraw(seasonNumber-1, Math.floor(roundOFtrn)-1, 'avg')
+}
+document.getElementById('approachLeaderSwitch').addEventListener('change', (event) => {
+  dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, event.target.value)})
+  let firstTarget
+  let lastTarget
+  function dataLeadersTableDraw(season, round, approach){
+  if (lastTarget > firebaseTournaments[num].targets.length){
+    lastTarget = firebaseTournaments[num].targets.length
+    firstTarget = lastTarget-4
+  }
+  if (firstTarget < 0){
+    firstTarget = 0
+    lastTarget = firstTarget+4
+  }
+  while (document.getElementById('dataLeadersTable').firstChild) {
+    document.getElementById('dataLeadersTable').removeChild(document.getElementById('dataLeadersTable').firstChild);
+  }
+  document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
+  <label class="lbldataHeaderLeadersTable"></label><label class="lbldataHeaderLeadersTable">Name</label>
+  `)
+  for (let i = firstTarget; i < lastTarget; i++){
+    if (firebaseTournaments[num].targets[i] !== undefined){
+      document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
+  <label class="lbldataHeaderLeadersTable">${firebaseTournaments[num].targets[i].name}</label>
+  `)
+    }
+  } 
+  for (let j = 0; j < firebaseTournaments[num].usersInfo.length; j++){
+    document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
+    <img src="img/icons8-test-account-48.png" width="36px"></img>
+    <label class="lbldataLeadersTable" style="justify-self: baseline;">${firebaseTournaments[num].participants[j]}</label>
+    `)
+    let thisID = firebaseTournaments[num].usersInfo[j]
+    if (((firebaseTournaments[num].season[season] !== {}) && (firebaseTournaments[num].season[season] !== undefined))
+    && ((firebaseTournaments[num].season[season] !== null) && (firebaseTournaments[num].season[season] !== 0))){
+    if (((firebaseTournaments[num].season[season].round[round] !== {}) && (firebaseTournaments[num].season[season].round[round] !== undefined))
+      && (firebaseTournaments[num].season[season].round[round] !== null)){
+      if (firebaseTournaments[num].season[season].round[round].UsersInfo !== undefined){
+        if (firebaseTournaments[num].season[season].round[round].UsersInfo[thisID] !== undefined){
+          // for (let i = 0; i < Object.keys(firebaseTournaments[num].season[season].round[round].UsersInfo[thisID]).length; i++){
+          //   let thisUserInfo = firebaseUserData.find(element => {element == thisID})
+          //   if (Object.keys(firebaseTournaments[num].season[season].round[round].UsersInfo[thisID])[i] == firebaseTournaments[num].usersInfo){
+              
+          //   }
+          // }
+          for (let i = firstTarget; i < lastTarget; i++){
+            if (firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name] !== undefined){
+              let valueOFlbl = 0
+              switch (approach) {
+                case 'sum':
+                  firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name].forEach(element => valueOFlbl += element)
+                  break;
+                  case 'max':
+                    valueOFlbl = Math.max.apply(Math, firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name])
+                    break;
+                    case 'min':
+                      valueOFlbl = Math.min.apply(Math, firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name])
+                    break;
+                default:
+                  firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name].forEach(element => valueOFlbl += element)
+                  valueOFlbl /= firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name].length
+                  break;
+              }
+            document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length-1].insertAdjacentHTML('afterend', `
+      <label class="lbldataLeadersTable">${valueOFlbl}</label>
+      `)} else { 
+      document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length-1].insertAdjacentHTML('afterend', `
+      <label class="lbldataLeadersTable">0</label>
+      `)
+      }
+          }
+        } else {document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length-1].insertAdjacentHTML('afterend', `
+        <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
+        `)}
+      } else {document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length-1].insertAdjacentHTML('afterend', `
+      <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
+      `)}
+    } else {document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length-1].insertAdjacentHTML('afterend', `
+    <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
+    `)}
+  } else {document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length-1].insertAdjacentHTML('afterend', `
+  <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
+  `)}
+  }
 }
 function onNavPanelJTsettings(event){
   onSaveTournamentDate()
@@ -968,6 +1129,10 @@ function onNavPanelJTsettings(event){
   document.getElementById('navPanelJT').style.display = 'none'
   document.getElementById('settingsPageJT').style.display = 'grid'
   document.getElementById('pageNameJT').innerText = 'Settings'
+  document.getElementById('pageNextJT').removeEventListener('click', () => {firstTarget++; lastTarget++;
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
+  document.getElementById('pagePrevJT').removeEventListener('click', () => {firstTarget--; lastTarget--; 
+    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value-1, document.getElementById('roundLeaderSwitch').value-1, document.getElementById('approachLeaderSwitch').value)})
 }
 function onSaveTournamentDate(){
   if ((document.getElementById('dataPageJT').style.display !== 'none') && (Array.from(document.getElementsByClassName('dataBlockJT'))[0] !== undefined)){
@@ -1173,9 +1338,12 @@ function onCreateTournament(event) {
   document.getElementById('trnEndInputCP').addEventListener('input', (event) => {
     roundLength()
   })
-  body.addEventListener('keydown', function (event) {
-    if (event.code == 'Escape') { oncrossIcononCreate(); }
-  });
+  body.addEventListener('keyup', function (event) {
+    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
+      escapeFuseSpam = true
+      oncrossIcononCreate();
+      setTimeout(() => {escapeFuseSpam = false}, 1000)
+  } });
   tournamentCreateBtn.addEventListener('click', onTournamentCreateBtn);
   tournamentRequirementsLblAtCreatePanel = document.getElementById('tournamentRequirementsLblAtCreatePanel');
   tournamentDescriptionTextAreaAtCreatePanel = document.getElementById('tournamentDescriptionTextAreaAtCreatePanel');
@@ -1228,9 +1396,12 @@ function onNextPagTurn(event) {
   showTournaments(from);
 }
 function oncrossIcononCreate(event) {
-  body.removeEventListener('keydown', function (event) {
-    if (event.code == 'Escape') { oncrossIcononCreate(); }
-  });
+  body.removeEventListener('keyup', function (event) {
+    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
+      escapeFuseSpam = true
+      oncrossIcononCreate();
+      setTimeout(() => {escapeFuseSpam = false}, 1000)
+  }});
   while (tournamentCreatePanel.firstChild) {
     tournamentCreatePanel.removeChild(tournamentCreatePanel.firstChild);
   }

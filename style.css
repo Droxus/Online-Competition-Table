@@ -1387,6 +1387,8 @@ margin: 10px;
 
 #leadersPageJT{
     display: none;
+    grid-template-columns: 100%;
+    grid-template-rows: 9fr 1fr;
 }
 #settingsPageJT{
     display: none;
@@ -1466,6 +1468,60 @@ margin: 10px;
 }
 .inputsAproachesPanel::placeholder{
     color: #a09781;
+}
+#dataLeadersTable{
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-rows: repeat(8, 1fr);
+    grid-template-columns: 40px 5fr repeat(4, 4fr);
+}
+#dataLeadersTable > *{
+    place-self: center;
+}
+.lbldataLeadersTable{
+    font-weight: bold;
+    font-size: 20px;
+    color: #1027c9;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.lbldataHeaderLeadersTable{
+    font-weight: bold;
+    font-size: 16px;
+    color: #0c1c8f;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#dataLeadersFooter{
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 3fr 2fr 3fr 2fr 2fr;
+}
+#lblLeadersSeason{
+    place-self: center;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: #2504b8;
+}
+.selectorsLeadersBoard{
+    background: transparent;
+    border: none;
+    place-self: center;
+    font-size: 24px;
+    color: #2504b8;
+    font-weight: bold;
+}
+#lblLeadersRound{
+    place-self: center;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: sans-serif;
+    color: #2504b8;
+}
+
+.btnsLeaderFooter{
+    width: 100%;
+    height: 100%;
 }
 @media screen and (min-device-width: 0px) {
     #mainBlock {
