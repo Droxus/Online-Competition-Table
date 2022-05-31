@@ -762,7 +762,8 @@ function onNavPanelJTdata(event){
       &&  (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== undefined)) {
         if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== {})
        &&  (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== undefined)){
-        approachLength = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length
+        approachLength = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length > 1 ? 
+        firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length : 1
       }} else {
         approachLength = 1
       }
@@ -778,23 +779,24 @@ function onNavPanelJTdata(event){
           if (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== undefined){
           if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== undefined)
       && (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')){
+      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') && 
+      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined) ){
        valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j]
-     }} else {valueInput = 0}  
+     } else {valueInput = 0}  } else {valueInput = 0}  
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="range" min="0" max="100" placeholder="try ${j+1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`)
           Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
           <label class="labelCounter" style="display:${j < 1 ? 'block' : 'none'};">0</label>`)
           Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input'))[j].addEventListener('input', (event) =>
              {event.target.parentElement.getElementsByClassName('labelCounter')[j].innerText = event.target.value})
-        }
-      } else if (firebaseTournaments[num].targets[i].type == 'clicker'){
+     } } else if (firebaseTournaments[num].targets[i].type == 'clicker'){
         for (let j = 0; j < approachLength; j++){    
           valueInput = ''
           if (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo !== undefined){
           if ((firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid] !== undefined)
       && (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')){
+      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') && 
+      (firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined)){
        valueInput = firebaseTournaments[num].season[seasonNumber-1].round[Math.floor(roundOFtrn)-1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j]
      }} else {valueInput = ''}
           Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
