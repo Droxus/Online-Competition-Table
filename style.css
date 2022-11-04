@@ -16,18 +16,21 @@ html {
 }
 
 body {
-    position: fixed;
-    margin: 0;
-    min-height: 100%;
-    width: 100%;
     height: 100%;
+    width: 100%;
+    margin: 0;
     padding: 0;
     background: linear-gradient(90deg, #aeffbb, #fcd271, #fad276, #f8676c);
     /* background: linear-gradient(var(--gradient-deg-bg), #ee0979, #ff6a00 ); */
     background-size: 200% 200%;
     animation: gradient 10s ease infinite;
 }
-
+#displayBlock{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 @keyframes gradient {
     0% {
         background-position: 50% 0%;
@@ -148,13 +151,86 @@ div.dataEnterSqr>* {
 }
 
 #mainBlock {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 93vh 7vh;
+}
+#displayingBlock{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 10vh 83vh;
+}
+#header{
+    width: 100%;
+    height: 10vh;
+}
+#content{
+    width: 100%;
+    height: 85vh;
+    overflow-y: scroll;
+}
+#defaultHeader{
+    display: none;
+    grid-template-rows: 100%;
+    grid-template-columns: 50px 1fr 50px;
+}
+#mainMenuHeader{
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100px 1fr 100px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0, 0.1);
+}
+#mainMenuHeader > div{
+    display: grid;
+}
+#mainMenuHeader > div > *{
+    place-self: center;
+}
+#searchMainBlock{
+    background-color: #9EA9B7;
+    height: 35px;
+    max-width: 200px;
+    display: grid;
+    grid-template-columns: 85% 15%;
+}
+#searchMainBlock > input{
+    background: transparent;
+    border: none;
+    text-align: center;
+    font-size: 20px;
+    color: #464646;
+}
+#searchMainBlock > input::placeholder{
+    color: #464646
+}
+#searchMainBlock > svg{
+    place-self: center;
+}
+#butulaMenu{
     display: none;
     width: 100%;
     height: 100%;
-    grid-template-rows: 1fr 65px;
-    grid-template-rows: 150px 1fr;
+    backdrop-filter: brightness(0.3);
+    flex-wrap: wrap;
+    align-content: space-around;
+    z-index: 99999;
 }
-
+#butulaMenu > *{
+    width: 100%;
+    height: 20%;
+    color: white;
+}
+#butulaBtn{
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+}
 .headerBlock {
     display: flex;
     border-bottom: 1px solid rgb(255, 255, 255);
@@ -324,14 +400,14 @@ li a:hover {
 }
 
 #homePageBlock {
-    display: none;
+    display: grid;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
 }
 #favoritesPageBlock{
-    display: none;
+    display: grid;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
@@ -353,7 +429,7 @@ li a:hover {
     font-size: 42px;
 }
 #dataPageBlock {
-    display: none;
+    display: grid;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
@@ -361,7 +437,7 @@ li a:hover {
 }
 
 #statisticPageBlock {
-    display: none;
+    display: grid;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
@@ -508,7 +584,7 @@ li a:hover {
 }
 
 #tournamentInfo {
-    position: fixed;
+    /* position: fixed; */
     display: none;
     z-index: 11;
     top: 3%;
@@ -619,7 +695,7 @@ ul {
 }
 
 #tournamentCupInfo {
-    position: fixed;
+    /* position: fixed; */
     opacity: 0.03;
     width: 600;
     height: 600;
@@ -696,66 +772,6 @@ ul {
     padding: 10px;
     letter-spacing: 0px;
 }
-
-.heart-like-button {
-    position: relative;
-    width: calc(160px * var(--like-btn-size-scale));
-    height: calc(130px * var(--like-btn-size-scale));
-}
-
-.heart-like-button:before {
-    position: absolute;
-    top: 0;
-    left: calc(80px * var(--like-btn-size-scale));
-    transform: rotate(-45deg);
-    transform-origin: 0 100%;
-    width: calc(80px * var(--like-btn-size-scale));
-    height: calc(125px * var(--like-btn-size-scale));
-    border-radius: calc(40px * var(--like-btn-size-scale)) calc(40px * var(--like-btn-size-scale)) 0 0;
-    background-color: #574136;
-    content: "";
-    cursor: pointer;
-    transition: background .4s;
-}
-
-.heart-like-button:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: rotate(45deg);
-    transform-origin: 100% 100%;
-    width: calc(80px * var(--like-btn-size-scale));
-    height: calc(125px * var(--like-btn-size-scale));
-    border-radius: calc(40px * var(--like-btn-size-scale)) calc(40px * var(--like-btn-size-scale)) 0 0;
-    background-color: #574136;
-    content: "";
-    cursor: pointer;
-    transition: background .4s;
-}
-
-.heart-like-button.liked::before,
-.heart-like-button.liked::after {
-    background-color: #ffa033;
-}
-
-.heart-like-button.liked {
-    animation: liked .4s ease;
-}
-
-@keyframes liked {
-    0% {
-        transform: scale(.8);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
 #lockbg {
     position: fixed;
     display: none;
@@ -806,14 +822,8 @@ ul {
     height: 40px;
 }
 
-#tournamentCreatePanels {
-    display: none;
-}
-
-#tournamentCreatePanel {
-    position: fixed;
-    display: none;
-    z-index: 11;
+#tournamentCreatePanelBlock {
+    display: grid;
     top: 1%;
     left: 2%;
     height: 98%;
@@ -1109,7 +1119,7 @@ margin: 10px;
 }
 
 #joinedTournament{
-    position: fixed;
+    /* position: fixed; */
     display: none;
     grid-template-columns: 100%;
     grid-template-rows: 50px 1fr 50px;
@@ -1206,7 +1216,7 @@ margin: 10px;
     transform: scale(1.5);
 }
 #navPanelJT{
-    position: fixed;
+    /* position: fixed; */
     display: none;
     z-index: 999;
     left: 0;
@@ -1525,10 +1535,10 @@ margin: 10px;
 }
 @media screen and (min-device-width: 0px) {
     #mainBlock {
-        grid-template-rows: 1fr 50px;
+        /* grid-template-rows: 1fr 50px; */
     }
 
-    #tournamentCreatePanel {
+    #tournamentCreatePanelBlock {
         grid-template-rows: 50px 50px 5fr 2fr 75px;
         grid-template-columns: 100%;
         grid-template-areas:
@@ -1584,7 +1594,7 @@ margin: 10px;
     }
 
     #tournamentDescriptionTextAreaAtCreatePanel {
-        height: 50%;
+        height: 10%;
         width: 90%;
         font-size: 16px;
         grid-area: reqsCP;
@@ -1671,10 +1681,10 @@ margin: 10px;
 
     @media screen and (min-device-width: 600px) {
         #mainBlock {
-            grid-template-rows: 100px 1fr;
+            /* grid-template-rows: 100px 1fr; */
         }
 
-        #tournamentCreatePanel {
+        #tournamentCreatePanelBlock {
             grid-template-rows: 50px 10% 50% 30%;
             grid-template-columns: 50% 50%;
             grid-template-areas:
@@ -1720,7 +1730,7 @@ margin: 10px;
 
         #tournamentDescriptionTextAreaAtCreatePanel {
             grid-area: descript;
-            height: 80%;
+            height: 10%;
             width: 80%;
             font-size: 24px;
         }
@@ -1817,7 +1827,7 @@ margin: 10px;
             }
 
             #mainBlock {
-                grid-template-rows: 150px 1fr;
+                /* grid-template-rows: 150px 1fr; */
             }
 
             .headerBlock {

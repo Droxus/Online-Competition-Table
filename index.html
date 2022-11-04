@@ -10,8 +10,69 @@
 </head>
 
 <body>
-
     <div id="mainBlock">
+        <div id="displayingBlock">
+            <div id="header">
+                <div id="mainMenuHeader">
+                    <div id="mailBtnMenu">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect width="48" height="48" fill="url(#pattern0)"/>
+                            <defs>
+                            <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                            <use xlink:href="#image0_44_599" transform="scale(0.00581395)"/>
+                            </pattern>
+                            <image id="image0_44_599" width="172" height="172" xlink:href="data:image/png;base64,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"/>
+                            </defs>
+                            </svg>
+                    </div>
+                    <div>
+                        <div id="searchMainBlock">
+                            <input type="text" autocomplete="off" placeholder="Search...">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <rect width="20" height="20" fill="url(#pattern3)"/>
+                                <defs>
+                                <pattern id="pattern3" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                <use xlink:href="#image0_5_125" transform="scale(0.00581395)"/>
+                                </pattern>
+                                <image id="image0_5_125" width="172" height="172" xlink:href="data:image/png;base64,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"/>
+                                </defs>
+                            </svg>
+                        </div>
+                            
+                    </div>
+                    <div id="profileBtnMenu">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect width="48" height="48" fill="url(#pattern1)"/>
+                            <defs>
+                            <pattern id="pattern1" patternContentUnits="objectBoundingBox" width="1" height="1">
+                            <use xlink:href="#image0_5_54" transform="scale(0.00442478)"/>
+                            </pattern>
+                            <image id="image0_5_54" width="226" height="226" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOIAAADiCAYAAABTEBvXAAAAAXNSR0IArs4c6QAAEZFJREFUeJztndt52zgQhc+wkeU+Ja4iTiUSK7FTCaVKolSh9VOYRoh9EKgwimUNQIDE5fwvSb7YFEnhYG4YACCEEEIIIYQQQgghhBBCCCGEEEJIcsjWN0D+5Nz3LYAWQNs0zT/X/zCmBQBz+b+J9s/fxjD9RWZ/h8gwjuOv2c8MT103gCQDhbgRVnDPTdP8A2NaK7DnFW9hAAABTjOhDk9dd1rxHoiFQlyBc9+3TdPsAMAY87r1/SgYBDiNxvwAxbkKFGIEMhTeIyjMyFCIAZi7mYUI7xFXYT513WHrmykBCnEBk+WrRHz3oCgDQCE6QvF9yCTKI91XNyhEBTPx7fF3yYC8zyAih3EcjyyVPIZC/IBz37eNyIsB9lvfS8YMAAZjzDdayftQiO9w7vtWRHqsW9ebM+Di5g0QuVqTm6I83vl7e/MnrosCftcqW2xn1QdjTEdB/g2FOOPc989WgGsM1M0K6jbLC9iJphH5svKCgslCMrljoRABvB2PLyvEf8Mkuk+73beIn7OIaynmIs7YLjkFaalaiJEFeHEvRU45JyxWEuYgIoeUJ6jYVCnEiDHglCn8UWocNMsgPyPC+zPGfM110lpCVUKMVAOsNk0f833WZh2rEaJNxHwPdT0ReR3H8Rfjm2jua1WCLF6Igd3QqgaHD5MoRWSHQO+8Bne1aCHaZEwIt4nZPQ/Ofb8PJMjiJ8AihRjQCrIAHYDA30eR1rE4IdpZuF94mROXZIUn0JLBIq1jUUJ8Oxz6hV/yyVrA4mbclAghSBF5LUmMRQgxgOtDF3QDrPfyAv8FFcW4qtkLcakrWtrMmhsBapFFuKpZC3GhK0o3NCGWejW5T6hZCnHhl8ZSRMIsdFeHz/v9v6HvaQ2yE+ISEQpw+LTfdxFuiwRkobuaZdyYlRCtCH/6/K51Q2kFM2LBgozsxJiNEBesFc02Izpv4J132gN/bL3f4neT8WXg3Wyxn+OzT9jJ9zvcXdWsvvcshOgrwpxc0Ul0kVqMst4geIGrmk1GNXkh+orQuiZJD7jIvX0fkc0AnePpqmbxrEkL0bNGmHR8kNjWjFkM0jm+rmrq5Y1khehpCU+f9/uvUW5oIYlvTJyVIH0z5ymLMUkhliTCxAX4BykP1Fs832uyNeTkhOgjwlSTMgH7IdckyQntPRaIMblsalJC9KkTpjiLJ7BB8VKSjrNv8Zjwknu+ZIToI8IUi/Sh98bZmGx2pctdjMkI8b/D4TscLEiK5YlMXVEtySd0PLLsyYgxCSEWIcLlTcm5kLQgfcSYwkLxzYXoIcLk3FHXZyiEZAXp6pmkkOxrtvzwc987rSgRkdfURPh2PL6gPhECQGuMebXPnxSfdrtvIqIWogH2Wz/HZhbRNTmTwqx1S2GJmSUkE2vNcbSMm5Y1NrOIjn78iSJMmlZEvs+6RZJgHMejg2VsPZZTBmMTITrGVEkWmG0XOflNm9rE9NR1wziORwBaK9e+HQ6biHF1ITrGhUmKsOK48BGbDeR7PHXdYIzpoBTjVvHiqkKcrZxXYYxJLiN37vu24FrhYlJIfNwyE6MKY8zeGozVWFWILj54irVCwDm2rZItBvIjHMW4ery4mhBd3DkBDimKcDrpaOv7yIA2xRj6qesOLsmbNd3sVYTo6M4llyGdaBIcXAnznJpVBC6ZVOjjxdWeYRUhOrqkycWFE5UsYQtGolbR1UVd5RmiC/Hc93so3blU40Lg6loTN5K0io5ifLZjOCrRhaidUVKNCyfsHjPEkRStIuAWL67xDFGFaINdzWqLIdW4cEZSq0YyItn3ZuNFzbK86ImbaEI89/2zNqZyqfFswRquScG0KbqnwNVFVeUkYiduognRwZyfUnZJAaAR+bL1PeRMI7Lb+h7uYbt5NOMvam0xihAdEzRJW0OA2dKlmMRrry5Z1FjeURQhqhM0l/7CpFpnbqFbGoQ2tc6MOU9dN2yduAkuRDtwdQmaBLu7STSSFSLglriJMTkHF6J2xsjBJQUYH4aiaZqk36NLbTGGVQwqRAdrmHyChoTFHrSTNHZMqhI3oTOoQYUoyuxYysvYbkk90UDC4mAVg2ZQgwlRmylNfQXNOyQd22REFu/RJg9Xt4rBhKi1hqMxx1CfGZuUM30kHlvEikGE6LD9BWPDekm6hDHHwSoGW20TRIgOmdJsYkNLFgOHhEc7VkNZxVCuKa0hKQqHDGoQq7hYiNriZobWEKBFrBrtmA1RI10sRKVppjUk2aG1iiF6VRcJ0Zrkh1bDZJQpJWSOcuwuLmUsEqK2vSW1g2McSHpBOlkFlSe3tNVrkRA1q04EyFWEhKhLGUtXYHkLUbuuNKcCPolL6i1v91AmbRa5p95C1HYlZJ6kyXLgJErO71JlFZfUFL2FqOlap1tKZmQrRNs4rFp/6vsZXkLU1g7HPGuHJAKSsRCBa+PwI7zdUy8hKt3SU64xwUTu90/CoU3a+LqnXkLUZIgKqh3mHOOmg0j2k5q2puhzbd8YUdWF73ltUiDjOP7a+h4CEK1P0VmI2viwFLdOGaSTx2T/Hu2YfjiufdaeOgtREx8yW0puKWVihkKIPvvzOAtREx+OxvxwvW6qjONYzLNsSCkijBYnOglRu8gbBbghM4oZRFshZY2HKHGiq0VUKb0gN4QEoCQPSVvGcI0TnYRYY3zosH8JuU917881TnQSYm3x4QQzp8sozUPSLgJ3uWYM17S4QcuEjT+leUgW1RkZLhdUC1EbfJY2+1lKfCbiibae6JKwcbGIVVpDsowSQxVLUKuoFmLTNP88+pncV9jfgwkbfzLeJuVDNGNdo5nrz6o/2RhNN36psx8TNh4UGh9eUCxid8mcqoVY+6lIORwrlholjxllAi+8a6q8aJFW4+14fEHBgyoi7dvhEPT4soQIGoYFPR+x0IwpjDGq89XJ35RsFRWoD95RCVHZ+lSkCGOcl14ZUc6c3xqXcxQ11wt3PmKhbql2tzpyH+3ZmYUSToguadjSqNy1CkWRh/loMula7YSLEQvYk+QORQ6ilcnmkNKt0AlRUUMskZBnpJNKJzSldoJZxEI2B7qlVCtPAhByzActXxDyAVVOaiZkskZ7MUIqI9jkEtIiFjfjlbpAYQv4Lj9GK8SaLWKR9dGVqfkdrpusQYEWESi3tWtNCn6HSbqmRcKDVpdTcntcKOiaPqbU2XxN6Jo+QCvEagcju/MXk/3xfAtRPXtI17RYq1nQEXOrU/i7CzbmaRF10CL6U/u7W90iFos9Q53NwY4IcCjcLV3dImoo1jUFrmeolzyogvNpv++2voet0ZZuVEIsuA6k5qnrBmNM9QNLizHm69b3kBPBLGINzcNPXXeii/oYEXl96rriY8OQY14nxHKbfp35tNt9oxjvIyKvn3Y7zSEtdaDUDpM1Hnza7b5Z14sT1G8GY8zXqkQYsGE+mBBr24D3qetOjBl/Y4zpanBHXdE2D6uEGHpX41KwA49WEdd3URUhNxZjQX8hpW4j6ULRZ1x8TLDd71VCVBZl2xo3W2J3Rp3vQLsrnXZBg0uMWP3Mf4fqvYUa3VLo3FL12AiaNW2aprpdsZ+6bqjYNavZLX2IS9iiFqLqfMBK9z8djaknZX9Drc8e+igGtRA1adhad3ur1SpWsKj7Lpqx7rIzgYtrGvTM8NKo0TLU+MwzNGM9SoyozZxWKcbarGLN1tCyjRDtS6dV/ICaLERNz3qL9rxHl4nKNWv68MIi8uJ4zWKopYHYdldUaw01iRpX78hJiKrMacUWEbg2EJdcVxuqWtj9Dpqlba5bSDoJ0Q6yR1S5wmbCNhAXO1C50B1AwKVtE05CrNkdcaHUBmKboCnZ2j8kRnwI+K2sefhF1BwnThS4x83APWjixIeAhxAZJ+qwLmoxzcN0SS/EiA8BDyEyTtQzE2PWGGO+1u6SzggeHwIeQlS3dVS4APw9ct/9jSL8Taz4EPDvvnj4xRhjVDddA09dd0CGJQ0mZ/5Ek/vwXV3lJURlep7u6QzuDZs3diwHXeg9x9ci6txTkZ3n9QlJCu1Ytt6P+/V9fkl7VFnIzXUI2RLNWF6y6N+7Q5/uKakFm6SJ5pYCy7bKoHtKqkDbje/rlgILhKjtv6N7SnLHAA8rAEt7URdtHqXcRo/uKckWbe1w6ZaSS3dxU7mnItIv/BxCNkH02dJF9dZFQnTYHoJWMUNq3QxswlrDqNnSicX7mmq3TKi9I6P2QZ0jWmsYYtuQxULU1hQBPNMqklywY1VlDUP06QbZ6VvbkV65VczRIuZ4z0HQjtVQ534EEaINVGkVSRForSGAU6hF8SEPKqVV/JhqrUtuaMdoyL2JggnRwSpWl0F9OxxyLd+0Gd+7F3aDbNVJTyFbxIKeBmWUBf6arOK57581KzNSxVQWTmhr3qF36gsqRFwsoiaDVMWXe+77ZxH5vvV9LKQVkb6W7wvKJZlL1pW+R1AhuuzpWfpqm3Pf7wsQ4UQrIv3b8Vi0J6MdkzG2ypTQFzz3fWsH4MPkhIi8lrZrtH3+HuUudj8ZY7rS9rh9Ox5fjDEagQ2f9/t/Q39+aNfUySoaY/YlnR71djy+iMhPlCtCAHgWke8lWcdz37dKEUbbVjK4RZz473D4DmUt5vN+n/WWg3Y2VTWPFsYgIofcvZoUxmo0IVoX7afmZ3Pcsu/c923TNDvtTFo4g4gcxnE85uayuiTUYo7TaEIELvUzZeo+it8dAwrwQwYBTqMxx1wm1v8Oh5/Q5DOAQ8wjB6IK0cUqxn7QJczEV6P76ctkJX+kKkoHlxTGmH9jWvuoQgSuaXxtkbQLXZ/xZSY+dW2J3CU519XFJV0ju7+GEF3S+YP1wzf7ss59/9yI7HJeDZMwAy7f8XHLCdfFU8NKYVN0IQJpPvgcxn2bMMWTP9YWpaNLukoicRUhAk4F01XiRYovKVZL8jgkEFddcLKaEF1XnMSKF899v29EvtD1TJZotUnHtb+r1rdXEyLg7qKGihdp/bIkqJV0HHur17ZXFSLglkXFwnjx3PdtI/JC65c9gzHm2xIPKcW4cM7qQgTcXgo8xFjBwuta8RKk43jbZMnlJkJ06dAA9MkbCrAa1IJ0FCE+7/ebaGKTDwXcm2Y/ymBRgNXyYR7BJUMKbLvmOXgblJanrju5NFgaY17fa72ppPWIvE97ryXr7Xh0yg2IyOuWS/E2s4gTLvVF4LdltBa1B9d+kgvXsofHFiWbt+JtLkQPt3IQ4MRMKHkPAQ6OY2NzEQIJCBFwT94QEohk2u82ixHn2O01vkJ5zBshARhibXvhQxIWccJ19QMhvqS2K0QSFnHCWsZkZilSJqmJEEhMiMBl49YY+0YSAlybCZISIZCYazrHcU0qIQ9J0RJOJCtEgGIk4UhZhEDiQgQoRrKc1EUIZCBEgGIk/uQgQiATIQIUI3EnFxECGQkRoBiJnpxECGQmRIDL4chDhlRLFB+RnRABboFB7pLEAm4fkivoa3jqumE05hsL/2RCgEOuIgQytYhzXPsZSXmkdFSDL9kLEWDcWDFZxoPvUYQQAe5bUyHJ9BKGIMsY8T2mzg3GjeUjIq8liRAoyCLOoXUsls1PC4tFkUIEuM1+aax5IMwWFCvECSZysqeYhMxHFC9EgNYxV0q3gnOqEOIEBZkNJ2sFi4sF71GVECeYzEmWKtzQ96hSiBO2m+MFjB+3ploBTlQtROBiHQE8U5CbEO104NyoXogTs/hxDwoyNhTgDRTiDTMLuQNjyNBQgHegED+AfY9hEJHXcRyPNWVBXaEQFdBt9YLWzwEK0YHJbW1EvtBK3uUkIicK0A0K0ROK8sogIodxHH/l3py7JRRiACoUJcUXGAoxMFaUbdM0X4wxzygj8zrgIr7TOI4/ai68x4JCXIEbi9kifXEOInIAAApvHSjEDZisJoB2Jk5gfYFeLB0wQGSg6LaDQkyMuUgB4EaoE+3Nn8Dfx55f/y0iJwAYx/EXgIFiI4QQQgghhBBCCCGEEEIIIYQQQghR8D/DmUmgERV1xgAAAABJRU5ErkJggg=="/>
+                            </defs>
+                            </svg>
+                    </div>
+                        
+                        
+                        
+                        
+                </div>
+                <div id="defaultHeader">
+                    <button>Back</button>
+                    <div></div>
+                    <button id="mainMenuBtn">Main</button>
+                </div>
+            </div>
+            <div id="content">
+                
+            </div>
+        </div>
+        <div id="butulaMenu">
+            <div class="butulaMenuBtns" id="createTournament" page="tournamentCreatePanel">Create New Tournament</div>
+            <div class="butulaMenuBtns" id="btnFavorites" page="favoritesPage">My Tournamnets</div>
+            <div class="butulaMenuBtns" id="btnStatistics" page="statisticPage">My Statistics</div>
+            <div class="butulaMenuBtns" id="btnData" page="dataPage">Specify Data</div>
+        </div>
+           <button id="butulaBtn">Butula</button> 
         <div class="headerBlock" id="headerBlock">
             <div class="labelUnity" id="labelUnity">
                 <label class="tileLbl" id="tileLbl1" for="tileLbl"><b>Butula</b></label>
@@ -32,52 +93,14 @@
             </div>
         </div>
         <div class="contentBlock" id="contentBlock">
-            <div id="homePageBlock">
-                <div class="tournamentsPanel"></div>
-                <div class="footerPanel">
-                    <button class="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
-                    <button class="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
-                    <label for="pageNumLbl" class="pageNumLbl">1</label>
-                    <button class="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
-                    <select name="numsOfTrnsOnthePage" class="numsOfTrnsOnthePage">
-                        <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
-                        <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
-                        <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
-                        <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
-                    </select>
-                </div>
-            </div>
-            <div id="favoritesPageBlock">
-                <div class="tournamentsPanel"></div>
-                <div class="footerPanel">
-                    <button class="createTournament"><img src="img/createTrn.png" alt="create" id="createTrnIcon"></button>
-                    <button class="prewPageTurn"><img src="img/prewPageIcon.png" alt="prewPage" id="prewPageIcon"></button>
-                    <label for="pageNumLbl" class="pageNumLbl">1</label>
-                    <button class="nextPagTurn"><img src="img/nextPageIcon.png" alt="nextPage" id="nextPageIcon"></button>
-                    <select name="numsOfTrnsOnthePage" class="numsOfTrnsOnthePage">
-                        <option class="numsOfTrnsOnthePageOpt" value="3">3</option>
-                        <option class="numsOfTrnsOnthePageOpt" value="5">5</option>
-                        <option class="numsOfTrnsOnthePageOpt" value="7">7</option>
-                        <option class="numsOfTrnsOnthePageOpt" value="9">9</option>
-                    </select>
-                    <button id="trnsTOshow">joined</button>
-                </div>
-            </div>
-            <div id="dataPageBlock"></div>
-            <div id="statisticPageBlock"></div>
+            
+            
             <div id="aboutPageBlock"></div>
             <div id="profilePageBlock">
                 <div></div>
                 <button id="btnLogout">Log Out</button>
             </div>
         </div>
-        <ul class="mobileNavPanel" id="mobileNavPanel">
-            <li><img src="img/homeIcon.png" alt="btnMobHome" id="btnMobHome"></li>
-            <li><img src="img/FavIcon.png" alt="btnMobFav" id="btnMobFav"></li>
-            <li><img src="img/DataIcon.png" alt="btnMobData" id="btnMobData"></li>
-            <li><img src="img/statisticIcon.png" alt="btnMobStat" id="btnMobStat"></li>
-            <li><img src="img/userIcon.png" alt="btnMobProf" id="btnMobProf"></li>
-        </ul>
     </div>
     <div class="dataEnterSqr">
         <label id="isignIn" for="isignIn">Login</label>
@@ -101,7 +124,7 @@
             <li id="tournamentGoalsLabelInfo">Goals</li>
         </ul>
         <ul id="tournamentMembersInfo">
-            <li id="tournamentAdminLabelInfo">ADMINISTRATOR</li>
+            <li id="tournamentAdminLabelInfo">Creator</li>
             <li id="tournamentMembersLabelInfo">PARTICIPANTS</li>
         </ul>
         <ul id="tournamentReqInfo">
@@ -110,7 +133,78 @@
         <img src="img/cup.png" alt="cup" id="tournamentCupInfo">
         <img src="img/lock.jpg" alt="lock" id="lockbg">
     </div>
-    <div id="tournamentCreatePanel"></div>
+
+    <template id="homePage">
+        <div id="homePageBlock">
+            <div class="tournamentsPanel"></div>
+        </div>
+    </template>
+
+    <template id="dataPage">
+        <div id="dataPageBlock"></div>
+    </template>
+
+    <template id="statisticPage">
+        <div id="statisticPageBlock"></div>
+    </template>
+
+    <template id="favoritesPage">
+        <div id="favoritesPageBlock">
+            <div class="tournamentsPanel"></div>
+        </div>
+    </template>
+
+    <template id="tournamentCreatePanel">
+        <div id="tournamentCreatePanelBlock">
+        <div id="headerCT">
+            <img src="img/backIcon.png" alt="cross" id="crossIcononCreate">
+            <label class="trnCrtPanel" for="creatingTournament" id="creatingTournamentLbl">Creating Tournament</label>
+          </div>
+            <input class="trnCrtPanel firstMpage" type="text" id="tournamentNameInputAtCreatePanel" maxlength="16" placeholder="Tournament Name">
+            <div class="firstMpage" id="TargetsCreatePanel"><label class="trnCrtPanel" for="trnTargets" id="tournamentTargetsLblAtCreatePanel">Tartgets: </label>
+            <div id="tournamentTargetsBlockAtCreatePanel">
+            <div class="targetsUnityCT"><input list="hotTargets" name="hotTargets" class="trnCrtPanel tournamentTargetsInputAtCreatePanel" placeholder="enter target name" id="browser">
+            <datalist id="hotTargets">
+              <option value="push-up">
+              <option value="crunch">
+              <option value="pull-up">
+              <option value="squat">
+              <option value="plank">
+            </datalist>
+          <select class="trnCrtPanel tournamentTargetsTypeInputAtCreatePanel" placeholder="type">
+            <option value="field">field</option>
+            <option value="slider">slider</option>
+            <option value="clicker">clicker</option>
+          </select>
+            <input type="number" class="trnCrtPanel tournamentTargetsApproachInputAtCreatePanel" placeholder="try">
+            </div></div></div>
+            <div class="secondMpage" id="RequirementsCreatePanel">
+              <div class="dateBlockCT">
+              <label class="trndateLblCP">Start</label>
+              <input type="datetime-local" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="trnStartInputCP">
+              </div>
+              <div class="dateBlockCT">
+              <label class="trndateLblCP">End</label>
+              <input type="datetime-local" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="trnEndInputCP">
+              </div>
+              <div class="dateBlockCT">
+              <label class="trndateLblCP" id="roundLength" style="color: grey;">Round</label>
+              </div>
+              <div class="dateBlockCT">
+              <label class="trndateLblCP">Tournament Season Length</label>
+              <input type="number" class="trnCrtPanel tournamentDateInputAtCreatePanel" id="trnSeasonsInputCP" value="30">
+              </div>
+           </div>
+           <textarea class="trnCrtPanel secondMpage" id="tournamentDescriptionTextAreaAtCreatePanel" name="tournamentDescriptionTextAreaAtCreatePanel"
+               cols="30" rows="3" maxlength="100" placeholder="write some short description"></textarea>
+               <div class="firstMpage" id="tournamentTypeInputAtCreatePanel">
+                <button class="trnTypeAtCP" style="background: green; color: beige;">Opened</button>
+                <button class="trnTypeAtCP" style="color: black;">Invited</button>
+                <button class="trnTypeAtCP" style="color: black;">Closed</button>
+             </div>
+            <button class="trnCrtPanel btn-grad secondMpage" id="tournamentCreateBtn">Create</button>
+        </div>
+    </template>
     <div id="joinedTournament">
         <div id="headerJT">
             <img src="img/backIcon.png" alt="cross" id="crossIconJT">
