@@ -90,31 +90,33 @@ inptPassword.addEventListener('click', onClearError);
 btnHome.addEventListener('click', onbtnHome);
 profile.addEventListener('click', onProfile);
 // createTournament.forEach(element => element.addEventListener('click', showCreateTournamentBlock));
-crossIcon.addEventListener('click', onCrossTournamentInfo);
+// crossIcon.addEventListener('click', onCrossTournamentInfo);
 document.getElementById('btnLogout').addEventListener('click', onBtnSignOut);
 document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
-document.getElementById('tournamentJoinInfo').addEventListener('click', onJTbtn);
-document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn);
-document.getElementById('btnNavJT').addEventListener('click', onBtnNavJT);
-document.getElementById('navPanelJTclose').addEventListener('click', onNavPanelJTclose);
-document.getElementById('navPanelJTmain').addEventListener('click', onNavPanelJTmain);
-document.getElementById('navPanelJTstatistics').addEventListener('click', onNavPanelJTstatistics);
-document.getElementById('navPanelJTdata').addEventListener('click', onNavPanelJTdata);
-document.getElementById('navPanelJTleaders').addEventListener('click', onNavPanelJTleaders);
-document.getElementById('navPanelJTsettings').addEventListener('click', onNavPanelJTsettings);
-document.getElementById('btnEditJTdata').addEventListener('click', onSaveTournamentDate);
-document.getElementById('btnResetJTdata').addEventListener('click', onResetTournamentDate);
+// document.getElementById('tournamentJoinInfo').addEventListener('click', onJTbtn);
+// document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn);
+// document.getElementById('btnNavJT').addEventListener('click', onBtnNavJT);
+// document.getElementById('navPanelJTclose').addEventListener('click', onNavPanelJTclose);
+// document.getElementById('navPanelJTmain').addEventListener('click', onNavPanelJTmain);
+// document.getElementById('navPanelJTstatistics').addEventListener('click', onNavPanelJTstatistics);
+// document.getElementById('navPanelJTdata').addEventListener('click', onNavPanelJTdata);
+// document.getElementById('navPanelJTleaders').addEventListener('click', onNavPanelJTleaders);
+// document.getElementById('navPanelJTsettings').addEventListener('click', onNavPanelJTsettings);
+// document.getElementById('btnEditJTdata').addEventListener('click', onSaveTournamentDate);
+// document.getElementById('btnResetJTdata').addEventListener('click', onResetTournamentDate);
 
 document.getElementById('butulaBtn').addEventListener('click', onButulaBtn)
 Array.from(document.getElementsByClassName('butulaMenuBtns')).forEach(element => element.addEventListener('click', onButulaMenuBtns))
+Array.from(document.getElementsByClassName('butulaTournmanetMenuBtns')).forEach(element => element.addEventListener('click', onButulaTournmanetMenuBtns))
 document.getElementById('mainMenuBtn').addEventListener('click', onbtnHome)
 
 width = window.innerWidth;
 height = window.innerHeight;
 
-blackout.style.display = 'block';
+// blackout.style.display = 'block';
 dataEnterSqr.forEach(element => element.style.display = 'none');
 document.getElementById('butulaMenu').style.display = 'none'
+document.getElementById('butulaTournamentMenu').style.display = 'none'
 //  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
 
 function onNoaccLink(event) {
@@ -137,11 +139,12 @@ function onHasaccLink(event) {
   btnSignIn.addEventListener('click', onBtnSignIn);
 }
 function onButulaBtn(){
-  if (document.getElementById('butulaMenu').style.display == 'none'){
-    document.getElementById('butulaMenu').style.display = 'flex'
+  let butulaMenu = document.getElementById('content').firstElementChild.id == 'joinedTournament' ? 'butulaTournamentMenu' : 'butulaMenu'
+  if (document.getElementById(butulaMenu).style.display == 'none'){
+    document.getElementById(butulaMenu).style.display = 'flex'
     document.getElementById('displayingBlock').style.display = 'none'
   } else {
-    document.getElementById('butulaMenu').style.display = 'none'
+    document.getElementById(butulaMenu).style.display = 'none'
     document.getElementById('displayingBlock').style.display = 'block'
   }
 }
@@ -179,6 +182,7 @@ function getNickName() {
 function onSignIn() {
   password = null;
   getFirebaseData();
+  getFirebaseUserJT()
   clearMenuOfAuth();
   mainBlock.style.display = 'grid';
   blackout.style.display = 'none';
@@ -211,7 +215,7 @@ let firebaseUserData = [];
 let from = 0;
 function getFirebaseData() {
   firebaseTournaments = [];
-  blackout.style.display = 'block';
+  // blackout.style.display = 'block';
   db.collection("global_tournaments").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       firebaseTournaments.push(doc.data());
@@ -276,18 +280,19 @@ function showTournaments() {
            style="position: absolute; margin: -2px 10px; opacity: 0.7;"></label></div>
           </div></div>`);
   }
-  onTournamentInfoBlock = Array.from(document.getElementsByClassName('onTournamentInfoBlock'));
-  onTournamentInfoBlock.forEach(element => element.addEventListener('click', onTournament));
+  Array.from(document.getElementsByClassName('tournament')).forEach(element => element.addEventListener('click', onTournament));
 }
 let num;
 function onTournament(event) {
-  tournamentID = this.parentElement.getAttribute('id')
+  tournamentID = this.getAttribute('id')
   for (let i = 0; i < firebaseTournaments.length; i++) {
     if (firebaseTournaments[i].id == tournamentID) {
       num = i; 
       break;
     }
   }
+  console.log(tournamentID)
+  console.log(firebaseTournaments[num].name)
   docName = this.firstElementChild.innerText;
   for (let i = 0; i < firebaseUser.length; i++) {
     if (firebaseUser[i].name == firebaseTournaments[num].name) {
@@ -298,16 +303,15 @@ function onTournament(event) {
 }
 let escapeFuseSpam = false;
 function onTournamentInfo() {
-  mainBlock.style.display = 'none';
-  tournamentInfo.style.display = 'grid';
-  body.addEventListener('keyup', function (event) {
-    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
-      escapeFuseSpam = true;
-      onCrossTournamentInfo();
-      setTimeout(() => { escapeFuseSpam = false; }, 1000);
-    }
-  });
-  tournamentNameInfo.innerText = firebaseTournaments[num].name;
+  // tournamentInfo.style.display = 'grid';
+  document.getElementById('mainMenuHeader').style.display = 'none'
+  document.getElementById('defaultHeader').style.display = 'grid'
+  while (document.getElementById('content').firstElementChild) {
+    document.getElementById('content').firstElementChild.remove()
+  }
+  document.getElementById('content').appendChild(document.getElementById('tournamentInfoBlock').content.cloneNode(true));
+  console.log(firebaseUser)
+  document.getElementById('tournamentNameInfo').innerText = firebaseTournaments[num].name;
 }
 function onCrossTournamentInfo(event) {
   body.removeEventListener('keyup', function (event) {
@@ -388,26 +392,17 @@ function onJTbtn(event) {
   }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); });
 }
 function onTournamentJoin(event) {
-  body.removeEventListener('keyup', function (event) {
-    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
-      escapeFuseSpam = true;
-      onCrossTournamentInfo();
-      setTimeout(() => { escapeFuseSpam = false; }, 1000);
-    }
-  });
-  body.addEventListener('keyup', function (event) {
-    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
-      escapeFuseSpam = true;
-      onCrossIconJT();
-      setTimeout(() => { escapeFuseSpam = false; }, 1000);
-    }
-  });
-  tournamentInfo.style.display = 'none';
+  // tournamentInfo.style.display = 'none';
   if (temporaryElementsTI) {
     temporaryElementsTI.forEach(element => element.remove());
   }
-  mainBlock.style.display = 'none';
-  document.getElementById('joinedTournament').style.display = 'grid';
+  // document.getElementById('joinedTournament').style.display = 'grid';
+  document.getElementById('mainMenuHeader').style.display = 'none'
+  document.getElementById('defaultHeader').style.display = 'grid'
+  while (document.getElementById('content').firstElementChild) {
+    document.getElementById('content').firstElementChild.remove()
+  }
+  document.getElementById('content').appendChild(document.getElementById('joinedTournamentBlock').content.cloneNode(true));
   document.getElementById('crossIconJT').addEventListener('click', onCrossIconJT);
   document.getElementById('nameJT').innerText = docName;
   onNavPanelJTmain();
@@ -459,8 +454,8 @@ let roundNumber, hoursToNextRound, minutesToNextRound, secondsToNextRound, seaso
 function onNavPanelJTmain(event) {
   onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  document.getElementById('navPanelJT').style.display = 'none';
-  document.getElementById('mainPageJT').style.display = 'grid';
+  // document.getElementById('navPanelJT').style.display = 'none';
+  // document.getElementById('mainPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Main';
   getTournamentTime();
   document.getElementById('roundNumJT').innerText = `Round ${roundNumber}`;
@@ -501,8 +496,8 @@ function getTournamentTime(event) {
 function onNavPanelJTstatistics(event) {
   onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  document.getElementById('navPanelJT').style.display = 'none';
-  document.getElementById('statisticsPageJT').style.display = 'grid';
+  // document.getElementById('navPanelJT').style.display = 'none';
+  // document.getElementById('statisticsPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Statistics';
   document.getElementById('pageNextJT').removeEventListener('click', () => {
     firstTarget++; lastTarget++;
@@ -516,8 +511,8 @@ function onNavPanelJTstatistics(event) {
 function onNavPanelJTdata(event) {
   getTournamentTime();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  document.getElementById('navPanelJT').style.display = 'none';
-  document.getElementById('dataPageJT').style.display = 'grid';
+  // document.getElementById('navPanelJT').style.display = 'none';
+  // document.getElementById('dataPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Data';
   document.getElementById('pageNextJT').removeEventListener('click', () => {
     firstTarget++; lastTarget++;
@@ -656,7 +651,7 @@ function onNavPanelJTdata(event) {
       }
     }
 
-    document.getElementById('blackout').style.display = 'grid';
+    // document.getElementById('blackout').style.display = 'grid';
     document.getElementById('crossApproachesPanel').addEventListener('click', (event2) => {
       if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'submit') {
         for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
@@ -796,8 +791,8 @@ let timerToNextRound;
 function onNavPanelJTleaders(event) {
   onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  document.getElementById('navPanelJT').style.display = 'none';
-  document.getElementById('leadersPageJT').style.display = 'grid';
+  // document.getElementById('navPanelJT').style.display = 'none';
+  // document.getElementById('leadersPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Leader Board';
   document.getElementById('pageNextJT').addEventListener('click', () => {
     firstTarget++; lastTarget++;
@@ -835,9 +830,9 @@ function onNavPanelJTleaders(event) {
   document.getElementById('roundLeaderSwitch').addEventListener('change', (event) => dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, event.target.value - 1, document.getElementById('approachLeaderSwitch').value));
   dataLeadersTableDraw(seasonNumber, roundNumber, 'avg');
 }
-document.getElementById('approachLeaderSwitch').addEventListener('change', (event) => {
-  dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, event.target.value);
-});
+// document.getElementById('approachLeaderSwitch').addEventListener('change', (event) => {
+//   dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, event.target.value);
+// });
 let firstTarget;
 let lastTarget;
 function dataLeadersTableDraw(season, round, approach) {
@@ -991,54 +986,47 @@ function onResetTournamentDate() {
 function onButulaMenuBtns(event){
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
-  document.getElementById('butulaMenu').style.display = 'none';
+  document.getElementById('butulaMenu').style.display = 'none'
   document.getElementById('displayingBlock').style.display = 'block'
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById(event.target.getAttribute('page')).content.cloneNode(true));
-  if (event.target.getAttribute('page') == 'tournamentCreatePanel'){
-    document.getElementById('tournamentCreateBtn').addEventListener('click', onTournamentCreateBtn);
-    Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
-  } else if (event.target.getAttribute('page') == 'favoritesPage'){
-    showTournaments();
+  switch (event.target.getAttribute('page')) {
+    case 'tournamentCreatePanel':
+      document.getElementById('tournamentCreateBtn').addEventListener('click', onTournamentCreateBtn);
+      Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
+      break;
+    case 'favoritesPage':
+      showTournaments();
+      break;  
   }
 }
+function onButulaTournmanetMenuBtns(event){
+    document.getElementById('displayingBlock').style.display = 'block'
+    document.getElementById('butulaTournamentMenu').style.display = 'none'
+    document.getElementById(event.target.getAttribute('page')).style.display = 'grid'
+    Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
+    switch (event.target.getAttribute('page')) {
+      case 'mainPageJT':
+        onNavPanelJTmain()
+        break;
+      case 'leadersPageJT':
+        onNavPanelJTleaders()
+        break;
+      case 'statisticsPageJT':
+        onNavPanelJTstatistics()
+        break;
+      case 'dataPageJT':
+        onNavPanelJTdata()
+        break;
+    }
+}
 function onProfile(event) {
-  clearMenu();
   document.getElementById('profilePageBlock').style.display = 'grid';
 }
 
-function clearMenu() {
-  //   NavPanelBtns.forEach(element => element.style.color = 'white');
-  //   profile.style["background-color"] = 'transparent';
-  //   mobileNavPanelBtns.forEach(element => element.parentElement.style["background-color"] = 'transparent');
-  //   btnHome.addEventListener('click', onbtnHome);
-  //   btnFavorites.addEventListener('click', onbtnFavorites);
-  //   btnData.addEventListener('click', onbtnData);
-  //   btnStatistics.addEventListener('click', onbtnStatistics);
-  //   profile.addEventListener('click', onProfile);
-  //   btnHome.classList.remove("moveDown");
-  //   btnFavorites.classList.remove("moveDown");
-  //   btnData.classList.remove("moveDown");
-  //   btnStatistics.classList.remove("moveDown");
-  //   document.getElementById('homePageBlock').style.display = 'none';
-  //   document.getElementById('profilePageBlock').style.display = 'none';
-  //   document.getElementById('favoritesPageBlock').style.display = 'none';
-  //   document.getElementById('dataPageBlock').style.display = 'none';
-  //   document.getElementById('statisticPageBlock').style.display = 'none';
-  //   document.getElementById('aboutPageBlock').style.display = 'none';
-
-}
-
 function oncrossIcononCreate(event) {
-  body.removeEventListener('keyup', function (event) {
-    if ((event.code == 'Escape') && (!escapeFuseSpam)) {
-      escapeFuseSpam = true;
-      oncrossIcononCreate();
-      setTimeout(() => { escapeFuseSpam = false; }, 1000);
-    }
-  });
   // while (tournamentCreatePanel.firstChild) {
   //   tournamentCreatePanel.removeChild(tournamentCreatePanel.firstChild);
   // }
