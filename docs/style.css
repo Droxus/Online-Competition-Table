@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Krona+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Harmattan:wght@700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Asap&display=swap');
-
+@font-face {
+    font-family: IBMPlexSansDevanagari-Regular;
+    src: url('./fonts/IBMPlexSansDevanagari-Regular.ttf');
+    font-weight: normal;
+  }
 html {
     height: 100vh;
     width: 100vw;
@@ -13,7 +12,11 @@ html {
     display: flex;
     --like-btn-size-scale: 0.33;
     --tournamnets-on-the-page: 5;
-    /* --gradient-deg-bg: 0deg; */
+    font-family: 'IBMPlexSansDevanagari-Regular';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 32px;
+    /* line-height: 49px; */
 }
 
 body {
@@ -23,9 +26,11 @@ body {
     margin: 0;
     padding: 0;
     background: linear-gradient(0deg,#D7A0A0, #6D7F8F);
-    /* background: linear-gradient(var(--gradient-deg-bg), #ee0979, #ff6a00 ); */
     background-size: 100% 100%;
-    /* animation: gradient 10s ease infinite; */
+}
+label, button {
+    color: #DDC5AF;
+    text-shadow: 0.5px 0.5px #d9a9ac, -0.5px -0.5px #d9a9ac;
 }
 #displayBlock{
     width: 100%;
@@ -196,8 +201,8 @@ div.dataEnterSqr>* {
 }
 #searchMainBlock{
     background-color: #9EA9B7;
-    height: 30px;
-    max-width: 200px;
+    height: 35%;
+    width: 45vw;
     display: grid;
     grid-template-columns: 85% 15%;
 }
@@ -255,6 +260,8 @@ div.dataEnterSqr>* {
     z-index: 99999;
     background: rgb(255, 255, 255, 0.1);
     border: none;
+    font-size: 24px;
+    font-weight: bold;
 }
 .headerBlock {
     display: none;
@@ -479,21 +486,23 @@ li a:hover {
 
 .tournament {
     display: grid;
-    grid-template-columns: 6fr 1fr;
-    border: 1px solid white;
-    border-radius: 20px;
-    width: 100%;
-    background-color: rgb(255 185 93 / 40%);
+    grid-template-rows: 45% 55%;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+        "title access"
+        "targets participants";
+    height: 100px;
+    width: 90%;
+    margin: 25px 5%;
+    box-shadow: 4px 2px 4px rgb(0, 0, 0, 0.25);
+    background: linear-gradient(90deg, #FFB8B8, #DCC5AF)
+}
+.tournament * {
+    color: #464646;
+    overflow: hidden;
+    text-shadow: 0px 2px 4px rgb(0, 0, 0, 0.25);
 }
 
-.onTournamentInfoBlock {
-    display: grid;
-    grid-template-rows: 33% 64%;
-    grid-template-columns: 4fr 1fr;
-    grid-template-areas:
-        "title type"
-        "description maxMemb";
-}
 
 .tournamentLikeBtn {
     justify-self: center;
@@ -502,7 +511,8 @@ li a:hover {
 }
 
 .tournament:hover {
-    background-color: rgba(216, 181, 135, 0.6);
+    /* background-position-x: 300px;
+    transition: .2s; */
 }
 
 .footerPanel {
@@ -533,69 +543,59 @@ li a:hover {
 }
 
 .tournamentsPanel {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: repeat(var(--tournamnets-on-the-page), calc(100% / var(--tournamnets-on-the-page)));
     width: 100%;
 }
 
 #tournamentNameBlock {
     grid-area: title;
+    align-self: end;
+    justify-self: center;
     font-weight: bold;
-    align-self: center;
-    font-family: 'Asap', sans-serif;
+    margin-left: -20%;
 }
 
-#tournamentDescriptionBlock {
-    grid-area: description;
+#tournamentTargetsBlock {
+    grid-area: targets;
     padding: 5px 10px;
-    font-family: 'Asap', sans-serif;
-    font-style: italic;
+    font-size: 16px;
+    padding-left: 25%;
 }
 
-#tournamentTypeBlock {
-    grid-area: type;
+#tournamentAccessBlock {
+    grid-area: access;
     align-self: flex-end;
-    font-family: 'Asap', sans-serif;
-    font-weight: bold;
     margin-top: 10px;
 }
 
-#tournamentMaxMembersBlock {
-    grid-area: maxMemb;
+#tournamentParticipantsBlock {
+    grid-area: participants;
     align-self: center;
-    font-family: 'Asap', sans-serif;
     font-weight: bold;
+    display: grid;
+    grid-template-columns: 20px 1fr;
 }
 
 .tournamentName {
-    font-family: 'Asap', sans-serif;
     font-weight: bold;
     font-size: 24px;
-    color: black;
-    margin-left: 20px;
 }
 
 .tournamentDescription {
-    font-family: 'Asap', sans-serif;
     font-size: 14px;
     color: black;
     font-style: italic;
     margin-left: 10px;
 }
 
-.tournamentType {
-    font-family: 'Asap', sans-serif;
-    font-size: 12px;
-    font-weight: bold;
+.tournamentAccess {
+    font-size: 16px;
 }
 
-.tournamentMaxMembers {
-    font-family: 'Asap', sans-serif;
+.tournamentParticipantsBlock {
     font-size: 18px;
     font-weight: bold;
+    display: flex;
 }
-
 #blackout {
     position: fixed;
     display: none;
@@ -646,7 +646,6 @@ li a:hover {
     margin: 25px;
     margin-right: 75px;
     letter-spacing: 2px;
-    font-family: 'Asap', sans-serif;
 }
 
 .btn-grad {
@@ -688,7 +687,6 @@ ul {
     align-self: baseline;
     font: normal 16px/1 sans-serif;
     line-height: 0px;
-    font-family: 'Asap', sans-serif;
 }
 
 #tournamentMembersInfo li {
@@ -696,7 +694,6 @@ ul {
     float: none;
     padding-top: 15px;
     letter-spacing: 0px;
-    font-family: 'Asap', sans-serif;
     font-weight: 600;
     font-size: 20px;
 }
@@ -756,7 +753,6 @@ ul {
 }
 
 .tournamentReqsInfo {
-    font-family: 'Asap', sans-serif;
     font-weight: normal;
     list-style-type: disc;
     grid-area: Reqs;
@@ -770,7 +766,6 @@ ul {
 
 #tournamentReqLabelInfo {
     grid-area: Reqs;
-    font-family: 'Asap', sans-serif;
     font-size: 24px;
     font-weight: bolder;
 }
@@ -779,7 +774,6 @@ ul {
     font: bold 20px/1 Tahoma, Verdana, sans-serif;
     letter-spacing: 0px;
     margin-left: 2%;
-    font-family: 'Asap', sans-serif;
     font-size: 24px;
     font-weight: bolder;
 }
@@ -791,7 +785,6 @@ ul {
 }
 
 .tournamentGoalsInfo {
-    font-family: 'Asap', sans-serif;
     font-weight: normal !important;
     list-style-type: disc;
     padding: 10px;
@@ -891,7 +884,6 @@ ul {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid rgb(119, 98, 212);
-    font-family: 'Asap', sans-serif;
 }
 
 #typeMaxBtns {
@@ -900,7 +892,6 @@ ul {
     grid-template-areas:
         "typeCP"
         "btnCP";
-    font-family: 'Asap', sans-serif;
 }
 
 #tournamentTargetsLblAtCreatePanel {
@@ -908,7 +899,6 @@ ul {
     display: block;
     justify-self: center;
     font-weight: bold;
-    font-family: 'Asap', sans-serif;
     color: #2828b1;
 }
 #trnEndInputCP{
@@ -916,7 +906,6 @@ ul {
 }
 #TargetsCreatePanel {
     grid-area: goalsCP;
-    font-family: 'Asap', sans-serif;
 }
 #trnStartInputCP{
     width: 250px;
@@ -932,7 +921,6 @@ ul {
 }
 #RequirementsCreatePanel {
     grid-area: goalsCP;
-    font-family: 'Asap', sans-serif;
 }
 
 .tournamentTargetsInputAtCreatePanel {
@@ -949,7 +937,6 @@ ul {
     justify-self: center;
     letter-spacing: 1px;
     font-weight: bold;
-    font-family: 'Asap', sans-serif;
 }
 
 #tournamentRequirementsBlockAtCreatePanel {
@@ -1030,7 +1017,6 @@ margin: 10px;
     outline: none;
     background-color: transparent;
     border: 2px solid rgb(119, 98, 212);
-    font-family: 'Asap', sans-serif;
 }
 
 #tournamentMaxMembersInputAtCreatePanel {
@@ -1041,7 +1027,6 @@ margin: 10px;
     background-color: transparent;
     border: 2px solid rgb(119, 98, 212);
     border-radius: 10px;
-    font-family: 'Asap', sans-serif;
 }
 
 #tournamentTypeInputAtCreatePanel {
@@ -1417,7 +1402,6 @@ margin: 10px;
     font-weight: bold;
     color: #0015ab;
     text-transform: uppercase;
-    font-family: 'Asap', sans-serif;;
 }
 
 #leadersPageJT{
@@ -1475,7 +1459,6 @@ margin: 10px;
     font-weight: bold;
     color: #ffe8b4;
     text-transform: uppercase;
-    font-family: 'Asap', sans-serif;
 }
 #thisApproaches{
     grid-area: inputsOfAproach;
@@ -1659,15 +1642,15 @@ margin: 10px;
     }
 
     .tournamentName {
-        font-size: 24px;
+        font-size: 20px;
     }
 
     .tournamentDescription {
         font-size: 14px;
     }
 
-    .tournamentType {
-        font-size: 12px;
+    .tournamentAccess {
+        font-size: 16px;
     }
 
     #tournamentsTargetInfo {
@@ -1793,15 +1776,15 @@ margin: 10px;
         }
 
         .tournamentName {
-            font-size: 28px;
+            font-size: 24px;
         }
 
         .tournamentDescription {
             font-size: 18px;
         }
 
-        .tournamentType {
-            font-size: 16px;
+        .tournamentAccess {
+            font-size: 20px;
         }
 
         #tournamentsTargetInfo {

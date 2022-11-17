@@ -73,7 +73,6 @@ let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfT
 let likeButton = Array.from(document.getElementsByClassName("heart-like-button"));
 let tournamentsPanel = Array.from(document.getElementsByClassName('tournamentsPanel'));
 let trnType = 'opened';
-let onTournamentInfoBlock;
 let tournamentGoalsLabelInfo = document.getElementById('tournamentGoalsLabelInfo');
 let tournamentTargetsInputAtCreatePanel, tournamentSwitchPageBtn;
 let tournamentRequirementsLblAtCreatePanel;
@@ -271,14 +270,22 @@ function showTournaments() {
   trnsToShow = firebaseTournaments;
   for (let i = 0; i < trnsToShow.length; i++) {
     console.log(trnsToShow[i].id)
-    document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].id}"><div class="onTournamentInfoBlock">               
+    document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].id}">             
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
-          <div id="tournamentDescriptionBlock"></div>
-          <div id="tournamentTypeBlock"><label class="tournamentType" for="tournamentType">type: ${trnsToShow[i].type}</label></div>
-          <div id="tournamentMaxMembersBlock"><label class="tournamentMaxMembers" for="tournamentMaxMembers">
-          ${trnsToShow[i].participants.length}  <img src="img/usersGroupIcon.png" alt="usersGroup" width="24px"
-           style="position: absolute; margin: -2px 10px; opacity: 0.7;"></label></div>
-          </div></div>`);
+          <div id="tournamentTargetsBlock">${(trnsToShow[i].targets.map(e => e.name))}</div>
+          <div id="tournamentAccessBlock"><label class="tournamentAccess" for="tournamentAccess">${trnsToShow[i].type}</label></div>
+          <div id="tournamentParticipantsBlock"><label class="tournamentParticipantsBlock" for="tournamentParticipantsBlock">${trnsToShow[i].participants.length}</label>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <rect width="24" height="24" fill="url(#people)"/>
+          <defs>
+          <pattern id="people" patternContentUnits="objectBoundingBox" width="1" height="1">
+          <use xlink:href="#image0_5_117" transform="scale(0.00581395)"/>
+          </pattern>
+          <image id="image0_5_117" width="172" height="172" xlink:href="data:image/png;base64,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"/>
+          </defs>
+          </svg>
+          </div>
+          </div>`);
   }
   Array.from(document.getElementsByClassName('tournament')).forEach(element => element.addEventListener('click', onTournament));
 }
