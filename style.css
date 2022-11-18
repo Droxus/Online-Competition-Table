@@ -1,8 +1,9 @@
-@font-face {
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari&display=swap');
+/* @font-face {
     font-family: IBMPlexSansDevanagari-Regular;
     src: url('./fonts/IBMPlexSansDevanagari-Regular.ttf');
     font-weight: normal;
-  }
+  } */
 html {
     height: 100vh;
     width: 100vw;
@@ -12,7 +13,7 @@ html {
     display: flex;
     --like-btn-size-scale: 0.33;
     --tournamnets-on-the-page: 5;
-    font-family: 'IBMPlexSansDevanagari-Regular';
+    font-family: 'IBM Plex Sans Devanagari', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 32px;
@@ -28,6 +29,21 @@ body {
     background: linear-gradient(0deg,#D7A0A0, #6D7F8F);
     background-size: 100% 100%;
 }
+
+::-webkit-scrollbar {
+    width: 1vw;
+  }
+  
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px transparent;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: red;
+    border-radius: 1px;
+  }
+
 label, button {
     color: #DDC5AF;
     text-shadow: 0.5px 0.5px #d9a9ac, -0.5px -0.5px #d9a9ac;
@@ -178,17 +194,24 @@ div.dataEnterSqr>* {
 #content{
     width: 100%;
     height: 83vh;
-    overflow-y: scroll;
 }
 #defaultHeader{
     display: none;
+    place-items: center;
     grid-template-rows: 100%;
-    grid-template-columns: 50px 1fr 50px;
+    grid-template-columns: 20% 60% 20%;
+    height: 80%;
+}
+#defaultHeader > button{
+    height: 50%;
+    font-size: 20px;
+    background: none;
+    border: none;
 }
 #mainMenuHeader{
     display: grid;
     grid-template-rows: 100%;
-    grid-template-columns: 100px 1fr 100px;
+    grid-template-columns: 20% 60% 20%;
     width: 100%;
     height: 100%;
     background-color: rgb(0, 0, 0, 0.1);
@@ -225,10 +248,11 @@ div.dataEnterSqr>* {
     place-self: center;
 }
 #butulaMenu{
+    position: fixed;
     display: none;
     width: 100%;
-    height: 100%;
-    backdrop-filter: brightness(0.3);
+    height: 93%;
+    backdrop-filter: brightness(0.3) blur(2px);
     flex-wrap: wrap;
     align-content: space-around;
     z-index: 99999;
@@ -240,10 +264,11 @@ div.dataEnterSqr>* {
 }
 
 #butulaTournamentMenu{
+    position: fixed;
     display: none;
     width: 100%;
-    height: 100%;
-    backdrop-filter: brightness(0.3);
+    height: 93%;
+    backdrop-filter: brightness(0.3) blur(2px);
     flex-wrap: wrap;
     align-content: space-around;
     z-index: 99999;
@@ -255,13 +280,16 @@ div.dataEnterSqr>* {
 }
 
 #butulaBtn{
+    position: absolute;
     width: 100%;
-    height: 100%;
+    height: 7vh;
     z-index: 99999;
-    background: rgb(255, 255, 255, 0.1);
+    background: #D9A6A6;
     border: none;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
+    left: 0;
+    bottom: 0;
 }
 .headerBlock {
     display: none;
@@ -552,6 +580,7 @@ li a:hover {
     justify-self: center;
     font-weight: bold;
     margin-left: -20%;
+    padding-top: 15px;
 }
 
 #tournamentTargetsBlock {
@@ -559,6 +588,9 @@ li a:hover {
     padding: 5px 10px;
     font-size: 16px;
     padding-left: 25%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 #tournamentAccessBlock {
@@ -607,45 +639,46 @@ li a:hover {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(4px)
 }
-
+#tournamentJoinInfo{
+    height: 40px;
+    width: 100%;
+    font-size: 24px;
+    border: none;
+    background: rgb(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgb(0, 0, 0, 0.25);
+    font-weight: bold;
+}
 #tournamentInfo {
-    /* position: fixed; */
-    display: grid;
-    z-index: 11;
-    top: 3%;
-    left: 3%;
-    height: 94%;
-    width: 94%;
-    grid-template-rows: 10% 1fr 1fr 15%;
-    grid-template-columns: 50% 50%;
-    grid-template-areas:
-        "titleAndcloseIcon titleAndcloseIcon"
-        "Goals tournamentMembers"
-        "Reqs tournamentMembers"
-        "btns btns";
-    background-color: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    border: 1px solid white;
-    border-radius: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90%;
+    margin: 0 5%;
+    height: 95%;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgb(0, 0, 0, 0.25);
 }
-
-#crossIcon {
-    grid-area: titleAndcloseIcon;
+#tournamentInfo > *{
+    /* height: 20%; */
+    width: 80%;
+    text-align: center;
+    display: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
 }
-.crossIcons{
-    align-self: baseline;
-    justify-self: end;
-    padding: 20px 20px 0 0;
-    width: 48px;
+#tournamentInfo > label:nth-child(2){
+    color: #6E7C88;
+    text-shadow: 2px 1px 2px rgb(0, 0, 0, 0.25);
+}
+#tournamentInfo > label:nth-child(5){
+    color: #6E7C88;
+    text-shadow: 2px 1px 2px rgb(0, 0, 0, 0.25);
 }
 #tournamentNameInfo {
-    grid-area: titleAndcloseIcon;
-    font-size: 38px;
-    font-weight: bold;
-    justify-self: flex-start;
-    margin: 25px;
-    margin-right: 75px;
-    letter-spacing: 2px;
+
 }
 
 .btn-grad {
@@ -716,19 +749,6 @@ ul {
     margin-left: -5px;
 }
 
-#tournamentCupInfo {
-    /* position: fixed; */
-    opacity: 0.03;
-    width: 600;
-    height: 600;
-    z-index: -1;
-    margin: 0;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-}
-
 #tournamentBtnsInfo {
     grid-area: btns;
     display: inline-flex;
@@ -738,10 +758,6 @@ ul {
 
 #tournamentLikeBtnInfo {
     left: 25px;
-}
-
-#tournamentJoinInfo {
-    position: relative;
 }
 
 #tournamentReqInfo {
@@ -790,20 +806,6 @@ ul {
     padding: 10px;
     letter-spacing: 0px;
 }
-#lockbg {
-    position: fixed;
-    display: none;
-    opacity: 0.1;
-    width: 600;
-    height: 600;
-    z-index: -1;
-    margin: 0;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-}
-
 .createTournament {
     background-color: transparent;
     border: none;
@@ -1129,36 +1131,10 @@ margin: 10px;
 }
 
 #joinedTournament{
-    /* position: fixed; */
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 50px 1fr 50px;
-    grid-template-areas: 
-    "headerJT"
-    "a"
-    "footerJT";
-    top: 1%;
-    left: 2%;
-    height: 98%;
-    width: 96%;
-    background-color: rgba(255, 255, 255, 0.4);
-    border: 1px solid white;
-    border-radius: 25px;
-}
-#headerJT{
-    grid-area: headerJT;
-    display: grid;
-    grid-template-rows: 100%;
-    grid-template-columns: 60px 1fr 60px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-}
-#footerJT{
-    grid-area: footerJT;
-    display: grid;
-    grid-template-columns: 15% 1fr 15%;
-    grid-template-rows: 100%;
+    margin: 0 5%;
+    height: 95%;
+    width: 90%;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 #btnNavJT{
     text-align: center;

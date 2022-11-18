@@ -61,9 +61,7 @@ const tournamentAdminLabelInfo = document.getElementById('tournamentAdminLabelIn
 const tournamentReqInfo = document.getElementById('tournamentReqInfo');
 const tournamentAdminInfo = document.getElementById('tournamentAdminInfo');
 const tournamentReqLabelInfo = document.getElementById('tournamentReqLabelInfo');
-const tournamentCupInfo = document.getElementById('tournamentCupInfo');
 const tournamentLikeBtn = Array.from(document.getElementsByClassName('tournamentLikeBtn'));
-const lockbg = document.getElementById('lockbg');
 let crossIcononCreate = document.getElementById('crossIcononCreate');
 const prewPageTurn = Array.from(document.getElementsByClassName('prewPageTurn'));
 const nextPagTurn = Array.from(document.getElementsByClassName('nextPagTurn'));
@@ -141,10 +139,8 @@ function onButulaBtn(){
   let butulaMenu = document.getElementById('content').firstElementChild.id == 'joinedTournament' ? 'butulaTournamentMenu' : 'butulaMenu'
   if (document.getElementById(butulaMenu).style.display == 'none'){
     document.getElementById(butulaMenu).style.display = 'flex'
-    document.getElementById('displayingBlock').style.display = 'none'
   } else {
     document.getElementById(butulaMenu).style.display = 'none'
-    document.getElementById('displayingBlock').style.display = 'block'
   }
 }
 function clearMenuOfAuth() {
@@ -257,7 +253,6 @@ function onbtnHome(event) {
   root.style.setProperty('--tournamnets-on-the-page', '5');
 
   document.getElementById('butulaMenu').style.display = 'none';
-  document.getElementById('displayingBlock').style.display = 'block'
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
   }
@@ -272,7 +267,7 @@ function showTournaments() {
     console.log(trnsToShow[i].id)
     document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].id}">             
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
-          <div id="tournamentTargetsBlock">${(trnsToShow[i].targets.map(e => e.name))}</div>
+          <div id="tournamentTargetsBlock">${trnsToShow[i].targets.map(e => e.name)}</div>
           <div id="tournamentAccessBlock"><label class="tournamentAccess" for="tournamentAccess">${trnsToShow[i].type}</label></div>
           <div id="tournamentParticipantsBlock"><label class="tournamentParticipantsBlock" for="tournamentParticipantsBlock">${trnsToShow[i].participants.length}</label>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -317,8 +312,10 @@ function onTournamentInfo() {
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('tournamentInfoBlock').content.cloneNode(true));
-  console.log(firebaseUser)
   document.getElementById('tournamentNameInfo').innerText = firebaseTournaments[num].name;
+  document.getElementById('numsOfParticipants').innerText = firebaseTournaments[num].participants.length + ' participants';
+  document.getElementById('targets').innerText = 'Targets: ' + firebaseTournaments[num].targets.map(e => e.name);
+  document.getElementById('creator').innerText = 'Creator ' + firebaseTournaments[num].creator;
 }
 function onCrossTournamentInfo(event) {
   body.removeEventListener('keyup', function (event) {
@@ -410,7 +407,6 @@ function onTournamentJoin(event) {
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('joinedTournamentBlock').content.cloneNode(true));
-  document.getElementById('crossIconJT').addEventListener('click', onCrossIconJT);
   document.getElementById('nameJT').innerText = docName;
   onNavPanelJTmain();
 }
@@ -419,14 +415,6 @@ function onCrossIconJT(event) {
   clearInterval(timerToNextRound);
   document.getElementById('joinedTournament').style.display = 'none';
   document.getElementById('navPanelJT').style.display = 'none';
-  document.getElementById('pageNextJT').removeEventListener('click', () => {
-    firstTarget++; lastTarget++;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
-  document.getElementById('pagePrevJT').removeEventListener('click', () => {
-    firstTarget--; lastTarget--;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
   body.removeEventListener('keyup', function (event) {
     if ((event.code == 'Escape') && (!escapeFuseSpam)) {
       escapeFuseSpam = true;
@@ -461,40 +449,34 @@ let roundNumber, hoursToNextRound, minutesToNextRound, secondsToNextRound, seaso
 function onNavPanelJTmain(event) {
   onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  // document.getElementById('navPanelJT').style.display = 'none';
-  // document.getElementById('mainPageJT').style.display = 'grid';
-  document.getElementById('pageNameJT').innerText = 'Main';
+  document.getElementById('mainPageJT').style.display = 'grid';
   getTournamentTime();
-  document.getElementById('roundNumJT').innerText = `Round ${roundNumber}`;
-  document.getElementById('seasonNumJT').innerText = `Season ${seasonNumber}`;
-  document.getElementById('pageNextJT').removeEventListener('click', () => {
-    firstTarget++; lastTarget++;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
-  document.getElementById('pagePrevJT').removeEventListener('click', () => {
-    firstTarget--; lastTarget--;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
+  document.getElementById('roundNumJT').innerText = `Round ${roundNumber+1}`;
+  document.getElementById('seasonNumJT').innerText = `Season ${seasonNumber+1}`;
 }
-function getTournamentTime(event) {
+function getTournamentTime() {
   nowDate = Date.now();
   dateDiff = nowDate - firebaseTournaments[num].start
   seasonNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24 / 30)
   dateDiff -= seasonNumber * 30 * 24 * 60 * 60 * 1000
   roundNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24)
   dateDiff -= roundNumber * 24 * 60 * 60 * 1000
-  secondsToNextRound = Math.floor(dateDiff / 1000)
-  minutesToNextRound = Math.floor(secondsToNextRound / 60)
-  hoursToNextRound = Math.floor(secondsToNextRound / 60 / 60)
-
+  hoursToNextRound = 24 - Math.floor(dateDiff / 1000 / 60 / 60)
+  dateDiff -= (24 - hoursToNextRound) * 60 * 60 * 1000
+  minutesToNextRound = 60 - Math.floor(dateDiff / 1000 / 60)
+  dateDiff -= (60 - minutesToNextRound) * 60 * 1000
+  secondsToNextRound = 60 -  Math.floor(dateDiff / 1000)
   Array.from(document.getElementsByClassName('timerDataJT')).forEach(element => {
     element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
   });
   clearInterval(timerToNextRound);
   timerToNextRound = setInterval(() => {
-    secondsToNextRound--;
-    minutesToNextRound = Math.floor(secondsToNextRound / 60)
-    hoursToNextRound = Math.floor(secondsToNextRound / 60 / 60)
+    secondsToNextRound--
+    minutesToNextRound = secondsToNextRound < 0 ? minutesToNextRound-1 : minutesToNextRound
+    secondsToNextRound = secondsToNextRound < 0 ? 59 : secondsToNextRound
+    hoursToNextRound = minutesToNextRound < 0 ? hoursToNextRound-1 : hoursToNextRound
+    minutesToNextRound = minutesToNextRound < 0 ? 59 : minutesToNextRound
+    if (hoursToNextRound < 0)  { onNavPanelJTmain() }
     Array.from(document.getElementsByClassName('timerDataJT')).forEach(element => {
       element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
     });
@@ -506,14 +488,6 @@ function onNavPanelJTstatistics(event) {
   // document.getElementById('navPanelJT').style.display = 'none';
   // document.getElementById('statisticsPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Statistics';
-  document.getElementById('pageNextJT').removeEventListener('click', () => {
-    firstTarget++; lastTarget++;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
-  document.getElementById('pagePrevJT').removeEventListener('click', () => {
-    firstTarget--; lastTarget--;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
 }
 function onNavPanelJTdata(event) {
   getTournamentTime();
@@ -521,14 +495,6 @@ function onNavPanelJTdata(event) {
   // document.getElementById('navPanelJT').style.display = 'none';
   // document.getElementById('dataPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Data';
-  document.getElementById('pageNextJT').removeEventListener('click', () => {
-    firstTarget++; lastTarget++;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
-  document.getElementById('pagePrevJT').removeEventListener('click', () => {
-    firstTarget--; lastTarget--;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
   while (document.getElementById('dataBlocksJT').firstChild) {
     document.getElementById('dataBlocksJT').removeChild(document.getElementById('dataBlocksJT').firstChild);
   }
@@ -801,14 +767,6 @@ function onNavPanelJTleaders(event) {
   // document.getElementById('navPanelJT').style.display = 'none';
   // document.getElementById('leadersPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Leader Board';
-  document.getElementById('pageNextJT').addEventListener('click', () => {
-    firstTarget++; lastTarget++;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
-  document.getElementById('pagePrevJT').addEventListener('click', () => {
-    firstTarget--; lastTarget--;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
   while (document.getElementById('dataLeadersTable').firstChild) {
     document.getElementById('dataLeadersTable').removeChild(document.getElementById('dataLeadersTable').firstChild);
   }
@@ -937,14 +895,6 @@ function onNavPanelJTsettings(event) {
   document.getElementById('navPanelJT').style.display = 'none';
   document.getElementById('settingsPageJT').style.display = 'grid';
   document.getElementById('pageNameJT').innerText = 'Settings';
-  document.getElementById('pageNextJT').removeEventListener('click', () => {
-    firstTarget++; lastTarget++;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
-  document.getElementById('pagePrevJT').removeEventListener('click', () => {
-    firstTarget--; lastTarget--;
-    dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value);
-  });
 }
 function onSaveTournamentDate() {
   if ((document.getElementById('dataPageJT').style.display !== 'none') && (Array.from(document.getElementsByClassName('dataBlockJT'))[0] !== undefined)) {
@@ -994,7 +944,6 @@ function onButulaMenuBtns(event){
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   document.getElementById('butulaMenu').style.display = 'none'
-  document.getElementById('displayingBlock').style.display = 'block'
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
   }
@@ -1010,7 +959,6 @@ function onButulaMenuBtns(event){
   }
 }
 function onButulaTournmanetMenuBtns(event){
-    document.getElementById('displayingBlock').style.display = 'block'
     document.getElementById('butulaTournamentMenu').style.display = 'none'
     document.getElementById(event.target.getAttribute('page')).style.display = 'grid'
     Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')

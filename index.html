@@ -59,9 +59,9 @@
                         
                 </div>
                 <div id="defaultHeader">
-                    <button>Back</button>
+                    <button>&lt Back</button>
                     <div></div>
-                    <button id="mainMenuBtn">Main</button>
+                    <button id="mainMenuBtn">Main ></button>
                 </div>
             </div>
             <div id="content">
@@ -123,24 +123,13 @@
     </div>
     <template id="tournamentInfoBlock">
         <div id="tournamentInfo">
-            <img src="img/crossIcon.svg" alt="cross" class="crossIcons" id="crossIcon">
             <label id="tournamentNameInfo" for="tournamentNameInfo"></label>
-            <div id="tournamentBtnsInfo">
-                <button class="btn-grad" id="tournamentJoinInfo">Join</button>
-                <div class="heart-like-button" id="tournamentLikeBtnInfo"></div>
+            <label id="numsOfParticipants"></label>
+            <label id="targets"></label>
+            <div>
+                <button id="tournamentJoinInfo">Join</button>
             </div>
-            <ul id="tournamentsTargetInfo">
-                <li id="tournamentGoalsLabelInfo">Goals</li>
-            </ul>
-            <ul id="tournamentMembersInfo">
-                <li id="tournamentAdminLabelInfo">Creator</li>
-                <li id="tournamentMembersLabelInfo">PARTICIPANTS</li>
-            </ul>
-            <ul id="tournamentReqInfo">
-                <li id="tournamentReqLabelInfo">Requirements</li>
-            </ul>
-            <img src="img/cup.png" alt="cup" id="tournamentCupInfo">
-            <img src="img/lock.jpg" alt="lock" id="lockbg">
+            <label id="creator"></label>
         </div>
 
     </template>
@@ -217,16 +206,14 @@
     </template>
     <template id="joinedTournamentBlock">
         <div id="joinedTournament">
-            <div id="headerJT">
-                <img src="img/backIcon.png" alt="cross" id="crossIconJT">
-                <label id="pageNameJT" for="pageNameJT">Main</label>
-                <img src="img/icons8-test-account-48.png" alt="trnIcon" class="trnIconJT">
-            </div>
             <div class="pagesJT" id="mainPageJT">
-                <label class="mainLblInfoJT" id="nameJT" for="nameJT"></label>
-                <label class="mainLblInfoJT" id="seasonNumJT" for="seasonNumJT"></label>
-                <label class="mainLblInfoJT" id="roundNumJT" for="roundNumJT"></label>
-                <label class="mainLblInfoJT timerDataJT" for="timerDataJT"></label>
+                <label class="mainLblInfoJT" id="nameJT"></label>
+                <label class="mainLblInfoJT" id="seasonNumJT"></label>
+                <label class="mainLblInfoJT" id="toNextSeason"></label>
+                <label class="mainLblInfoJT" id="roundNumJT"></label>
+                <label class="mainLblInfoJT timerDataJT"></label>
+                <label id="numOfMyPoints"></label>
+                <label id="creator"></label>
             </div>
             <div class="pagesJT" id="statisticsPageJT"></div>
             <div class="pagesJT" id="dataPageJT">
@@ -259,20 +246,6 @@
             <div class="pagesJT" id="settingsPageJT">
                 <div></div>
                 <button class="btn-grad" id="btnLeaveTrn">Leave</button>
-            </div>
-            <div id="footerJT">
-                <button class="pageSwitchJT" id="pagePrevJT"><</button>
-                <button id="btnNavJT">Navigation</button>
-                <button class="pageSwitchJT" id="pageNextJT">></button>
-                <div id="navPanelJT">
-                    <div></div>
-                    <button class="navPanBtnsJT" id="navPanelJTmain">MAIN</button>
-                    <button class="navPanBtnsJT" id="navPanelJTstatistics">STATISTICS</button>
-                    <button class="navPanBtnsJT" id="navPanelJTdata">DATA</button>
-                    <button class="navPanBtnsJT" id="navPanelJTleaders">LEADER BOARD</button>
-                    <button class="navPanBtnsJT" id="navPanelJTsettings">SETTINGS</button>
-                    <button class="navPanBtnsJT" id="navPanelJTclose">CLOSE</button>
-                </div>
             </div>
         </div>
     </template>
