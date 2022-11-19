@@ -371,7 +371,7 @@ function onTournamentCreateBtn() {
           targets: trnTargets,
           type: trnType,
           creator: login,
-          participants: [{login: login, id: uid}],
+          participants: [{login: login, ID: uid}],
           usersInfo: [uid],
           isStarted: false,
           start: Date.now()
@@ -449,7 +449,7 @@ let roundNumber, hoursToNextRound, minutesToNextRound, secondsToNextRound, seaso
 function onNavPanelJTmain(event) {
   onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  document.getElementById('mainPageJT').style.display = 'grid';
+  document.getElementById('mainPageJT').style.display = 'flex';
   getTournamentTime();
   document.getElementById('roundNumJT').innerText = `Round ${roundNumber+1}`;
   document.getElementById('seasonNumJT').innerText = `Season ${seasonNumber+1}`;
@@ -466,8 +466,12 @@ function getTournamentTime() {
   minutesToNextRound = 60 - Math.floor(dateDiff / 1000 / 60)
   dateDiff -= (60 - minutesToNextRound) * 60 * 1000
   secondsToNextRound = 60 -  Math.floor(dateDiff / 1000)
+  document.getElementById('numsOfParticipants').innerText = `${firebaseTournaments[num].participants.length} participants`
+  document.getElementById('toNextSeason').innerText = `${29-roundNumber}d ${hoursToNextRound}h`
+  document.getElementById('numOfMyPoints').innerText = `You have ${firebaseTournaments[num].participants.filter(e => e.ID == uid)[0].points} points`
+  document.getElementById('creator').innerText = `Creator ${firebaseTournaments[num].creator}`
   Array.from(document.getElementsByClassName('timerDataJT')).forEach(element => {
-    element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
+    element.innerText = `${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
   });
   clearInterval(timerToNextRound);
   timerToNextRound = setInterval(() => {
@@ -478,7 +482,7 @@ function getTournamentTime() {
     minutesToNextRound = minutesToNextRound < 0 ? 59 : minutesToNextRound
     if (hoursToNextRound < 0)  { onNavPanelJTmain() }
     Array.from(document.getElementsByClassName('timerDataJT')).forEach(element => {
-      element.innerText = `Next Round ${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
+      element.innerText = `${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
     });
   }, 1000);
 }
@@ -486,15 +490,13 @@ function onNavPanelJTstatistics(event) {
   onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
   // document.getElementById('navPanelJT').style.display = 'none';
-  // document.getElementById('statisticsPageJT').style.display = 'grid';
-  document.getElementById('pageNameJT').innerText = 'Statistics';
+  document.getElementById('statisticsPageJT').style.display = 'grid';
 }
 function onNavPanelJTdata(event) {
   getTournamentTime();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
   // document.getElementById('navPanelJT').style.display = 'none';
-  // document.getElementById('dataPageJT').style.display = 'grid';
-  document.getElementById('pageNameJT').innerText = 'Data';
+  document.getElementById('dataPageJT').style.display = 'grid';
   while (document.getElementById('dataBlocksJT').firstChild) {
     document.getElementById('dataBlocksJT').removeChild(document.getElementById('dataBlocksJT').firstChild);
   }
@@ -506,14 +508,14 @@ function onNavPanelJTdata(event) {
     </div></div>`);
     let approachLength, valueInput;
     if ((firebaseTournaments[num].targets[i].approach !== '') && (firebaseTournaments[num].targets[i].approach !== 0)) {
-      approachLength = firebaseTournaments[num].targets[i].approach;
-    } else if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== {})
-      && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined)) {
-      if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== {})
-        && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)) {
-        approachLength = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length > 1 ?
-          firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length : 1;
-      }
+    //   approachLength = firebaseTournaments[num].targets[i].approach;
+    // } else if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== {})
+    //   && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined)) {
+    //   if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== {})
+    //     && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)) {
+    //     approachLength = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length > 1 ?
+    //       firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length : 1;
+    //   }
     } else {
       approachLength = 1;
     }
@@ -526,14 +528,14 @@ function onNavPanelJTdata(event) {
     if (firebaseTournaments[num].targets[i].type == 'slider') {
       for (let j = 0; j < approachLength; j++) {
         valueInput = '';
-        if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
-          if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)
-            && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-            (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') &&
-            (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined)) {
-            valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
-          } else { valueInput = 0; }
-        } else { valueInput = 0; }
+        // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
+        //   if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)
+        //     && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
+        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') &&
+        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined)) {
+        //     valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
+        //   } else { valueInput = 0; }
+        // } else { valueInput = 0; }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="range" min="0" max="100" placeholder="try ${j + 1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`);
         Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
@@ -543,14 +545,14 @@ function onNavPanelJTdata(event) {
     } else if (firebaseTournaments[num].targets[i].type == 'clicker') {
       for (let j = 0; j < approachLength; j++) {
         valueInput = '';
-        if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
-          if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)
-            && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-            (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') &&
-            (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined)) {
-            valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
-          }
-        } else { valueInput = ''; }
+        // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
+        //   if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)
+        //     && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
+        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') &&
+        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined)) {
+        //     valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
+        //   }
+        // } else { valueInput = ''; }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <button class="dataJTinputs"  placeholder="try ${j + 1}" style="display:${j < 1 ? 'flex' : 'none'};">
           <div class="btnDataMinus">-</div><label class="btnDataCounter">${valueInput}</label><div class="btnDataPlus">+</div></button>`);
@@ -565,15 +567,15 @@ function onNavPanelJTdata(event) {
     } else {
       for (let j = 0; j < approachLength; j++) {
         valueInput = '';
-        if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
-          if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined) {
-            if (((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined &&
-              (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0)) &&
-              firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')) {
-              valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
-            }
-          }
-        } else { valueInput = ''; }
+        // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
+          // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined) {
+          //   if (((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined &&
+          //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0)) &&
+          //     firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')) {
+          //     valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
+          //   }
+          // }
+        // } else { valueInput = ''; }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="number" placeholder="try ${j + 1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`);
       }
@@ -765,8 +767,7 @@ function onNavPanelJTleaders(event) {
   onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
   // document.getElementById('navPanelJT').style.display = 'none';
-  // document.getElementById('leadersPageJT').style.display = 'grid';
-  document.getElementById('pageNameJT').innerText = 'Leader Board';
+  document.getElementById('leadersPageJT').style.display = 'grid';
   while (document.getElementById('dataLeadersTable').firstChild) {
     document.getElementById('dataLeadersTable').removeChild(document.getElementById('dataLeadersTable').firstChild);
   }

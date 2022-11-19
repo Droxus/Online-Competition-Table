@@ -40,7 +40,7 @@ body {
   }
   
   ::-webkit-scrollbar-thumb {
-    background: red;
+    background: #dcc5af54;
     border-radius: 1px;
   }
 
@@ -252,7 +252,7 @@ div.dataEnterSqr>* {
     display: none;
     width: 100%;
     height: 93%;
-    backdrop-filter: brightness(0.3) blur(2px);
+    backdrop-filter: brightness(0.25) blur(3px);
     flex-wrap: wrap;
     align-content: space-around;
     z-index: 99999;
@@ -268,7 +268,7 @@ div.dataEnterSqr>* {
     display: none;
     width: 100%;
     height: 93%;
-    backdrop-filter: brightness(0.3) blur(2px);
+    backdrop-filter: brightness(0.25) blur(3px);
     flex-wrap: wrap;
     align-content: space-around;
     z-index: 99999;
@@ -461,7 +461,6 @@ li a:hover {
 
 #homePageBlock {
     display: grid;
-    grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;
     height: 100%;
@@ -571,7 +570,9 @@ li a:hover {
 }
 
 .tournamentsPanel {
+    overflow-y: scroll;
     width: 100%;
+    height: 100%;
 }
 
 #tournamentNameBlock {
@@ -1043,23 +1044,6 @@ margin: 10px;
 #tournamentTypeInputAtCreatePanel fieldset {
     border: none;
 }
-.mainLblInfoJT{
-    font-size: 24px;
-    font-weight: bold;
-    color:#2828b1;
-    align-self: center;
-    font-family: Arial, Helvetica, sans-serif;
-    justify-self: center;
-}
-.timerDataJT{
-    flex: 2;
-    font-size: 20px;
-    font-weight: bold;
-    color: green;
-    align-self: center;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-}
 #tournamentTypeInputAtCreatePanel fieldset input {
     margin-top: 25px;
 }
@@ -1186,11 +1170,7 @@ margin: 10px;
     color: #2504b8;
 }
 #nameJT{
-    align-self: center;
-    justify-self: center;
     font-size: 28px;
-    font-weight: bold;
-    margin: 5%;
 }
 .trnIconJT{
     align-self: center;
@@ -1228,33 +1208,61 @@ margin: 10px;
 }
 #mainPageJT{
     display: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+    width: 100%;
+    height: 100%;
+}
+#mainPageJT > *{
+    text-align: center;
+    font-size: 32px;
+    width: 100%;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+}
+#mainPageJT > label:nth-child(3),
+#mainPageJT > label:nth-child(4),
+#mainPageJT > label:nth-child(5),
+#mainPageJT > label:nth-child(6) {
+    width: 50%;
+}
+#mainPageJT > label:nth-child(even) {
+    color: #6E7C88;
+    text-shadow: 2px 1px 2px rgb(0, 0, 0, 0.25);
+}
+#mainPageJT > label:nth-child(4) {
+    color: #DDC5AF;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+}
+#mainPageJT > label:nth-child(5) {
+    color: #6E7C88;
+    text-shadow: 2px 1px 2px rgb(0, 0, 0, 0.25);
+    font-size: 28px;
+}
+#mainPageJT > label:nth-child(6){
+    font-size: 28px;
 }
 #statisticsPageJT{
     display: none;
 }
 #dataPageJT{
     display: none;
-    grid-template-columns: 70% 30%;
-    grid-template-rows: 1fr 50px;
-    grid-template-areas: "dataBlocksJT dataLeadersBlockJT"
-    "footerDateBlock dataLeadersBlockJT";
-}
-#footerDateBlock{
-    grid-area: footerDateBlock;
+    width: 100%;
+    height: 100%;
 }
 #dataBlocksJT{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
     align-items: center;
     flex-direction: column;
-    align-content: stretch;
-    grid-area: dataBlocksJT;
+    overflow-y: scroll;
 }
 .dataBlockJT{
     width: 100%;
-    grid-area: dataBlockJT;
     text-align: center;
+    height: 20%;
 }
 #btnEditJTdata{
     position: inherit;
@@ -1354,10 +1362,6 @@ margin: 10px;
 }
 .dataJTinputs::placeholder{
     font-size: 20px;
-}
-#dataLeadersBlockJT{
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
-    grid-area: dataLeadersBlockJT;
 }
 .inputsUnityDataJT{
     display: flex;
@@ -1656,9 +1660,6 @@ margin: 10px;
     #tournamentNameInfo {
         font-size: 28px;
     }
-    #dataLeadersBlockJT{
-        display: none;
-    }
     #dataPageJT {
         grid-template-columns: 100% 0%;
     }
@@ -1798,9 +1799,6 @@ margin: 10px;
         #tournamentNameInfo {
             font-size: 34px;
         }
-        #dataLeadersBlockJT{
-            display: none;
-        }
         #dataPageJT {
             grid-template-columns: 100% 0%;
         }
@@ -1857,9 +1855,6 @@ margin: 10px;
 
             #tournamentNameInfo {
                 font-size: 38px;
-            }
-            #dataLeadersBlockJT{
-                display: grid;
             }
             #dataPageJT {
                 grid-template-columns: 70% 30%;
