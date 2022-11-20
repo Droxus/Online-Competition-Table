@@ -522,8 +522,8 @@ function onNavPanelJTdata(event) {
     Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].insertAdjacentHTML('beforeend', `
       <div class="lblAndInputDataJT">
       <label class="nowApproach" for="nowApproach">1</label>
-      <button class="btnsRowLeft"><img src="img/leftArrowIcon.png" alt="leftArrow" width="36px"></button>
-      <button class="btnsRowRight"><img src="img/rightArrowIcon.png" alt="rightArrow" width="36px"></button>
+      <button class="btnsRowLeft"><</button>
+      <button class="btnsRowRight">></button>
       </div>`);
     if (firebaseTournaments[num].targets[i].type == 'slider') {
       for (let j = 0; j < approachLength; j++) {

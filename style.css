@@ -40,7 +40,7 @@ body {
   }
   
   ::-webkit-scrollbar-thumb {
-    background: #dcc5af54;
+    background: rgb(255, 255, 255, 0.1);
     border-radius: 1px;
   }
 
@@ -1256,8 +1256,8 @@ margin: 10px;
     height: 100%;
     width: 100%;
     align-items: center;
-    flex-direction: column;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 .dataBlockJT{
     width: 100%;
@@ -1272,20 +1272,44 @@ margin: 10px;
     background-image: linear-gradient(to right, #a45fff 0%, #718bff 51%, #5ff4ff 100%);
 }
 .dataJTinputs{
-    height: 40px;
-    width: 90%;
-    background-color: transparent;
+    height: 35px;
+    width: 80%;
+    background: rgb(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgb(0, 0, 0, 0.25);
+    border: none;
     outline: none;
-    border-radius: 15px;
-    border: 2px solid rgb(119 98 212);
-    font-size: 28px;
-    color: #6859ab;
-    padding: 5px 5px;
-    margin: 0px 1%;
+    font-size: 24px;
     text-align: center;
     grid-area: dataJTinputs;
-    align-self: center;
     justify-self: center;
+    color: #DDC5AF;
+    text-shadow: 0.5px 0.5px #d9a9ac, -0.5px -0.5px #d9a9ac;
+}
+.dataJTlabels{
+    display: flex;
+    font-size: 28px;
+    height: 70px;
+    justify-content: center;
+    align-items: flex-end;
+}
+.dataJTinputs[type=range]{
+    box-shadow: none;
+    align-self: center;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80%;
+    height: 20px;
+    background: rgb(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgb(0, 0, 0, 0.25);
+    outline: none;
+}
+.dataJTinputs[type=range]::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px; 
+    background: #DDC5AF; 
+    cursor: pointer;
 }
 .lblAndInputDataJT{
     text-align: center;
@@ -1293,15 +1317,26 @@ margin: 10px;
     flex: 1;
     display: grid;
     grid-template-columns: 15% 70% 15%;
-    grid-template-rows: 25px 15px 1fr;
+    grid-template-rows: 10px 15px 1fr;
     grid-template-areas: "nowApproach nowApproach nowApproach" 
     "labelCounter labelCounter labelCounter"
     "btnsRowLeft dataJTinputs btnsRowRight";
 }
 .btnsRowLeft{
+    font-size: 28px;
     grid-area: btnsRowLeft;
     background: transparent;
     border: none;
+    font-family: inherit;
+    text-align: right;
+}
+.btnsRowRight{
+    font-size: 28px;
+    grid-area: btnsRowRight;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    text-align: left;
 }
 .moveLeftDateInput{
     animation: 0.3s linear 0s forwards moveLeftDate;
@@ -1355,13 +1390,10 @@ margin: 10px;
         width: 90%;
     }
 }
-.btnsRowRight{
-    grid-area: btnsRowRight;
-    background: transparent;
-    border: none;
-}
 .dataJTinputs::placeholder{
     font-size: 20px;
+    color: #6E7C88;
+    text-shadow: none;
 }
 .inputsUnityDataJT{
     display: flex;
@@ -1371,19 +1403,11 @@ margin: 10px;
     display: flex;
 }
 .labelCounter{
-    color: #5a5a5a;
-    font-size: 18px;
+    color: #464646;
+    font-size: 16px;
     font-weight: bold;
     grid-area: labelCounter;
 }
-.dataJTlabels{
-    padding: 10px 0px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #0015ab;
-    text-transform: uppercase;
-}
-
 #leadersPageJT{
     display: none;
     grid-template-columns: 100%;
@@ -1416,12 +1440,10 @@ margin: 10px;
 }
 .nowApproach{
     grid-area: nowApproach;
-    border: 2px solid #0015ab;
-    width: 40px;
-    border-radius: 35px;
+    font-size: 18px;
+    text-shadow: none;
+    color: #6E7C88;
     place-self: center;
-    color: #494949;
-    font-weight: bold;
 }
 #allApproachesOfThisTarget{
     z-index: 1000;
@@ -1660,10 +1682,6 @@ margin: 10px;
     #tournamentNameInfo {
         font-size: 28px;
     }
-    #dataPageJT {
-        grid-template-columns: 100% 0%;
-    }
-
     @media screen and (min-device-width: 600px) {
         #mainBlock {
             /* grid-template-rows: 100px 1fr; */
@@ -1799,9 +1817,6 @@ margin: 10px;
         #tournamentNameInfo {
             font-size: 34px;
         }
-        #dataPageJT {
-            grid-template-columns: 100% 0%;
-        }
         @media screen and (min-device-width: 1100px) {
             .profile {
                 font-size: 24px;
@@ -1855,9 +1870,6 @@ margin: 10px;
 
             #tournamentNameInfo {
                 font-size: 38px;
-            }
-            #dataPageJT {
-                grid-template-columns: 70% 30%;
             }
         }
     }
