@@ -94,12 +94,6 @@ document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
 // document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn);
 // document.getElementById('btnNavJT').addEventListener('click', onBtnNavJT);
 // document.getElementById('navPanelJTclose').addEventListener('click', onNavPanelJTclose);
-// document.getElementById('navPanelJTmain').addEventListener('click', onNavPanelJTmain);
-// document.getElementById('navPanelJTstatistics').addEventListener('click', onNavPanelJTstatistics);
-// document.getElementById('navPanelJTdata').addEventListener('click', onNavPanelJTdata);
-// document.getElementById('navPanelJTleaders').addEventListener('click', onNavPanelJTleaders);
-// document.getElementById('navPanelJTsettings').addEventListener('click', onNavPanelJTsettings);
-// document.getElementById('btnEditJTdata').addEventListener('click', onSaveTournamentDate);
 // document.getElementById('btnResetJTdata').addEventListener('click', onResetTournamentDate);
 
 document.getElementById('butulaBtn').addEventListener('click', onButulaBtn)
@@ -136,6 +130,7 @@ function onHasaccLink(event) {
   btnSignIn.addEventListener('click', onBtnSignIn);
 }
 function onButulaBtn(){
+  if (document.getElementById('butulaBtn').innerText == 'Save') return saveTournament()
   let butulaMenu = document.getElementById('content').firstElementChild.id == 'joinedTournament' ? 'butulaTournamentMenu' : 'butulaMenu'
   if (document.getElementById(butulaMenu).style.display == 'none'){
     document.getElementById(butulaMenu).style.display = 'flex'
@@ -267,7 +262,7 @@ function showTournaments() {
     console.log(trnsToShow[i].id)
     document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].id}">             
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
-          <div id="tournamentTargetsBlock">${trnsToShow[i].targets.map(e => e.name)}</div>
+          <textarea id="tournamentTargetsBlock" readonly rows="2">${trnsToShow[i].targets.map(e => e.name)}</textarea>
           <div id="tournamentAccessBlock"><label class="tournamentAccess" for="tournamentAccess">${trnsToShow[i].type}</label></div>
           <div id="tournamentParticipantsBlock"><label class="tournamentParticipantsBlock" for="tournamentParticipantsBlock">${trnsToShow[i].participants.length}</label>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -411,7 +406,6 @@ function onTournamentJoin(event) {
   onNavPanelJTmain();
 }
 function onCrossIconJT(event) {
-  onSaveTournamentDate();
   clearInterval(timerToNextRound);
   document.getElementById('joinedTournament').style.display = 'none';
   document.getElementById('navPanelJT').style.display = 'none';
@@ -447,7 +441,6 @@ function onNavPanelJTclose(event) {
 
 let roundNumber, hoursToNextRound, minutesToNextRound, secondsToNextRound, seasonNumber;
 function onNavPanelJTmain(event) {
-  onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
   document.getElementById('mainPageJT').style.display = 'flex';
   getTournamentTime();
@@ -487,7 +480,6 @@ function getTournamentTime() {
   }, 1000);
 }
 function onNavPanelJTstatistics(event) {
-  onSaveTournamentDate();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
   // document.getElementById('navPanelJT').style.display = 'none';
   document.getElementById('statisticsPageJT').style.display = 'grid';
@@ -560,9 +552,10 @@ function onNavPanelJTdata(event) {
           element => element.addEventListener('click', (event) => {
             event.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[j].innerText < 1 ?
               0 : event.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[j].innerText--;
+              onDataInputsChange()
           }));
         Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnDataPlus')).forEach(
-          element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[j].innerText++; }));
+          element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[j].innerText++; onDataInputsChange()}));
       }
     } else {
       for (let j = 0; j < approachLength; j++) {
@@ -603,6 +596,7 @@ function onNavPanelJTdata(event) {
         element => element.addEventListener('click', (event) => {
           event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText < 1 ?
             0 : event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText--;
+            onDataInputsChange()
         }));
       Array.from(document.getElementById('thisApproaches').getElementsByClassName('btnDataPlus')).forEach(
         element => element.addEventListener('click', (event) => { event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText++; }));
@@ -714,9 +708,10 @@ function onNavPanelJTdata(event) {
             element => element.addEventListener('click', (event) => {
               event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText < 1 ?
                 0 : event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText--;
+                onDataInputsChange()
             }));
           Array.from(event.target.parentElement.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].getElementsByClassName('btnDataPlus')).forEach(
-            element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++; }));
+            element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++; onDataInputsChange() }));
         } else {
           event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
         style="transform: translate(-150%, 0); width: 35%;"></input>`);
@@ -749,8 +744,9 @@ function onNavPanelJTdata(event) {
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight);
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveLeft);
     event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].addEventListener('animationend', onAnimationInputMoveRight);
-
+    Array.from(document.getElementsByClassName('dataJTinputs')).forEach(e => e.addEventListener('change', onDataInputsChange))
   }));
+  Array.from(document.getElementsByClassName('dataJTinputs')).forEach(e => e.addEventListener('change', onDataInputsChange))
   getTournamentTime();
 }
 let nowAproach = 0;
@@ -762,167 +758,62 @@ function onAnimationInputMoveLeft(event) {
   event.target.style.display = 'none';
   nowAproach--;
 }
+function onDataInputsChange(event){
+  let data = {}
+  for (const target in firebaseTournaments[num].targets){
+    if (firebaseTournaments[num].targets[target].type == "clicker"){
+      data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('btnDataCounter'))
+      .reduce((partialSum, e) => partialSum + Number(e.innerText) * firebaseTournaments[num].targets[target].points, 0)
+    } else {
+      data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('dataJTinputs'))
+      .reduce((partialSum, e) => partialSum + e.value * firebaseTournaments[num].targets[target].points, 0)
+    }
+  }
+  let transaction = {
+    season: seasonNumber,
+    round: roundNumber,
+    data: data
+  }
+  localStorage.setItem(tournamentID, JSON.stringify(transaction));
+  console.log(JSON.parse((localStorage.getItem(tournamentID))))
+  document.getElementById('butulaBtn').innerText = 'Save'
+}
+function saveTournament(){
+  document.getElementById('butulaBtn').innerText = 'Butula'
+  db.collection("global_tournaments").doc(tournamentID).get().then((doc) => {
+    if (doc.exists) {
+      firebaseTournaments[num] = doc.data()
+      firebaseTournaments[num].participants[firebaseTournaments[num].participants.findIndex(e => e.ID == uid)].data = JSON.parse((localStorage.getItem(tournamentID)))
+      db.collection("global_tournaments").doc(tournamentID).set(firebaseTournaments[num]).then(() => {
+        console.log('Saved');
+      });
+    } else {
+      console.log('error')
+    }
+  }).catch((error) => {
+    console.log("Error getting document:", error);
+});
+}
 let timerToNextRound;
 function onNavPanelJTleaders(event) {
-  onSaveTournamentDate();
-  Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  // document.getElementById('navPanelJT').style.display = 'none';
-  document.getElementById('leadersPageJT').style.display = 'grid';
-  while (document.getElementById('dataLeadersTable').firstChild) {
-    document.getElementById('dataLeadersTable').removeChild(document.getElementById('dataLeadersTable').firstChild);
+  document.getElementById('leadersPageJT').style.display = 'grid'
+  while (document.getElementById('dataLeadersTable').firstElementChild){
+    document.getElementById('dataLeadersTable').firstElementChild.remove()
   }
-
-  for (let i = 0; i < firebaseTournaments[num].season.length; i++) {
-    if (i == firebaseTournaments[num].season.length - 1) {
-      document.getElementById('sesondLeaderSwitch').insertAdjacentHTML('afterbegin', `
-      <option selected="selected" value="${i + 1}">${i + 1}</option>`);
-    } else {
-      document.getElementById('sesondLeaderSwitch').insertAdjacentHTML('afterbegin', `
-      <option value="${i + 1}">${i + 1}</option>`);
+  let participantsSorted = firebaseTournaments[num].participants.sort((a, b) => {
+    if (a.points > b.points) {
+      return -1;
     }
-  }
-  document.getElementById('sesondLeaderSwitch').addEventListener('change', (event) => dataLeadersTableDraw(event.target.value - 1, document.getElementById('roundLeaderSwitch').value - 1, document.getElementById('approachLeaderSwitch').value));
-  for (let i = 0; i < firebaseTournaments[num].date.seasonLength; i++) {
-    if (i == Math.floor(roundNumber) - 1) {
-      document.getElementById('roundLeaderSwitch').insertAdjacentHTML('afterbegin', `
-      <option selected="selected" value="${i + 1}">${i + 1}</option>`);
-    } else {
-      document.getElementById('roundLeaderSwitch').insertAdjacentHTML('afterbegin', `
-      <option value="${i + 1}">${i + 1}</option>`);
+    if (a.points < b.points) {
+      return 1;
     }
-  }
-  firstTarget = 0;
-  lastTarget = 4;
-  document.getElementById('roundLeaderSwitch').addEventListener('change', (event) => dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, event.target.value - 1, document.getElementById('approachLeaderSwitch').value));
-  dataLeadersTableDraw(seasonNumber, roundNumber, 'avg');
-}
-// document.getElementById('approachLeaderSwitch').addEventListener('change', (event) => {
-//   dataLeadersTableDraw(document.getElementById('sesondLeaderSwitch').value - 1, document.getElementById('roundLeaderSwitch').value - 1, event.target.value);
-// });
-let firstTarget;
-let lastTarget;
-function dataLeadersTableDraw(season, round, approach) {
-  if (lastTarget > firebaseTournaments[num].targets.length) {
-    lastTarget = firebaseTournaments[num].targets.length;
-    firstTarget = lastTarget - 4;
-  }
-  if (firstTarget < 0) {
-    firstTarget = 0;
-    lastTarget = firstTarget + 4;
-  }
-  while (document.getElementById('dataLeadersTable').firstChild) {
-    document.getElementById('dataLeadersTable').removeChild(document.getElementById('dataLeadersTable').firstChild);
-  }
-  document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
-  <label class="lbldataHeaderLeadersTable"></label><label class="lbldataHeaderLeadersTable">Name</label>
-  `);
-  for (let i = firstTarget; i < lastTarget; i++) {
-    if (firebaseTournaments[num].targets[i] !== undefined) {
-      document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
-  <label class="lbldataHeaderLeadersTable">${firebaseTournaments[num].targets[i].name}</label>
-  `);
-    }
-  }
-  for (let j = 0; j < firebaseTournaments[num].usersInfo.length; j++) {
+    return 0;
+  })
+  for (const participant in participantsSorted){
+    let bgColor = participantsSorted[participant].ID == uid ? '#737B8B' : 'transparent'
     document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
-    <img src="img/icons8-test-account-48.png" width="36px"></img>
-    <label class="lbldataLeadersTable" style="justify-self: baseline;">${firebaseTournaments[num].participants[j]}</label>
-    `);
-    let thisID = firebaseTournaments[num].usersInfo[j];
-    if (((firebaseTournaments[num].season[season] !== {}) && (firebaseTournaments[num].season[season] !== undefined))
-      && ((firebaseTournaments[num].season[season] !== null) && (firebaseTournaments[num].season[season] !== 0))) {
-      if (((firebaseTournaments[num].season[season].round[round] !== {}) && (firebaseTournaments[num].season[season].round[round] !== undefined))
-        && (firebaseTournaments[num].season[season].round[round] !== null)) {
-        if (firebaseTournaments[num].season[season].round[round].UsersInfo !== undefined) {
-          if (firebaseTournaments[num].season[season].round[round].UsersInfo[thisID] !== undefined) {
-            // for (let i = 0; i < Object.keys(firebaseTournaments[num].season[season].round[round].UsersInfo[thisID]).length; i++){
-            //   let thisUserInfo = firebaseUserData.find(element => {element == thisID})
-            //   if (Object.keys(firebaseTournaments[num].season[season].round[round].UsersInfo[thisID])[i] == firebaseTournaments[num].usersInfo){
-
-            //   }
-            // }
-            for (let i = firstTarget; i < lastTarget; i++) {
-              if (firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name] !== undefined) {
-                let valueOFlbl = 0;
-                switch (approach) {
-                  case 'sum':
-                    firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name].forEach(element => valueOFlbl += element);
-                    break;
-                  case 'max':
-                    valueOFlbl = Math.max.apply(Math, firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name]);
-                    break;
-                  case 'min':
-                    valueOFlbl = Math.min.apply(Math, firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name]);
-                    break;
-                  default:
-                    firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name].forEach(element => valueOFlbl += element);
-                    valueOFlbl /= firebaseTournaments[num].season[season].round[round].UsersInfo[thisID][firebaseTournaments[num].targets[i].name].length;
-                    break;
-                }
-                document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length - 1].insertAdjacentHTML('afterend', `
-      <label class="lbldataLeadersTable">${valueOFlbl}</label>
-      `);
-              } else {
-                document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length - 1].insertAdjacentHTML('afterend', `
-      <label class="lbldataLeadersTable">0</label>
-      `);
-              }
-            }
-          } else {
-            document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length - 1].insertAdjacentHTML('afterend', `
-        <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
-        `);
-          }
-        } else {
-          document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length - 1].insertAdjacentHTML('afterend', `
-      <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
-      `);
-        }
-      } else {
-        document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length - 1].insertAdjacentHTML('afterend', `
-    <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
-    `);
-      }
-    } else {
-      document.getElementsByClassName('lbldataLeadersTable')[document.getElementsByClassName('lbldataLeadersTable').length - 1].insertAdjacentHTML('afterend', `
-  <label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label><label class="lbldataLeadersTable">0</label>
-  `);
-    }
-  }
-}
-function onNavPanelJTsettings(event) {
-  onSaveTournamentDate();
-  Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  document.getElementById('navPanelJT').style.display = 'none';
-  document.getElementById('settingsPageJT').style.display = 'grid';
-  document.getElementById('pageNameJT').innerText = 'Settings';
-}
-function onSaveTournamentDate() {
-  if ((document.getElementById('dataPageJT').style.display !== 'none') && (Array.from(document.getElementsByClassName('dataBlockJT'))[0] !== undefined)) {
-    if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo == undefined) {
-      let UsersInfo = {};
-      firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1] = { UsersInfo };
-    }
-    if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] == undefined) {
-      firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] = {};
-    }
-    for (let i = 0; i < firebaseTournaments[num].targets.length; i++) {
-      let arr = [];
-      for (let j = 0; j < Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs').length; j++) {
-        if (firebaseTournaments[num].targets[i].type == 'clicker') {
-          arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('btnDataCounter')[j].innerText));
-        } else if (firebaseTournaments[num].targets[i].type == 'slider') {
-          arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('labelCounter')[j].innerText));
-        }
-        else {
-          arr.push(Number(Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('dataJTinputs')[j].value));
-        }
-      }
-      firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name] = arr;
-    }
-    db.collection("global_tournaments").doc(`${docName}`).set(firebaseTournaments[num]).then(() => {
-      console.log('Saved');
-    });
+    <div style="background:${bgColor};"><label>${Number(participant)+1}.</label><label>${participantsSorted[participant].name}</label><label>${participantsSorted[participant].points}</label></div>
+    `)
   }
 }
 function onResetTournamentDate() {

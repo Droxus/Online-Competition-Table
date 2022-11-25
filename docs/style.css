@@ -47,6 +47,11 @@ body {
 label, button {
     color: #DDC5AF;
     text-shadow: 0.5px 0.5px #d9a9ac, -0.5px -0.5px #d9a9ac;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    width: 100%;
 }
 #displayBlock{
     width: 100%;
@@ -526,10 +531,21 @@ li a:hover {
 }
 .tournament * {
     color: #464646;
-    overflow: hidden;
     text-shadow: 0px 2px 4px rgb(0, 0, 0, 0.25);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
-
+.tournament > textarea{
+    background: none;
+    resize: none;
+    border: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: break-spaces;
+    word-break: break-all;
+    width: 100%;
+}
 
 .tournamentLikeBtn {
     justify-self: center;
@@ -1119,6 +1135,7 @@ margin: 10px;
     height: 95%;
     width: 90%;
     background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgb(0, 0, 0, 0.25);
 }
 #btnNavJT{
     text-align: center;
@@ -1406,12 +1423,15 @@ margin: 10px;
     color: #464646;
     font-size: 16px;
     font-weight: bold;
+    overflow: visible;
     grid-area: labelCounter;
 }
 #leadersPageJT{
     display: none;
     grid-template-columns: 100%;
-    grid-template-rows: 9fr 1fr;
+    width: 100%;
+    height: 100%;
+
 }
 #settingsPageJT{
     display: none;
@@ -1493,17 +1513,23 @@ margin: 10px;
     display: grid;
     width: 100%;
     height: 100%;
-    grid-template-rows: repeat(8, 1fr);
-    grid-template-columns: 40px 5fr repeat(4, 4fr);
+    grid-auto-rows: 80px;
 }
-#dataLeadersTable > *{
-    place-self: center;
+#dataLeadersTable > div{
+    display: grid;
+    grid-template-columns: 20% 50% 30%;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid #6E7C88;
 }
-.lbldataLeadersTable{
-    font-weight: bold;
-    font-size: 20px;
-    color: #1027c9;
-    font-family: Arial, Helvetica, sans-serif;
+#dataLeadersTable > div > label{
+    align-self: center;
+    justify-self: start;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+    font-size: 24px;
+}
+#dataLeadersTable > div > label:nth-child(1){
+    text-align: center;
 }
 .lbldataHeaderLeadersTable{
     font-weight: bold;
