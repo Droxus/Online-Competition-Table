@@ -43,6 +43,9 @@ body {
     background: rgb(255, 255, 255, 0.1);
     border-radius: 1px;
   }
+  ::-webkit-scrollbar-corner{
+    display: none;
+  }
 
 label, button {
     color: #DDC5AF;
@@ -52,6 +55,9 @@ label, button {
     display: inline-block;
     white-space: nowrap;
     width: 100%;
+}
+input {
+    outline: none;
 }
 #displayBlock{
     width: 100%;
@@ -861,13 +867,202 @@ ul {
 
 #tournamentCreatePanelBlock {
     display: grid;
-    top: 1%;
-    left: 2%;
-    height: 98%;
-    width: 96%;
-    background-color: rgba(255, 255, 255, 0.4);
-    border: 1px solid white;
-    border-radius: 25px;
+    grid-template-columns: 100%;
+    grid-template-rows: 90% 10%;
+    margin: 0 5%;
+    height: 95%;
+    width: 90%;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgb(0 0 0 / 25%);
+}
+#tournamentCreatePanelBlock *{
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+}
+#tournamentName{
+    display: grid;
+}
+#tournamentAccess{
+    display: none;
+}
+#tournamentTargets{
+    display: none;
+    grid-template-rows: 30% 70%;
+}
+#footer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+#footer > button{
+    font-size: 20px;
+    background: none;
+    border: none;
+}
+#trnNameInput{
+    height: 40px;
+    width: 80%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+    color: #464646;
+    text-shadow: none !important;
+    font-size: 20px;
+}
+.trnCreatePages{
+    grid-template-columns: 100%;
+    grid-template-rows: 30% 40% 30%;
+}
+.trnCreatePages > *{
+    place-self: center;
+    width: 80%;
+    text-align: center;
+}
+.trnCreatePageName{
+    align-self: flex-end;
+    font-size: 28px;
+    white-space: normal;
+}
+.explanationLbls{
+    font-size: 20px;
+    height: 100%;
+    white-space: normal;
+    color: #6E7C88;
+    text-shadow: 2px 1px 2px rgb(0, 0, 0, 0.25) !important;
+    text-align: left;
+}
+#trnAccessBtnsBlock{
+    display: flex;
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+}
+#trnAccessBtnsBlock > button{
+    height: 40px;
+    font-size: 18px;
+    color: #464646;
+    text-align: center;
+    background: #6F7C88;
+    border: none;
+    text-shadow: none;
+}
+#trnAccessBtnsBlock > button:nth-child(1){
+    background: #7D8994;
+    
+}
+.targetBlock{
+    height: 85px;
+    width: 80%;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 50px 35px;
+}
+.targetBlock > div{
+    display: flex;
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+}
+.targetBlock > div > *{
+    flex: 1;
+    width: 100%;
+    background: #6F7C88;
+    border: none;
+}
+.targetBlock > div *{
+    text-align: center;
+    color: #464646 !important;
+    font-size: 20px;
+    text-shadow: none !important;
+}
+.targetBlock > div *::placeholder{
+    text-align: center;
+    color: #464646 !important;
+}
+.targetBlock > input{
+    text-align: center;
+    color: #464646;
+    font-size: 24px;
+    text-shadow: none !important;
+}
+.targetBlock > div > *:nth-child(2){
+    background: #7D8994;
+}
+#targetsBlock{
+    overflow: scroll;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    justify-items: center;
+}
+.targetsName{
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+    color: #DDC5AF;
+    text-shadow: 0.5px 0.5px #d9a9ac, -0.5px -0.5px #d9a9ac;
+    font-size: 20px;
+}
+#goNextTC{
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    text-shadow: none !important;
+    border: none;
+    color: #464646;
+    font-size: 18px;
+    background: #6F7C88;
+}
+.tournamentTargetsTypeInputAtCreatePanel{
+    background: #7D8994;
+    border-left: none;
+    outline: none;
+    font-weight: bold;
+    font-weight: normal;
+}
+.finalBloksCT{
+    display: none;
+    backdrop-filter: brightness(0.25) blur(3px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 93%;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.finalBloksCT > *{
+    width: 80%;
+    margin: 50px 0px;
+    text-shadow: none !important;
+}
+.finalBloksCT > *:nth-child(1){
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #D8A0A0;
+    font-weight: bold;
+    font-size: 28px;
+    white-space: normal;
+}
+.finalBloksCT > *:nth-child(2){
+    display: flex;
+}
+.finalBloksCT > *:nth-child(3){
+    border-bottom: 4px solid #D8A0A0;
+}
+.finalBloksCT > *:nth-child(2) > button{
+    height: 40px;
+    width: 100%;
+    text-shadow: none !important;
+    border: none;
+    color: #464646;
+    font-size: 18px;
+}
+#yesAreUsureBlock{
+    background: #7D8994;
+}
+#noAreUsureBlock{
+    background: #6F7C88;
 }
 #headerCT{
     grid-area: labelCP;
@@ -1010,15 +1205,6 @@ margin: 10px;
     background-color: transparent;
     border: 2px solid rgb(119, 98, 212);
     border-top: none;
-}
-.tournamentTargetsTypeInputAtCreatePanel{
-    background-color: transparent;
-    border: 2px solid rgb(119, 98, 212);
-    border-left: none;
-    outline: none;
-    font-size: 20px;
-    font-weight: bold;
-    grid-area: tournamentTargetsTypeInputAtCreatePanel;
 }
 .tournamentTargetsDescriptInputAtCreatePanel{
     background-color: transparent;
@@ -1570,20 +1756,6 @@ margin: 10px;
     height: 100%;
 }
 @media screen and (min-device-width: 0px) {
-    #mainBlock {
-        /* grid-template-rows: 1fr 50px; */
-    }
-
-    #tournamentCreatePanelBlock {
-        grid-template-rows: 50px 50px 5fr 2fr 75px;
-        grid-template-columns: 100%;
-        grid-template-areas:
-            "labelCP"
-            "titleCP"
-            "goalsCP"
-            "reqsCP"
-            "btnsm";
-    }
 
     #TargetsCreatePanel {
         padding: 5%;
@@ -1711,16 +1883,6 @@ margin: 10px;
     @media screen and (min-device-width: 600px) {
         #mainBlock {
             /* grid-template-rows: 100px 1fr; */
-        }
-
-        #tournamentCreatePanelBlock {
-            grid-template-rows: 50px 10% 50% 30%;
-            grid-template-columns: 50% 50%;
-            grid-template-areas:
-                "labelCP labelCP"
-                "titleCP titleCP"
-                "goalsCP reqsCP"
-                "descript typeMaxCreate";
         }
 
         #TargetsCreatePanel {

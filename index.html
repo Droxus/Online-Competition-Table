@@ -155,11 +155,59 @@
 
     <template id="tournamentCreatePanel">
         <div id="tournamentCreatePanelBlock">
-        <div id="headerCT">
-            <img src="img/backIcon.png" alt="cross" id="crossIcononCreate">
-            <label class="trnCrtPanel" for="creatingTournament" id="creatingTournamentLbl">Creating Tournament</label>
-          </div>
-            <input class="trnCrtPanel firstMpage" type="text" id="tournamentNameInputAtCreatePanel" maxlength="16" placeholder="Tournament Name">
+            <div class="trnCreatePages" id="tournamentName">
+                <label class="trnCreatePageName">Name the tournament</label>
+                <input type="text" id="trnNameInput">
+                <label class="explanationLbls">By this parametr your friends can find your tournamnet.</label>
+            </div>
+            <div class="trnCreatePages" id="tournamentAccess">
+                <label class="trnCreatePageName">Set tournament access</label>
+                <div id="trnAccessBtnsBlock">
+                    <button class="trnAccessBtn">Opened</button>
+                    <button class="trnAccessBtn">Invited</button>
+                    <button class="trnAccessBtn">Closed</button>
+                </div>
+                <label class="explanationLbls">If opened - all can join to tournament. <br>
+                    If invited - you have to accept every new member. <br>
+                    If closed - you are alone.</label>
+            </div>
+            <div class="trnCreatePages" id="tournamentTargets">
+                <label class="trnCreatePageName">Add tournament targets</label>
+                <div id="targetsBlock">
+                    <template id="targetCT">
+                        <div class="targetBlock">
+                            <input class="targetsName" type="text" placeholder="Target Name">
+                            <div>
+                                <input id="pointsOfTargetCT" type="number" placeholder="Points">
+                                <select id="typeOfTargetCT" class="tournamentTargetsTypeInputAtCreatePanel" placeholder="Field">
+                                    <option value="field">Field</option>
+                                    <option value="slider">Slider</option>
+                                    <option value="clicker">Clicker</option>
+                                  </select>
+                                <input id="amountOfTargetCT" type="number" placeholder="Amount">
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="finalBloksCT" id="areUsureBlock">
+                <label>Are you sure you want to create this tournament?</label>
+                <div>
+                    <button id="yesAreUsureBlock">Yes</button>
+                    <button id="noAreUsureBlock">No</button>
+                </div>
+                <hr>
+            </div>
+            <div class="finalBloksCT" id="trnCreatedBlock">
+                <label>Are you sure you want to create this tournament?</label>
+                    <button id="goNextTC">Go next</button>
+                <hr>
+            </div>
+            <div id="footer">
+                <button class="switchPageBtn">Go back</button>
+                <button class="switchPageBtn">Go next</button>
+            </div>
+            <!-- <input class="trnCrtPanel firstMpage" type="text" id="tournamentNameInputAtCreatePanel" maxlength="16" placeholder="Tournament Name">
             <div class="firstMpage" id="TargetsCreatePanel"><label class="trnCrtPanel" for="trnTargets" id="tournamentTargetsLblAtCreatePanel">Tartgets: </label>
             <div id="tournamentTargetsBlockAtCreatePanel">
             <div class="targetsUnityCT"><input list="hotTargets" name="hotTargets" class="trnCrtPanel tournamentTargetsInputAtCreatePanel" placeholder="enter target name" id="browser">
@@ -201,7 +249,7 @@
                 <button class="trnTypeAtCP" style="color: black;">Invited</button>
                 <button class="trnTypeAtCP" style="color: black;">Closed</button>
              </div>
-            <button class="trnCrtPanel btn-grad secondMpage" id="tournamentCreateBtn">Create</button>
+            <button class="trnCrtPanel btn-grad secondMpage" id="tournamentCreateBtn">Create</button> -->
         </div>
     </template>
     <template id="joinedTournamentBlock">

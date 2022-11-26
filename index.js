@@ -75,7 +75,6 @@ let tournamentGoalsLabelInfo = document.getElementById('tournamentGoalsLabelInfo
 let tournamentTargetsInputAtCreatePanel, tournamentSwitchPageBtn;
 let tournamentRequirementsLblAtCreatePanel;
 let creatingTournamentLbl;
-let tournamentNameInputAtCreatePanel;
 let tournamentTargetsBlockAtCreatePanel;
 let tournamentRequirementsBlockAtCreatePanel;
 let tournamentRequirementsInputAtCreatePanel;
@@ -341,13 +340,17 @@ function ontournamentTargetsInputAtCreatePanel(event) {
     tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 1].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
 }
 function onTournamentCreateBtn() {
+  console.log('Loading...')
   let trnTargets = [];
-    Array.from(document.getElementById('tournamentTargetsBlockAtCreatePanel').children).forEach(element => {
-      trnTargets.push({
-        name: Array.from(element.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].value,
-        approach: Math.abs(Math.floor(Array.from(element.getElementsByClassName('tournamentTargetsApproachInputAtCreatePanel'))[0].value)),
-        type: Array.from(element.getElementsByClassName('tournamentTargetsTypeInputAtCreatePanel'))[0].value,
-      });
+    Array.from(document.getElementsByClassName('targetBlock')).forEach(element => {
+      if ( Array.from(document.getElementsByClassName('targetBlock')).length-1 < Array.from(document.getElementsByClassName('targetBlock')).findIndex(e => e == element) ){
+        trnTargets.push({
+          name: document.getElementsByClassName('targetsName')[0].value,
+          approach: Math.abs(Math.floor(document.getElementById('amountOfTargetCT').value)),
+          type: document.getElementById('typeOfTargetCT').value,
+          points: document.getElementById('pointsOfTargetCT').value
+        });
+      }
     });
     let id, allId = new Set()
     for (const tournament in firebaseTournaments){
@@ -359,16 +362,17 @@ function onTournamentCreateBtn() {
     } while (allId.has(id))
     allId.add(id)
       trnTargets.pop();
-        docName = tournamentNameInputAtCreatePanel.value;
+        docName = document.getElementById('trnNameInput').value;
         let createdTrn = {
-          id: id,
-          name: tournamentNameInputAtCreatePanel.value,
+          ID: id,
+          name: document.getElementById('trnNameInput').value,
           targets: trnTargets,
-          type: trnType,
-          creator: login,
+          type: (Array.from(document.getElementsByClassName('trnAccessBtn')).find(e => getComputedStyle(e).backgroundColor == 'rgb(125, 137, 148)').innerText).toLowerCase(),
+          creator: {
+            login: login,
+            ID: uid
+          },
           participants: [{login: login, ID: uid}],
-          usersInfo: [uid],
-          isStarted: false,
           start: Date.now()
         };
         console.log(createdTrn);
@@ -376,7 +380,8 @@ function onTournamentCreateBtn() {
         db.collection("global_tournaments").add(createdTrn).then(() => {
           db.collection("users_info").doc(uid).collection("active_tournaments").add(createdTrn)}).then(() => {
           getFirebaseData();
-          oncrossIcononCreate();
+          document.getElementById('areUsureBlock').style.display = 'none'
+          document.getElementById('trnCreatedBlock').style.display = 'flex'
         });
 }
 function onJTbtn(event) {
@@ -842,8 +847,17 @@ function onButulaMenuBtns(event){
   document.getElementById('content').appendChild(document.getElementById(event.target.getAttribute('page')).content.cloneNode(true));
   switch (event.target.getAttribute('page')) {
     case 'tournamentCreatePanel':
-      document.getElementById('tournamentCreateBtn').addEventListener('click', onTournamentCreateBtn);
-      Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
+      Array.from(document.getElementsByClassName('switchPageBtn')).forEach(e => e.addEventListener('click', onSwitchPageBtn))
+      Array.from(document.getElementsByClassName('trnAccessBtn')).forEach(e => e.addEventListener('click', onTrnAccessBtn))
+      document.getElementById('targetsBlock').appendChild(document.getElementById('targetCT').content.cloneNode(true));
+      Array.from(document.getElementsByClassName('targetsName')).forEach(e => e.addEventListener('change', onTargetsName))
+      document.getElementById('noAreUsureBlock').addEventListener('click', () => {
+        document.getElementById('areUsureBlock').style.display = 'none'
+      })
+      document.getElementById('yesAreUsureBlock').addEventListener('click', onTournamentCreateBtn)
+      document.getElementById('goNextTC').addEventListener('click', onbtnHome)
+      // document.getElementById('tournamentCreateBtn').addEventListener('click', onTournamentCreateBtn);
+      // Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
       break;
     case 'favoritesPage':
       showTournaments();
@@ -880,9 +894,29 @@ function oncrossIcononCreate(event) {
   // tournamentCreatePanel.style.display = 'none';
   mainBlock.style.display = 'grid';
 }
-
-
-
+function onSwitchPageBtn(event){
+  let nextPageDiff = event.target.innerText == 'Go next' ? 1 : -1
+  let nowPageIndex = Array.from(document.getElementsByClassName('trnCreatePages')).findIndex(e => e.style.display !== 'none')
+  if (!Array.from(document.getElementsByClassName('trnCreatePages'))[nowPageIndex+nextPageDiff]){
+    if (nextPageDiff == 1) return document.getElementById('areUsureBlock').style.display = 'flex'
+  } else {
+    Array.from(document.getElementsByClassName('trnCreatePages'))[nowPageIndex].style.display = 'none'
+    Array.from(document.getElementsByClassName('trnCreatePages'))[nowPageIndex+nextPageDiff].style.display = 'grid'
+  }
+}
+function onTrnAccessBtn(event){
+  Array.from(document.getElementsByClassName('trnAccessBtn')).forEach(e => e.style.background = '#6F7C88')
+  event.target.style.background = '#7D8994'
+}
+function onTargetsName(event){
+  let targetBlock = Array.from(event.target.parentElement.parentElement.getElementsByClassName('targetBlock'))
+  let indexOfThisTarget = targetBlock.findIndex(e => e == event.target.parentElement)
+  console.log(indexOfThisTarget)
+  if (targetBlock.length - indexOfThisTarget < 2){
+    document.getElementById('targetsBlock').appendChild(document.getElementById('targetCT').content.cloneNode(true));
+  }
+  Array.from(document.getElementsByClassName('targetsName')).forEach(e => e.addEventListener('change', onTargetsName))
+}
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
 
 
