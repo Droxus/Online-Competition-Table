@@ -52,7 +52,6 @@ const blackout = document.getElementById('blackout');
 const tournamentInfo = document.getElementById('tournamentInfo');
 const crossIcon = document.getElementById('crossIcon');
 const tournamentNameInfo = document.getElementById('tournamentNameInfo');
-const tournamentJoinInfo = document.getElementById('tournamentJoinInfo');
 const tournamentsTargetInfo = document.getElementById('tournamentsTargetInfo');
 const tournamentMembersInfo = document.getElementById('tournamentMembersInfo');
 const tournamentBtnsInfo = document.getElementById('tournamentBtnsInfo');
@@ -89,7 +88,6 @@ profile.addEventListener('click', onProfile);
 // crossIcon.addEventListener('click', onCrossTournamentInfo);
 document.getElementById('btnLogout').addEventListener('click', onBtnSignOut);
 document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
-// document.getElementById('tournamentJoinInfo').addEventListener('click', onJTbtn);
 // document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn);
 // document.getElementById('btnNavJT').addEventListener('click', onBtnNavJT);
 // document.getElementById('navPanelJTclose').addEventListener('click', onNavPanelJTclose);
@@ -222,30 +220,19 @@ function getFirebaseData() {
 }
 function getFirebaseUserJT() {
   firebaseUser = [];
-  let arr;
   db.collection("users_info").doc(uid).get().then((doc) => {
     if (doc.exists) {
-      arr = doc.data().joined_tournaments;
+      firebaseUser = doc.data().joined_tournaments;
     }
-  }).then(() => {
-    if (arr !== undefined) {
-      for (let i = 0; i < firebaseTournaments.length; i++) {
-        for (let j = 0; j < arr.length; j++) {
-          if (firebaseTournaments[i].name == arr[j]) {
-            firebaseUser.push(firebaseTournaments[i]);
-          }
-        }
-      }
-    }
-  });
+  })
 }
 function onbtnHome(event) {
   console.log('aaaaa')
   document.getElementById('mainMenuHeader').style.display = 'grid'
   document.getElementById('defaultHeader').style.display = 'none'
   blackout.style.display = 'none';
-  root.style.setProperty('--tournamnets-on-the-page', '5');
-
+  num = null; tournamentID = null
+  document.getElementById('butulaBtn').innerText = 'Butula'
   document.getElementById('butulaMenu').style.display = 'none';
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
@@ -259,7 +246,7 @@ function showTournaments() {
   trnsToShow = firebaseTournaments;
   for (let i = 0; i < trnsToShow.length; i++) {
     console.log(trnsToShow[i].id)
-    document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].id}">             
+    document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].ID}">             
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
           <textarea id="tournamentTargetsBlock" readonly rows="2">${trnsToShow[i].targets.map(e => e.name)}</textarea>
           <div id="tournamentAccessBlock"><label class="tournamentAccess" for="tournamentAccess">${trnsToShow[i].type}</label></div>
@@ -282,7 +269,7 @@ let num;
 function onTournament(event) {
   tournamentID = this.getAttribute('id')
   for (let i = 0; i < firebaseTournaments.length; i++) {
-    if (firebaseTournaments[i].id == tournamentID) {
+    if (firebaseTournaments[i].ID == tournamentID) {
       num = i; 
       break;
     }
@@ -290,8 +277,10 @@ function onTournament(event) {
   console.log(tournamentID)
   console.log(firebaseTournaments[num].name)
   docName = this.firstElementChild.innerText;
+  console.log(firebaseUser)
   for (let i = 0; i < firebaseUser.length; i++) {
-    if (firebaseUser[i].name == firebaseTournaments[num].name) {
+    if (firebaseUser[i] == firebaseTournaments[num].ID) {
+      console.log(firebaseTournaments[num].ID)
       return onTournamentJoin();
     }
   }
@@ -309,7 +298,8 @@ function onTournamentInfo() {
   document.getElementById('tournamentNameInfo').innerText = firebaseTournaments[num].name;
   document.getElementById('numsOfParticipants').innerText = firebaseTournaments[num].participants.length + ' participants';
   document.getElementById('targets').innerText = 'Targets: ' + firebaseTournaments[num].targets.map(e => e.name);
-  document.getElementById('creator').innerText = 'Creator ' + firebaseTournaments[num].creator;
+  document.getElementById('creator').innerText = 'Creator ' + firebaseTournaments[num].creator.login;
+  document.getElementById('tournamentJoinInfo').addEventListener('click', onJTbtn);
 }
 function onCrossTournamentInfo(event) {
   body.removeEventListener('keyup', function (event) {
@@ -342,16 +332,15 @@ function ontournamentTargetsInputAtCreatePanel(event) {
 function onTournamentCreateBtn() {
   console.log('Loading...')
   let trnTargets = [];
-    Array.from(document.getElementsByClassName('targetBlock')).forEach(element => {
-      if ( Array.from(document.getElementsByClassName('targetBlock')).length-1 < Array.from(document.getElementsByClassName('targetBlock')).findIndex(e => e == element) ){
-        trnTargets.push({
-          name: document.getElementsByClassName('targetsName')[0].value,
-          approach: Math.abs(Math.floor(document.getElementById('amountOfTargetCT').value)),
-          type: document.getElementById('typeOfTargetCT').value,
-          points: document.getElementById('pointsOfTargetCT').value
-        });
-      }
-    });
+  let targetBlocks = Array.from(document.getElementsByClassName('targetBlock'))
+          for (const targetBlock in targetBlocks){
+            trnTargets.push({
+              name: document.getElementsByClassName('targetsName')[targetBlock].value,
+              approach: Math.abs(Math.floor(Number(document.getElementsByClassName('amountOfTargetCT')[targetBlock].value))),
+              type: document.getElementsByClassName('typeOfTargetCT')[targetBlock].value,
+              points: Math.max(Math.floor(Number(document.getElementsByClassName('pointsOfTargetCT')[targetBlock].value)), 1)
+            });
+          }
     let id, allId = new Set()
     for (const tournament in firebaseTournaments){
       allId.add(tournament.id)
@@ -365,7 +354,7 @@ function onTournamentCreateBtn() {
         docName = document.getElementById('trnNameInput').value;
         let createdTrn = {
           ID: id,
-          name: document.getElementById('trnNameInput').value,
+          name: docName,
           targets: trnTargets,
           type: (Array.from(document.getElementsByClassName('trnAccessBtn')).find(e => getComputedStyle(e).backgroundColor == 'rgb(125, 137, 148)').innerText).toLowerCase(),
           creator: {
@@ -376,30 +365,31 @@ function onTournamentCreateBtn() {
           start: Date.now()
         };
         console.log(createdTrn);
-        firebaseUser.push(createdTrn);
-        db.collection("global_tournaments").add(createdTrn).then(() => {
-          db.collection("users_info").doc(uid).collection("active_tournaments").add(createdTrn)}).then(() => {
-          getFirebaseData();
-          document.getElementById('areUsureBlock').style.display = 'none'
-          document.getElementById('trnCreatedBlock').style.display = 'flex'
-        });
+        firebaseUser.push(id);
+        db.collection("global_tournaments").doc(`${id}`).set(createdTrn).then(() => {
+          db.collection("users_info").doc(uid).set({
+            joined_tournaments: firebaseUser
+          }).then(() => {
+            document.getElementById('areUsureBlock').style.display = 'none'
+            document.getElementById('trnCreatedBlock').style.display = 'flex'
+          })
+        })
 }
 function onJTbtn(event) {
-  getTournamentTime();
+  firebaseUser.push(tournamentID)
   db.collection("users_info").doc(uid).set({
-    joined_tournaments: firebase.firestore.FieldValue.arrayUnion(docName)
+    joined_tournaments: firebaseUser
   }).then(() => {
     db.collection("global_tournaments").doc(tournamentID).update({
-      usersInfo: firebase.firestore.FieldValue.arrayUnion(uid),
-      participants: firebase.firestore.FieldValue.arrayUnion(login)
-    });
-  }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); });
+      participants: firebase.firestore.FieldValue.arrayUnion({
+        ID: uid,
+        login: login,
+      }) 
+    }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); })
+  })
 }
 function onTournamentJoin(event) {
   // tournamentInfo.style.display = 'none';
-  if (temporaryElementsTI) {
-    temporaryElementsTI.forEach(element => element.remove());
-  }
   // document.getElementById('joinedTournament').style.display = 'grid';
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
@@ -429,11 +419,10 @@ function onCrossIconJT(event) {
 }
 function onLeaveTrn(event) {
   db.collection("users_info").doc(uid).update({
-    joined_tournaments: firebase.firestore.FieldValue.arrayRemove(`${docName}`)
+    joined_tournaments: firebase.firestore.FieldValue.arrayRemove(tournamentID)
   }).then(() => {
-    db.collection("global_tournaments").doc(`${docName}`).update({
-      usersInfo: firebase.firestore.FieldValue.arrayRemove(uid),
-      participants: firebase.firestore.FieldValue.arrayRemove(login)
+    db.collection("global_tournaments").doc(tournamentID).update({
+      participants: firebase.firestore.FieldValue.arrayRemove(uid)
     });
   }).then(() => { onCrossIconJT(); getFirebaseData(); });
 }
@@ -459,15 +448,15 @@ function getTournamentTime() {
   dateDiff -= seasonNumber * 30 * 24 * 60 * 60 * 1000
   roundNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24)
   dateDiff -= roundNumber * 24 * 60 * 60 * 1000
-  hoursToNextRound = 24 - Math.floor(dateDiff / 1000 / 60 / 60)
-  dateDiff -= (24 - hoursToNextRound) * 60 * 60 * 1000
-  minutesToNextRound = 60 - Math.floor(dateDiff / 1000 / 60)
-  dateDiff -= (60 - minutesToNextRound) * 60 * 1000
-  secondsToNextRound = 60 -  Math.floor(dateDiff / 1000)
+  hoursToNextRound = 23 - Math.floor(dateDiff / 1000 / 60 / 60)
+  dateDiff -= (23 - hoursToNextRound) * 60 * 60 * 1000
+  minutesToNextRound = 59 - Math.floor(dateDiff / 1000 / 60)
+  dateDiff -= (59 - minutesToNextRound) * 60 * 1000
+  secondsToNextRound = 59 -  Math.floor(dateDiff / 1000)
   document.getElementById('numsOfParticipants').innerText = `${firebaseTournaments[num].participants.length} participants`
   document.getElementById('toNextSeason').innerText = `${29-roundNumber}d ${hoursToNextRound}h`
-  document.getElementById('numOfMyPoints').innerText = `You have ${firebaseTournaments[num].participants.filter(e => e.ID == uid)[0].points} points`
-  document.getElementById('creator').innerText = `Creator ${firebaseTournaments[num].creator}`
+  document.getElementById('numOfMyPoints').innerText = `You have ${Number(firebaseTournaments[num].participants.filter(e => e.ID == uid)[0].points) || 0} points`
+  document.getElementById('creator').innerText = `Creator ${firebaseTournaments[num].creator.login}`
   Array.from(document.getElementsByClassName('timerDataJT')).forEach(element => {
     element.innerText = `${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
   });
@@ -489,6 +478,7 @@ function onNavPanelJTstatistics(event) {
   // document.getElementById('navPanelJT').style.display = 'none';
   document.getElementById('statisticsPageJT').style.display = 'grid';
 }
+let approachLength, valueInput;
 function onNavPanelJTdata(event) {
   getTournamentTime();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
@@ -503,16 +493,9 @@ function onNavPanelJTdata(event) {
     <label class="dataJTlabels" for="dataJTlabels">${firebaseTournaments[num].targets[i].name}</label>
     <div class="inputsUnityDataJT">
     </div></div>`);
-    let approachLength, valueInput;
+    approachLength = null, valueInput = null;
     if ((firebaseTournaments[num].targets[i].approach !== '') && (firebaseTournaments[num].targets[i].approach !== 0)) {
-    //   approachLength = firebaseTournaments[num].targets[i].approach;
-    // } else if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== {})
-    //   && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined)) {
-    //   if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== {})
-    //     && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)) {
-    //     approachLength = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length > 1 ?
-    //       firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name].length : 1;
-    //   }
+      approachLength = firebaseTournaments[num].targets[i].approach;
     } else {
       approachLength = 1;
     }
@@ -579,115 +562,118 @@ function onNavPanelJTdata(event) {
       }
     }
   }
-  Array.from(document.getElementsByClassName('dataJTlabels')).forEach(element => element.addEventListener('click', (event) => {
-    let valueInput;
-    let targetName = event.target.innerText;
-    document.getElementById('blackout').insertAdjacentHTML('afterbegin', `
-    <div id="allApproachesOfThisTarget">
-    <label id="thisTargetName">${targetName}</label>
-    <img src="img/crossIcon.svg" alt="crossApproachesPanel" id="crossApproachesPanel" width="50px">
-    <div id="thisApproaches">
-    </div></div>
-    `);
-    if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'submit') {
-      for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
-        valueInput = event.target.parentElement.getElementsByClassName('dataJTinputs')[i].getElementsByClassName('btnDataCounter')[0].innerText;
-        document.getElementById('thisApproaches').insertAdjacentHTML('beforeend', `
-        <button class="inputsAproachesPanel" style="display:flex;">
-        <div class="btnDataMinus">-</div><label class="btnDataCounter">${valueInput}</label><div class="btnDataPlus">+</div></button>
-        `);
-      }
-      Array.from(document.getElementById('thisApproaches').getElementsByClassName('btnDataMinus')).forEach(
-        element => element.addEventListener('click', (event) => {
-          event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText < 1 ?
-            0 : event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText--;
-            onDataInputsChange()
-        }));
-      Array.from(document.getElementById('thisApproaches').getElementsByClassName('btnDataPlus')).forEach(
-        element => element.addEventListener('click', (event) => { event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText++; }));
-    } else if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'range') {
-      for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
-        valueInput = event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value;
-        document.getElementById('thisApproaches').insertAdjacentHTML('beforeend', `
-        <div style="align-self: center;justify-self: center; width: 45%; height="60px">
-        <label class="labelCounterAP">${valueInput}</label>
-        <input class="inputsAproachesPanel" min="0" max="100" type="range" placeholder="try ${i + 1}" value="${valueInput}" style="width=100%">
-        </div>
-        `);
-      }
-      Array.from(document.getElementsByClassName('inputsAproachesPanel')).forEach(element => element.addEventListener('input', (event2) => { event2.target.parentElement.getElementsByClassName('labelCounterAP')[0].innerText = event2.target.value; }));
-    } else {
-      for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
-        valueInput = event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value;
-        document.getElementById('thisApproaches').insertAdjacentHTML('beforeend', `
-        <input class="inputsAproachesPanel" type="number" placeholder="try ${i + 1}" value="${valueInput}">
-        `);
-      }
-    }
+  // Array.from(document.getElementsByClassName('dataJTlabels')).forEach(element => element.addEventListener('click', (event) => {
+  //   let valueInput;
+  //   let targetName = event.target.innerText;
+  //   document.getElementById('blackout').insertAdjacentHTML('afterbegin', `
+  //   <div id="allApproachesOfThisTarget">
+  //   <label id="thisTargetName">${targetName}</label>
+  //   <img src="img/crossIcon.svg" alt="crossApproachesPanel" id="crossApproachesPanel" width="50px">
+  //   <div id="thisApproaches">
+  //   </div></div>
+  //   `);
+  //   if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'submit') {
+  //     for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
+  //       valueInput = event.target.parentElement.getElementsByClassName('dataJTinputs')[i].getElementsByClassName('btnDataCounter')[0].innerText;
+  //       document.getElementById('thisApproaches').insertAdjacentHTML('beforeend', `
+  //       <button class="inputsAproachesPanel" style="display:flex;">
+  //       <div class="btnDataMinus">-</div><label class="btnDataCounter">${valueInput}</label><div class="btnDataPlus">+</div></button>
+  //       `);
+  //     }
+  //     Array.from(document.getElementById('thisApproaches').getElementsByClassName('btnDataMinus')).forEach(
+  //       element => element.addEventListener('click', (event) => {
+  //         event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText < 1 ?
+  //           0 : event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText--;
+  //           onDataInputsChange()
+  //       }));
+  //     Array.from(document.getElementById('thisApproaches').getElementsByClassName('btnDataPlus')).forEach(
+  //       element => element.addEventListener('click', (event) => { event.target.parentElement.getElementsByClassName('btnDataCounter')[0].innerText++; }));
+  //   } else if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'range') {
+  //     for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
+  //       valueInput = event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value;
+  //       document.getElementById('thisApproaches').insertAdjacentHTML('beforeend', `
+  //       <div style="align-self: center;justify-self: center; width: 45%; height="60px">
+  //       <label class="labelCounterAP">${valueInput}</label>
+  //       <input class="inputsAproachesPanel" min="0" max="100" type="range" placeholder="try ${i + 1}" value="${valueInput}" style="width=100%">
+  //       </div>
+  //       `);
+  //     }
+  //     Array.from(document.getElementsByClassName('inputsAproachesPanel')).forEach(element => element.addEventListener('input', (event2) => { event2.target.parentElement.getElementsByClassName('labelCounterAP')[0].innerText = event2.target.value; }));
+  //   } else {
+  //     for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
+  //       valueInput = event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value;
+  //       document.getElementById('thisApproaches').insertAdjacentHTML('beforeend', `
+  //       <input class="inputsAproachesPanel" type="number" placeholder="try ${i + 1}" value="${valueInput}">
+  //       `);
+  //     }
+  //   }
 
-    // document.getElementById('blackout').style.display = 'grid';
-    document.getElementById('crossApproachesPanel').addEventListener('click', (event2) => {
-      if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'submit') {
-        for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
-          event.target.parentElement.getElementsByClassName('btnDataCounter')[i].innerText = event2.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[i].innerText;
-        }
-      } else if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'range') {
-        for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
-          event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value = document.getElementsByClassName('labelCounterAP')[i].innerText;
-          event.target.parentElement.getElementsByClassName('labelCounter')[i].innerText = document.getElementsByClassName('labelCounterAP')[i].innerText;
-        }
-      } else {
-        for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
-          event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value = document.getElementsByClassName('inputsAproachesPanel')[i].value;
-        }
-      }
-      document.getElementById('allApproachesOfThisTarget').remove();
-      document.getElementById('blackout').style.display = 'none';
-    });
-  }));
+  //   // document.getElementById('blackout').style.display = 'grid';
+  //   document.getElementById('crossApproachesPanel').addEventListener('click', (event2) => {
+  //     if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'submit') {
+  //       for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
+  //         event.target.parentElement.getElementsByClassName('btnDataCounter')[i].innerText = event2.target.parentElement.parentElement.getElementsByClassName('btnDataCounter')[i].innerText;
+  //       }
+  //     } else if (event.target.parentElement.getElementsByClassName('dataJTinputs')[0].type == 'range') {
+  //       for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
+  //         event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value = document.getElementsByClassName('labelCounterAP')[i].innerText;
+  //         event.target.parentElement.getElementsByClassName('labelCounter')[i].innerText = document.getElementsByClassName('labelCounterAP')[i].innerText;
+  //       }
+  //     } else {
+  //       for (let i = 0; i < event.target.parentElement.getElementsByClassName('dataJTinputs').length; i++) {
+  //         event.target.parentElement.getElementsByClassName('dataJTinputs')[i].value = document.getElementsByClassName('inputsAproachesPanel')[i].value;
+  //       }
+  //     }
+  //     document.getElementById('allApproachesOfThisTarget').remove();
+  //     document.getElementById('blackout').style.display = 'none';
+  //   });
+  // }));
   Array.from(document.getElementsByClassName('btnsRowLeft')).forEach(element => element.addEventListener('click', (event) => {
-    nowAproach = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')).findIndex((element) => {
+    let dataJTinputs = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs'))
+    nowAproach = dataJTinputs.findIndex((element) => {
       if (element.style.display !== 'none') {
         return element;
       }
     });
-    if (nowAproach < 0) {
-      nowAproach = 0;
-    }
-    if (nowAproach < 1) {
-      event.target.parentElement.parentElement.getElementsByClassName('nowApproach')[0].innerText = (nowAproach + 1);
-    } else {
-      event.target.parentElement.parentElement.getElementsByClassName('nowApproach')[0].innerText = nowAproach;
-    }
-    if (nowAproach > 0) {
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromRightDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromLeftDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveRightDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveLeftDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.add('moveLeftDateInput');
-      if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].tagName == 'BUTTON') {
-        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].style.display = 'flex';
+    
+      if (nowAproach < 0) {
+        nowAproach = 0;
+      }
+      if (nowAproach < 1) {
+        event.target.parentElement.parentElement.getElementsByClassName('nowApproach')[0].innerText = (nowAproach + 1);
       } else {
-        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].style.display = 'block';
+        event.target.parentElement.parentElement.getElementsByClassName('nowApproach')[0].innerText = nowAproach;
       }
-      if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].type == 'range') {
-        event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach - 1].style.display = 'block';
-        event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach].style.display = 'none';
+      if (nowAproach > 0) {
+        dataJTinputs[nowAproach].classList.remove('moveFromRightDateInput');
+        dataJTinputs[nowAproach].classList.remove('moveFromLeftDateInput');
+        dataJTinputs[nowAproach].classList.remove('moveRightDateInput');
+        dataJTinputs[nowAproach].classList.remove('moveLeftDateInput');
+        dataJTinputs[nowAproach].classList.add('moveLeftDateInput');
+        if (dataJTinputs[nowAproach - 1].tagName == 'BUTTON') {
+          dataJTinputs[nowAproach - 1].style.display = 'flex';
+        } else {
+          dataJTinputs[nowAproach - 1].style.display = 'block';
+        }
+        if (dataJTinputs[nowAproach].type == 'range') {
+          event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach - 1].style.display = 'block';
+          event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach].style.display = 'none';
+        }
+        dataJTinputs[nowAproach - 1].classList.remove('moveFromRightDateInput');
+        dataJTinputs[nowAproach - 1].classList.remove('moveFromLeftDateInput');
+        dataJTinputs[nowAproach - 1].classList.remove('moveRightDateInput');
+        dataJTinputs[nowAproach - 1].classList.remove('moveLeftDateInput');
+        dataJTinputs[nowAproach - 1].classList.add('moveFromRightDateInput');
+        dataJTinputs[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveRight);
+        dataJTinputs[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveLeft);
+        dataJTinputs[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight);
+        dataJTinputs[nowAproach].removeEventListener('animationend', onAnimationInputMoveLeft);
+        dataJTinputs[nowAproach].addEventListener('animationend', onAnimationInputMoveLeft);
       }
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromRightDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveFromLeftDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveRightDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.remove('moveLeftDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].classList.add('moveFromRightDateInput');
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveRight);
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach - 1].removeEventListener('animationend', onAnimationInputMoveLeft);
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight);
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveLeft);
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].addEventListener('animationend', onAnimationInputMoveLeft);
-    }
   }));
   Array.from(document.getElementsByClassName('btnsRowRight')).forEach(element => element.addEventListener('click', (event) => {
-    nowAproach = Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')).findIndex((element) => {
+    let dataJTinputs = event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')
+    nowAproach = Array.from(dataJTinputs).findIndex((element) => {
       if (element.style.display !== 'none') {
         return element;
       }
@@ -695,61 +681,67 @@ function onNavPanelJTdata(event) {
     if (nowAproach < 0) {
       nowAproach = 0;
     }
-    event.target.parentElement.parentElement.getElementsByClassName('nowApproach')[0].innerText = (nowAproach + 2);
+    approachLength = firebaseTournaments[num].targets[Array.from(document.getElementsByClassName('dataBlockJT')).findIndex(e => e == dataJTinputs[nowAproach].parentElement.parentElement.parentElement)].approach
     let type;
-    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach] !== undefined) {
-      type = event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].type;
+    if (dataJTinputs[nowAproach] !== undefined) {
+      type = dataJTinputs[nowAproach].type;
     }
-    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs').length < nowAproach + 2) {
-      if (type == 'number') {
-        event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
-      style="transform: translate(-150%, 0); width: 35%;"></input>`);
-      } else
-        if (type == 'submit') {
-          event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `
-          <button class="dataJTinputs" style="display:flex;">
-          <div class="btnDataMinus">-</div> <label class="btnDataCounter"></label> <div class="btnDataPlus">+</div></button>`);
-          Array.from(event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].getElementsByClassName('btnDataMinus')).forEach(
-            element => element.addEventListener('click', (event) => {
-              event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText < 1 ?
-                0 : event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText--;
-                onDataInputsChange()
-            }));
-          Array.from(event.target.parentElement.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].getElementsByClassName('btnDataPlus')).forEach(
-            element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++; onDataInputsChange() }));
-        } else {
-          event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
+    if (dataJTinputs.length < nowAproach + 2) {
+      if (Number(approachLength) < 1 || Number(approachLength) > nowAproach+1){
+        if (type == 'number') {
+          dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
         style="transform: translate(-150%, 0); width: 35%;"></input>`);
-          event.target.parentElement.parentElement.parentElement.getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
-          <label class="labelCounter" style="display: block;">0</label>`);
-          event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].addEventListener('input', (event) => { event.target.parentElement.getElementsByClassName('labelCounter')[nowAproach].innerText = event.target.value; });
+        } else
+          if (type == 'submit') {
+            dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `
+            <button class="dataJTinputs" style="display:flex;">
+            <div class="btnDataMinus">-</div> <label class="btnDataCounter"></label> <div class="btnDataPlus">+</div></button>`);
+            Array.from(dataJTinputs[nowAproach + 1].getElementsByClassName('btnDataMinus')).forEach(
+              element => element.addEventListener('click', (event) => {
+                event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText < 1 ?
+                  0 : event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText--;
+                  onDataInputsChange()
+              }));
+            Array.from(event.target.parentElement.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].getElementsByClassName('btnDataPlus')).forEach(
+              element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++; onDataInputsChange() }));
+          } else {
+            dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
+          style="transform: translate(-150%, 0); width: 35%;"></input>`);
+            event.target.parentElement.parentElement.parentElement.getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
+            <label class="labelCounter" style="display: block;">0</label>`);
+            dataJTinputs[nowAproach + 1].addEventListener('input', (event) => { event.target.parentElement.getElementsByClassName('labelCounter')[nowAproach].innerText = event.target.value; });
+          }
+      }
+    }
+    console.log(Array.from(dataJTinputs).findIndex(e => e == dataJTinputs[nowAproach]))
+      if (dataJTinputs.length - nowAproach-1 > 0){
+        event.target.parentElement.parentElement.getElementsByClassName('nowApproach')[0].innerText = (nowAproach + 2);
+        dataJTinputs[nowAproach].classList.remove('moveFromRightDateInput');
+        dataJTinputs[nowAproach].classList.remove('moveFromLeftDateInput');
+        dataJTinputs[nowAproach].classList.remove('moveLeftDateInput');
+        dataJTinputs[nowAproach].classList.remove('moveRightDateInput');
+        dataJTinputs[nowAproach].classList.add('moveRightDateInput');
+        dataJTinputs[nowAproach + 1].classList.remove('moveFromRightDateInput');
+        dataJTinputs[nowAproach + 1].classList.remove('moveFromLeftDateInput');
+        dataJTinputs[nowAproach + 1].classList.remove('moveLeftDateInput');
+        dataJTinputs[nowAproach + 1].classList.remove('moveRightDateInput');
+        dataJTinputs[nowAproach + 1].classList.add('moveFromLeftDateInput');
+        if (dataJTinputs[nowAproach + 1].tagName == 'BUTTON') {
+          dataJTinputs[nowAproach + 1].style.display = 'flex';
+        } else {
+          dataJTinputs[nowAproach + 1].style.display = 'block';
         }
+        if (dataJTinputs[nowAproach + 1].type == 'range') {
+          event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach].style.display = 'none';
+          event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach + 1].style.display = 'block';
+        }
+        dataJTinputs[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveRight);
+        dataJTinputs[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveLeft);
+        dataJTinputs[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight);
+        dataJTinputs[nowAproach].removeEventListener('animationend', onAnimationInputMoveLeft);
+        dataJTinputs[nowAproach].addEventListener('animationend', onAnimationInputMoveRight);
+        Array.from(document.getElementsByClassName('dataJTinputs')).forEach(e => e.addEventListener('change', onDataInputsChange))
     }
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromRightDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveFromLeftDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveLeftDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.remove('moveRightDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].classList.add('moveRightDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveFromRightDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveFromLeftDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveLeftDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.remove('moveRightDateInput');
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].classList.add('moveFromLeftDateInput');
-    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].tagName == 'BUTTON') {
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].style.display = 'flex';
-    } else {
-      event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].style.display = 'block';
-    }
-    if (event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].type == 'range') {
-      event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach].style.display = 'none';
-      event.target.parentElement.parentElement.getElementsByClassName('labelCounter')[nowAproach + 1].style.display = 'block';
-    }
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveRight);
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].removeEventListener('animationend', onAnimationInputMoveLeft);
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveRight);
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].removeEventListener('animationend', onAnimationInputMoveLeft);
-    event.target.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach].addEventListener('animationend', onAnimationInputMoveRight);
-    Array.from(document.getElementsByClassName('dataJTinputs')).forEach(e => e.addEventListener('change', onDataInputsChange))
   }));
   Array.from(document.getElementsByClassName('dataJTinputs')).forEach(e => e.addEventListener('change', onDataInputsChange))
   getTournamentTime();
@@ -817,7 +809,7 @@ function onNavPanelJTleaders(event) {
   for (const participant in participantsSorted){
     let bgColor = participantsSorted[participant].ID == uid ? '#737B8B' : 'transparent'
     document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
-    <div style="background:${bgColor};"><label>${Number(participant)+1}.</label><label>${participantsSorted[participant].name}</label><label>${participantsSorted[participant].points}</label></div>
+    <div style="background:${bgColor};"><label>${Number(participant)+1}.</label><label>${participantsSorted[participant].login}</label><label>${Number(participantsSorted[participant].points) || 0}</label></div>
     `)
   }
 }
