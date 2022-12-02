@@ -361,7 +361,7 @@ function onTournamentCreateBtn() {
             login: login,
             ID: uid
           },
-          participants: [{login: login, ID: uid}],
+          participants: [{login: login, ID: uid, data: []}],
           start: Date.now()
         };
         console.log(createdTrn);
@@ -384,6 +384,7 @@ function onJTbtn(event) {
       participants: firebase.firestore.FieldValue.arrayUnion({
         ID: uid,
         login: login,
+        data: []
       }) 
     }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); })
   })
@@ -487,6 +488,7 @@ function onNavPanelJTdata(event) {
   while (document.getElementById('dataBlocksJT').firstChild) {
     document.getElementById('dataBlocksJT').removeChild(document.getElementById('dataBlocksJT').firstChild);
   }
+  let localData = JSON.parse((localStorage.getItem(tournamentID)))
   for (let i = 0; i < firebaseTournaments[num].targets.length; i++) {
     document.getElementById('dataBlocksJT').insertAdjacentHTML('beforeend', `
     <div class="dataBlockJT">
@@ -507,32 +509,22 @@ function onNavPanelJTdata(event) {
       </div>`);
     if (firebaseTournaments[num].targets[i].type == 'slider') {
       for (let j = 0; j < approachLength; j++) {
-        valueInput = '';
-        // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
-        //   if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)
-        //     && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') &&
-        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined)) {
-        //     valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
-        //   } else { valueInput = 0; }
-        // } else { valueInput = 0; }
+        valueInput = 0;
+        if (localData.data[firebaseTournaments[num].targets[i].name].length > 0){
+          valueInput = localData.data[firebaseTournaments[num].targets[i].name][j]
+        }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="range" min="0" max="100" placeholder="try ${j + 1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`);
         Array.from(document.getElementsByClassName('dataBlockJT'))[i].getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
-          <label class="labelCounter" style="display:${j < 1 ? 'block' : 'none'};">0</label>`);
+          <label class="labelCounter" style="display:${j < 1 ? 'block' : 'none'};">${valueInput}</label>`);
         Array.from(Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByTagName('input'))[j].addEventListener('input', (event) => { event.target.parentElement.getElementsByClassName('labelCounter')[j].innerText = event.target.value; });
       }
     } else if (firebaseTournaments[num].targets[i].type == 'clicker') {
       for (let j = 0; j < approachLength; j++) {
         valueInput = '';
-        // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
-        //   if ((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined)
-        //     && (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0) &&
-        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '') &&
-        //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined)) {
-        //     valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
-        //   }
-        // } else { valueInput = ''; }
+        if (localData.data[firebaseTournaments[num].targets[i].name].length > 0){
+          valueInput = localData.data[firebaseTournaments[num].targets[i].name][j]
+        }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <button class="dataJTinputs"  placeholder="try ${j + 1}" style="display:${j < 1 ? 'flex' : 'none'};">
           <div class="btnDataMinus">-</div><label class="btnDataCounter">${valueInput}</label><div class="btnDataPlus">+</div></button>`);
@@ -548,15 +540,9 @@ function onNavPanelJTdata(event) {
     } else {
       for (let j = 0; j < approachLength; j++) {
         valueInput = '';
-        // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo !== undefined) {
-          // if (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid] !== undefined) {
-          //   if (((firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== undefined &&
-          //     (firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== 0)) &&
-          //     firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j] !== '')) {
-          //     valueInput = firebaseTournaments[num].season[seasonNumber - 1].round[Math.floor(roundNumber) - 1].UsersInfo[uid][firebaseTournaments[num].targets[i].name][j];
-          //   }
-          // }
-        // } else { valueInput = ''; }
+        if (localData.data[firebaseTournaments[num].targets[i].name].length > 0){
+          valueInput = localData.data[firebaseTournaments[num].targets[i].name][j]
+        }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
           <input class="dataJTinputs" type="number" placeholder="try ${j + 1}" value="${valueInput}" style="display:${j < 1 ? 'block' : 'none'};">`);
       }
@@ -635,7 +621,6 @@ function onNavPanelJTdata(event) {
         return element;
       }
     });
-    
       if (nowAproach < 0) {
         nowAproach = 0;
       }
@@ -678,6 +663,7 @@ function onNavPanelJTdata(event) {
         return element;
       }
     });
+    let nowTarget = Array.from(document.getElementsByClassName('dataBlockJT')).findIndex(e => e == event.target.parentElement.parentElement.parentElement)
     if (nowAproach < 0) {
       nowAproach = 0;
     }
@@ -689,13 +675,21 @@ function onNavPanelJTdata(event) {
     if (dataJTinputs.length < nowAproach + 2) {
       if (Number(approachLength) < 1 || Number(approachLength) > nowAproach+1){
         if (type == 'number') {
-          dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
+          let valueInput = ''
+          if (localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
+            valueInput = localData.data[firebaseTournaments[num].targets[nowTarget].name][nowAproach+1]
+          }
+          dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" value="${valueInput}" placeholder="try ${nowAproach + 2}"
         style="transform: translate(-150%, 0); width: 35%;"></input>`);
         } else
           if (type == 'submit') {
+            let valueInput = ''
+            if (localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
+              valueInput = localData.data[firebaseTournaments[num].targets[nowTarget].name][nowAproach+1]
+            }
             dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `
             <button class="dataJTinputs" style="display:flex;">
-            <div class="btnDataMinus">-</div> <label class="btnDataCounter"></label> <div class="btnDataPlus">+</div></button>`);
+            <div class="btnDataMinus">-</div> <label class="btnDataCounter">${valueInput}</label> <div class="btnDataPlus">+</div></button>`);
             Array.from(dataJTinputs[nowAproach + 1].getElementsByClassName('btnDataMinus')).forEach(
               element => element.addEventListener('click', (event) => {
                 event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText < 1 ?
@@ -705,10 +699,14 @@ function onNavPanelJTdata(event) {
             Array.from(event.target.parentElement.parentElement.parentElement.getElementsByClassName('dataJTinputs')[nowAproach + 1].getElementsByClassName('btnDataPlus')).forEach(
               element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++; onDataInputsChange() }));
           } else {
-            dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" placeholder="try ${nowAproach + 2}"
+            let valueInput = 0
+            if (localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
+              valueInput = localData.data[firebaseTournaments[num].targets[nowTarget].name][nowAproach+1]
+            }
+            dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" value="${valueInput}" type="${type}" placeholder="try ${nowAproach + 2}"
           style="transform: translate(-150%, 0); width: 35%;"></input>`);
             event.target.parentElement.parentElement.parentElement.getElementsByClassName('lblAndInputDataJT')[0].insertAdjacentHTML('beforeend', `
-            <label class="labelCounter" style="display: block;">0</label>`);
+            <label class="labelCounter" style="display: block;">${valueInput}</label>`);
             dataJTinputs[nowAproach + 1].addEventListener('input', (event) => { event.target.parentElement.getElementsByClassName('labelCounter')[nowAproach].innerText = event.target.value; });
           }
       }
@@ -759,11 +757,13 @@ function onDataInputsChange(event){
   let data = {}
   for (const target in firebaseTournaments[num].targets){
     if (firebaseTournaments[num].targets[target].type == "clicker"){
-      data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('btnDataCounter'))
-      .reduce((partialSum, e) => partialSum + Number(e.innerText) * firebaseTournaments[num].targets[target].points, 0)
+      // data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('btnDataCounter'))
+      // .reduce((partialSum, e) => partialSum + Number(e.innerText) * firebaseTournaments[num].targets[target].points, 0)
+      data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('btnDataCounter')).map(e => Number(e.innerText))
     } else {
-      data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('dataJTinputs'))
-      .reduce((partialSum, e) => partialSum + e.value * firebaseTournaments[num].targets[target].points, 0)
+      // data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('dataJTinputs'))
+      // .reduce((partialSum, e) => partialSum + e.value * firebaseTournaments[num].targets[target].points, 0)
+      data[firebaseTournaments[num].targets[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('dataJTinputs')).map(e => Number(e.value))
     }
   }
   let transaction = {
@@ -777,10 +777,39 @@ function onDataInputsChange(event){
 }
 function saveTournament(){
   document.getElementById('butulaBtn').innerText = 'Butula'
+  let localData = JSON.parse((localStorage.getItem(tournamentID)))
   db.collection("global_tournaments").doc(tournamentID).get().then((doc) => {
     if (doc.exists) {
+      let userIndex = firebaseTournaments[num].participants.findIndex(e => e.ID == uid)
       firebaseTournaments[num] = doc.data()
-      firebaseTournaments[num].participants[firebaseTournaments[num].participants.findIndex(e => e.ID == uid)].data = JSON.parse((localStorage.getItem(tournamentID)))
+      if (firebaseTournaments[num].participants[userIndex].data == undefined){
+        firebaseTournaments[num].participants[userIndex].data = []
+      }
+      firebaseTournaments[num].participants[userIndex].points = Number(firebaseTournaments[num].participants[userIndex].points) || 0
+      let thisRounds = Array.from(firebaseTournaments[num].participants[userIndex].data).filter(e => e.season == seasonNumber && e.round == roundNumber)
+      // thisRounds.forEach(round => {
+      //   for (const target in Object.keys(round.data)){
+      //     for (let i = 0; i < round.data[firebaseTournaments[num].targets[target].name]; i++){
+      //       console.log(firebaseTournaments[num].targets[target].points)
+      //       firebaseTournaments[num].participants[userIndex].points -= (Number(round.data[firebaseTournaments[num].targets[target].name][i]) || 0) * firebaseTournaments[num].targets[target].points
+      //     }
+      //     console.log('Opa:' + firebaseTournaments[num].participants[userIndex].points)
+      //   }
+      // })
+      firebaseTournaments[num].participants[userIndex].data = firebaseTournaments[num].participants[userIndex].data.filter(e => e.season !== seasonNumber && e.round !== roundNumber)
+      firebaseTournaments[num].participants[userIndex].data.push(localData)
+      firebaseTournaments[num].participants[userIndex].points = 0
+      // console.log('Minus:' + firebaseTournaments[num].participants[userIndex].points)
+      for (const dataRound in firebaseTournaments[num].participants[userIndex].data){
+        for (const target in Object.keys(firebaseTournaments[num].participants[userIndex].data[dataRound].data)){
+          for (let i = 0; i < firebaseTournaments[num].participants[userIndex].data[dataRound].data[firebaseTournaments[num].targets[target].name].length; i++){
+            firebaseTournaments[num].participants[userIndex].points += (Number(firebaseTournaments[num].participants[userIndex].data[dataRound].data[firebaseTournaments[num].targets[target].name][i]) || 0) * firebaseTournaments[num].targets[target].points
+          }
+        }
+      }
+      // arr.push(localData)
+      let arr = Array.from(firebaseTournaments[num].participants[userIndex].data)
+      firebaseTournaments[num].participants[userIndex].data = arr
       db.collection("global_tournaments").doc(tournamentID).set(firebaseTournaments[num]).then(() => {
         console.log('Saved');
       });
