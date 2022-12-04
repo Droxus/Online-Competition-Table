@@ -1447,6 +1447,69 @@ margin: 10px;
 }
 #statisticsPageJT{
     display: none;
+    width: 100%;
+    height: 100%;
+    grid-template-rows: 15% 85%;
+}
+#targetSwitch{
+    height: 40px;
+    width: 80%;
+    margin: auto;
+    background: #6F7C88;
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+    overflow-x: scroll;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+}
+#targetSwitch::-webkit-scrollbar {
+    height: 2px;
+  }
+  
+.targetsSwitchLbl{
+    color: #464646;
+    font-size: 20px;
+    text-shadow: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 15px;
+}
+#diagramsBlock{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 100%;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-items: end;
+}
+.diagrams{
+    width: 50px;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 40px calc(100% - 40px);
+    margin: 0 5px;
+}
+.diagrams > div{
+    background: red;
+    display: flex;
+    align-items: flex-end;
+    background: linear-gradient(0deg, #D9C4B0 0%, #DCA8AB 100%);
+}
+.diagrams > div > label{
+    display: flex; 
+    justify-content: center;
+    color: #6E7C88;
+    text-shadow: none;
+    font-size: 24px;
+}
+.diagrams > label{
+    text-align: center;
+    font-size: 24px;
+    color: #464646;
+    text-shadow: none;
 }
 #dataPageJT{
     display: none;

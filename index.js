@@ -476,14 +476,44 @@ function getTournamentTime() {
 }
 function onNavPanelJTstatistics(event) {
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  // document.getElementById('navPanelJT').style.display = 'none';
   document.getElementById('statisticsPageJT').style.display = 'grid';
+  firebaseTournaments[num].targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label class="targetsSwitchLbl">${e.name}</label>`))
+  Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphic))
+  Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+}
+function onChangeTargetOfGraphic(event){
+  Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.style.background = 'transparent')
+  event.target.style.background = '#7D8994'
+  let allTargetsOfTrn = firebaseTournaments[num].targets.map(e => e.name)
+  let targetIndex = allTargetsOfTrn.findIndex(e => e == event.target.innerText)
+  let pointsForTarget = firebaseTournaments[num].targets[targetIndex].points
+  let userIndex = firebaseTournaments[num].participants.findIndex(e => e.ID == uid)
+  let data = []
+  for (let i = 0; i < firebaseTournaments[num].participants[userIndex].data.length; i++){
+    data[i] = {
+      data: firebaseTournaments[num].participants[userIndex].data[i].data[event.target.innerText].reduce((acc, e) => acc + e * pointsForTarget),
+      round: firebaseTournaments[num].participants[userIndex].data[i].round,
+      season: firebaseTournaments[num].participants[userIndex].data[i].season
+    }
+  }
+  buildDiagramsGraphic(data)
+}
+function buildDiagramsGraphic(data){
+  let label = 'round'
+  while (document.getElementById('diagramsBlock').firstChild) {
+    document.getElementById('diagramsBlock').removeChild(document.getElementById('diagramsBlock').firstChild);
+  }
+  if (label == 'round') { data = data.filter(e => e.season == seasonNumber) }
+  let maxData = Math.max.apply(null, data.map(e => e.data))
+  data.forEach((e, i) => {
+    let ratioToMax = e.data / maxData * 80
+    document.getElementById('diagramsBlock').insertAdjacentHTML('beforeend', `<div class="diagrams" style="height:calc(${ratioToMax || 0}% + 80px)"><label>${e.data}</label><div><label>${i+1}</label></div><div>`)
+  })
 }
 let approachLength, valueInput;
 function onNavPanelJTdata(event) {
   getTournamentTime();
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
-  // document.getElementById('navPanelJT').style.display = 'none';
   document.getElementById('dataPageJT').style.display = 'grid';
   while (document.getElementById('dataBlocksJT').firstChild) {
     document.getElementById('dataBlocksJT').removeChild(document.getElementById('dataBlocksJT').firstChild);
@@ -510,7 +540,7 @@ function onNavPanelJTdata(event) {
     if (firebaseTournaments[num].targets[i].type == 'slider') {
       for (let j = 0; j < approachLength; j++) {
         valueInput = 0;
-        if (localData.data[firebaseTournaments[num].targets[i].name].length > 0){
+        if (localData.round == roundNumber && localData.season == seasonNumber  && localData.data[firebaseTournaments[num].targets[i].name].length > 0){
           valueInput = localData.data[firebaseTournaments[num].targets[i].name][j]
         }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
@@ -522,7 +552,7 @@ function onNavPanelJTdata(event) {
     } else if (firebaseTournaments[num].targets[i].type == 'clicker') {
       for (let j = 0; j < approachLength; j++) {
         valueInput = '';
-        if (localData.data[firebaseTournaments[num].targets[i].name].length > 0){
+        if (localData.round == roundNumber && localData.season == seasonNumber  && localData.data[firebaseTournaments[num].targets[i].name].length > 0){
           valueInput = localData.data[firebaseTournaments[num].targets[i].name][j]
         }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
@@ -540,7 +570,7 @@ function onNavPanelJTdata(event) {
     } else {
       for (let j = 0; j < approachLength; j++) {
         valueInput = '';
-        if (localData.data[firebaseTournaments[num].targets[i].name].length > 0){
+        if (localData.round == roundNumber && localData.season == seasonNumber  && localData.data[firebaseTournaments[num].targets[i].name].length > 0){
           valueInput = localData.data[firebaseTournaments[num].targets[i].name][j]
         }
         Array.from(document.getElementsByClassName('inputsUnityDataJT'))[i].getElementsByClassName('btnsRowRight')[0].insertAdjacentHTML('beforebegin', `
@@ -676,7 +706,7 @@ function onNavPanelJTdata(event) {
       if (Number(approachLength) < 1 || Number(approachLength) > nowAproach+1){
         if (type == 'number') {
           let valueInput = ''
-          if (localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
+          if (localData.round == roundNumber && localData.season == seasonNumber  && localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
             valueInput = localData.data[firebaseTournaments[num].targets[nowTarget].name][nowAproach+1]
           }
           dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" value="${valueInput}" placeholder="try ${nowAproach + 2}"
@@ -684,7 +714,7 @@ function onNavPanelJTdata(event) {
         } else
           if (type == 'submit') {
             let valueInput = ''
-            if (localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
+            if (localData.round == roundNumber && localData.season == seasonNumber  && localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
               valueInput = localData.data[firebaseTournaments[num].targets[nowTarget].name][nowAproach+1]
             }
             dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `
@@ -700,7 +730,7 @@ function onNavPanelJTdata(event) {
               element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++; onDataInputsChange() }));
           } else {
             let valueInput = 0
-            if (localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
+            if (localData.round == roundNumber && localData.season == seasonNumber  && localData.data[firebaseTournaments[num].targets[nowTarget].name].length > nowAproach+1){
               valueInput = localData.data[firebaseTournaments[num].targets[nowTarget].name][nowAproach+1]
             }
             dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" value="${valueInput}" type="${type}" placeholder="try ${nowAproach + 2}"
@@ -785,31 +815,17 @@ function saveTournament(){
       if (firebaseTournaments[num].participants[userIndex].data == undefined){
         firebaseTournaments[num].participants[userIndex].data = []
       }
-      firebaseTournaments[num].participants[userIndex].points = Number(firebaseTournaments[num].participants[userIndex].points) || 0
-      let thisRounds = Array.from(firebaseTournaments[num].participants[userIndex].data).filter(e => e.season == seasonNumber && e.round == roundNumber)
-      // thisRounds.forEach(round => {
-      //   for (const target in Object.keys(round.data)){
-      //     for (let i = 0; i < round.data[firebaseTournaments[num].targets[target].name]; i++){
-      //       console.log(firebaseTournaments[num].targets[target].points)
-      //       firebaseTournaments[num].participants[userIndex].points -= (Number(round.data[firebaseTournaments[num].targets[target].name][i]) || 0) * firebaseTournaments[num].targets[target].points
-      //     }
-      //     console.log('Opa:' + firebaseTournaments[num].participants[userIndex].points)
-      //   }
-      // })
-      firebaseTournaments[num].participants[userIndex].data = firebaseTournaments[num].participants[userIndex].data.filter(e => e.season !== seasonNumber && e.round !== roundNumber)
+      firebaseTournaments[num].participants[userIndex].data = firebaseTournaments[num].participants[userIndex].data.filter(e => e.season !== seasonNumber || e.round !== roundNumber)
       firebaseTournaments[num].participants[userIndex].data.push(localData)
+      let thisSeasonData = firebaseTournaments[num].participants[userIndex].data.filter(e => e.season == seasonNumber)
       firebaseTournaments[num].participants[userIndex].points = 0
-      // console.log('Minus:' + firebaseTournaments[num].participants[userIndex].points)
-      for (const dataRound in firebaseTournaments[num].participants[userIndex].data){
-        for (const target in Object.keys(firebaseTournaments[num].participants[userIndex].data[dataRound].data)){
-          for (let i = 0; i < firebaseTournaments[num].participants[userIndex].data[dataRound].data[firebaseTournaments[num].targets[target].name].length; i++){
-            firebaseTournaments[num].participants[userIndex].points += (Number(firebaseTournaments[num].participants[userIndex].data[dataRound].data[firebaseTournaments[num].targets[target].name][i]) || 0) * firebaseTournaments[num].targets[target].points
+      for (const dataRound in thisSeasonData){
+        for (const target in Object.keys(thisSeasonData[dataRound].data)){
+          for (let i = 0; i < thisSeasonData[dataRound].data[firebaseTournaments[num].targets[target].name].length; i++){
+            firebaseTournaments[num].participants[userIndex].points += (Number(thisSeasonData[dataRound].data[firebaseTournaments[num].targets[target].name][i]) || 0) * firebaseTournaments[num].targets[target].points
           }
         }
       }
-      // arr.push(localData)
-      let arr = Array.from(firebaseTournaments[num].participants[userIndex].data)
-      firebaseTournaments[num].participants[userIndex].data = arr
       db.collection("global_tournaments").doc(tournamentID).set(firebaseTournaments[num]).then(() => {
         console.log('Saved');
       });
