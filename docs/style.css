@@ -273,6 +273,32 @@ div.dataEnterSqr>* {
     height: 20%;
     color: white;
 }
+#butulaMenu > div{
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: center;
+    margin-top: 5%;
+}
+#butulaMenu > div > *{
+    width: 85%;
+    height: 20%;
+    color: white;
+    display: grid;
+    place-self: center;
+    grid-template-rows: 100%;
+    grid-template-columns: 25% 75%;
+    place-items: center;
+    border-bottom: 4px solid #D8A0A0;
+}
+#butulaMenu > div > * > label{
+    color: #D8A0A0;
+    white-space: break-spaces;
+    text-align: center;
+}
+
 
 #butulaTournamentMenu{
     position: fixed;
@@ -289,6 +315,46 @@ div.dataEnterSqr>* {
     height: 20%;
     color: white;
 }
+#butulaTournamentMenu > div{
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: center;
+    margin-top: 5%;
+}
+#butulaTournamentMenu > div > *{
+    width: 85%;
+    height: 20%;
+    color: white;
+    display: grid;
+    place-self: center;
+    grid-template-rows: 100%;
+    grid-template-columns: 25% 75%;
+    place-items: center;
+    border-bottom: 4px solid #D8A0A0;
+}
+#butulaTournamentMenu > div > * > label{
+    color: #D8A0A0;
+    white-space: break-spaces;
+    text-align: center;
+}
+/* #butulaTournamentMenu{
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 93%;
+    backdrop-filter: brightness(0.25) blur(3px);
+    flex-wrap: wrap;
+    align-content: space-around;
+    z-index: 99999;
+}
+#butulaTournamentMenu > *{
+    width: 100%;
+    height: 20%;
+    color: white;
+} */
 
 #butulaBtn{
     position: absolute;
@@ -404,7 +470,6 @@ div.dataEnterSqr>* {
     text-decoration: none;
     text-align: center;
     box-sizing: border-box;
-    cursor: url('img/cena.png'), auto;
     font-size: 40px;
     text-shadow: 1px 0 black, 0 1px black, -1px 0 black, 0 -1px black;
     font-family: 'Harmattan', sans-serif;
@@ -1296,7 +1361,6 @@ margin: 10px;
 }
 
 .numsOfTrnsOnthePage {
-    background-image: url('img/trnNumsIcon.png');
     background-size: contain;
     background-color: transparent;
     width: 50px;
@@ -1484,6 +1548,10 @@ margin: 10px;
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     align-items: end;
+    overflow-x: scroll;
+}
+#diagramsBlock::-webkit-scrollbar{
+    height: 2px;
 }
 .diagrams{
     width: 50px;

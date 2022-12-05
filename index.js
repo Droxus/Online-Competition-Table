@@ -874,15 +874,15 @@ function onResetTournamentDate() {
     }
   });
 }
-function onButulaMenuBtns(event){
+function onButulaMenuBtns(){
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   document.getElementById('butulaMenu').style.display = 'none'
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
   }
-  document.getElementById('content').appendChild(document.getElementById(event.target.getAttribute('page')).content.cloneNode(true));
-  switch (event.target.getAttribute('page')) {
+  document.getElementById('content').appendChild(document.getElementById(this.getAttribute('page')).content.cloneNode(true));
+  switch (this.getAttribute('page')) {
     case 'tournamentCreatePanel':
       Array.from(document.getElementsByClassName('switchPageBtn')).forEach(e => e.addEventListener('click', onSwitchPageBtn))
       Array.from(document.getElementsByClassName('trnAccessBtn')).forEach(e => e.addEventListener('click', onTrnAccessBtn))
@@ -901,11 +901,11 @@ function onButulaMenuBtns(event){
       break;  
   }
 }
-function onButulaTournmanetMenuBtns(event){
+function onButulaTournmanetMenuBtns(){
     document.getElementById('butulaTournamentMenu').style.display = 'none'
-    document.getElementById(event.target.getAttribute('page')).style.display = 'grid'
+    document.getElementById(this.getAttribute('page')).style.display = 'grid'
     Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none')
-    switch (event.target.getAttribute('page')) {
+    switch (this.getAttribute('page')) {
       case 'mainPageJT':
         onNavPanelJTmain()
         break;

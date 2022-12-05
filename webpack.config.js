@@ -19,8 +19,8 @@ module.exports = {
     
     new CopyPlugin({
       patterns: [
-        { from: "img", to: "img" },
-        { from: "style.css", to: "." },
+        { from: "img", to: "img", noErrorOnMissing: true, },
+        { from: "style.css", to: ".", },
       ],
     }),
     new HtmlWebpackPlugin({
