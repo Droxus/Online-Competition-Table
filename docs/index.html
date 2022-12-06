@@ -200,10 +200,7 @@
             
             
             <div id="aboutPageBlock"></div>
-            <div id="profilePageBlock">
-                <div></div>
-                <button id="btnLogout">Log Out</button>
-            </div>
+            
         </div>
     </div>
     <div class="dataEnterSqr">
@@ -248,7 +245,32 @@
             <div class="tournamentsPanel"></div>
         </div>
     </template>
-
+    <template id="profilePage">
+        <div id="profilePageBlock">
+            <div>
+                <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <rect width="72" height="72" fill="url(#profile)"/>
+                    <defs>
+                    <pattern id="profile" patternContentUnits="objectBoundingBox" width="1" height="1">
+                    <use xlink:href="#image0_25_7" transform="scale(0.00442478)"/>
+                    </pattern>
+                    <image id="image0_25_7" width="226" height="226" xlink:href="data:image/png;base64,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"/>
+                    </defs>
+                    </svg>
+                <label id="loginProfile">Lolol</label>
+                <label id="emailProfile">Lolol</label>
+            </div>
+            <div></div>
+            <div>
+                <button class="profileBtns">Edit Profile</button>
+                <button class="profileBtns">Created Tournaments</button>
+                <button class="profileBtns">Archive</button>
+                <button class="profileBtns">Mail <label></label></button>
+                <button class="profileBtns" id="btnLogout">Log Out</button>
+            </div>
+        </div>
+    </template>
+ 
     <template id="tournamentCreatePanel">
         <div id="tournamentCreatePanelBlock">
             <div class="trnCreatePages" id="tournamentName">

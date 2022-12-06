@@ -55,6 +55,7 @@ label, button {
     display: inline-block;
     white-space: nowrap;
     width: 100%;
+    cursor: pointer;
 }
 input {
     outline: none;
@@ -263,7 +264,7 @@ div.dataEnterSqr>* {
     display: none;
     width: 100%;
     height: 93%;
-    backdrop-filter: brightness(0.25) blur(3px);
+    backdrop-filter: brightness(0.2) blur(3px);
     flex-wrap: wrap;
     align-content: space-around;
     z-index: 99999;
@@ -298,14 +299,12 @@ div.dataEnterSqr>* {
     white-space: break-spaces;
     text-align: center;
 }
-
-
 #butulaTournamentMenu{
     position: fixed;
     display: none;
     width: 100%;
     height: 93%;
-    backdrop-filter: brightness(0.25) blur(3px);
+    backdrop-filter: brightness(0.2) blur(3px);
     flex-wrap: wrap;
     align-content: space-around;
     z-index: 99999;
@@ -549,19 +548,55 @@ li a:hover {
     height: 100%;
 }
 #profilePageBlock {
-    display: none;
+    display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 1fr 50px;
-    margin: 0px;
-    width: 100%;
-    height: 100%;
+    grid-template-rows: calc(40% - 1px) 2px calc(60% - 1px);
+    margin: 0 5%;
+    height: 95%;
+    width: 90%;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
 }
-#btnLogout{
-    height: 50px;
-    background-color: rgba(255, 255, 255, 0.2);
+#profilePageBlock > div{
+    width: 80%;
+    height: 100%;
+    margin: 0 10%;
+}
+#profilePageBlock > div:nth-child(1){
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+    text-align: center;
+}
+#profilePageBlock > div:nth-child(1) > label{
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+    font-size: 28px;
+}
+#profilePageBlock > div:nth-child(2){
+    background: linear-gradient(90deg, #DCA8AB, #D9C4B0);
+}
+#profilePageBlock > div:nth-child(3){
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+}
+.profileBtns{
+    height: 10%;
+    font-size: 18px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
     border: none;
-    color: #718bff;
-    font-size: 42px;
+}
+.profileBtns:nth-child(4){
+    display: grid;
+    grid-template-columns: 90% 10%;
+    padding-left: 10%;
+    align-items: center;
+}
+.profileBtns:nth-child(5){
+    color: #D67373;
 }
 #dataPageBlock {
     display: grid;
@@ -573,14 +608,6 @@ li a:hover {
 
 #statisticPageBlock {
     display: grid;
-    grid-template-rows: 1fr 50px;
-    margin: 0px;
-    width: 100%;
-    height: 100%;
-}
-
-#aboutPageBlock {
-    display: none;
     grid-template-rows: 1fr 50px;
     margin: 0px;
     width: 100%;

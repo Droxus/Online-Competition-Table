@@ -83,10 +83,10 @@ let password, email, width, height, temporaryElementsTI, docName, tournamentID, 
 inptUsername.addEventListener('click', onClearError);
 inptPassword.addEventListener('click', onClearError);
 btnHome.addEventListener('click', onbtnHome);
-profile.addEventListener('click', onProfile);
+document.getElementById('profileBtnMenu').addEventListener('click', onProfile);
 // createTournament.forEach(element => element.addEventListener('click', showCreateTournamentBlock));
 // crossIcon.addEventListener('click', onCrossTournamentInfo);
-document.getElementById('btnLogout').addEventListener('click', onBtnSignOut);
+// document.getElementById('btnLogout').addEventListener('click', onBtnSignOut);
 document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
 // document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn);
 // document.getElementById('btnNavJT').addEventListener('click', onBtnNavJT);
@@ -921,9 +921,36 @@ function onButulaTournmanetMenuBtns(){
     }
 }
 function onProfile(event) {
-  document.getElementById('profilePageBlock').style.display = 'grid';
+  while (document.getElementById('content').firstElementChild) {
+    document.getElementById('content').firstElementChild.remove()
+  }
+  document.getElementById('content').appendChild(document.getElementById('profilePage').content.cloneNode(true));
+  document.getElementById('mainMenuHeader').style.display = 'none'
+  document.getElementById('defaultHeader').style.display = 'grid'
+  document.getElementById('loginProfile').innerText = login
+  document.getElementById('emailProfile').innerText = email
+  Array.from(document.getElementsByClassName('profileBtns')).forEach(e => e.addEventListener('click', onProfileBtns))
 }
-
+function onProfileBtns(event){
+  console.log(event.target.innerText)
+  switch (event.target.innerText) {
+    case 'Edit Profile':
+      
+      break;
+    case 'Created Tournaments':
+      
+      break
+    case 'Archive':
+      
+      break;
+    case 'Mail':
+      
+      break;  
+    case 'Log Out':
+      
+      break; 
+  }
+}
 function oncrossIcononCreate(event) {
   // while (tournamentCreatePanel.firstChild) {
   //   tournamentCreatePanel.removeChild(tournamentCreatePanel.firstChild);
