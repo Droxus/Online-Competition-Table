@@ -927,15 +927,16 @@ function onProfile(event) {
   document.getElementById('content').appendChild(document.getElementById('profilePage').content.cloneNode(true));
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
-  document.getElementById('loginProfile').innerText = login
-  document.getElementById('emailProfile').innerText = email
+  document.getElementById('loginProfile').value = login
+  document.getElementById('emailProfile').value = email
   Array.from(document.getElementsByClassName('profileBtns')).forEach(e => e.addEventListener('click', onProfileBtns))
 }
 function onProfileBtns(event){
   console.log(event.target.innerText)
   switch (event.target.innerText) {
     case 'Edit Profile':
-      
+      Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style["pointer-events"] = 'visible')
+      event.target.innerText = 'Save Changes'
       break;
     case 'Created Tournaments':
       
@@ -947,7 +948,19 @@ function onProfileBtns(event){
       
       break;  
     case 'Log Out':
-      
+      document.getElementById('onLogOutPage').style.display = 'flex'
+      document.getElementById('yesAreUsureBlock').addEventListener('click', () => {document.getElementById('onLogOutPage').style.display = 'none'; onBtnSignOut()})
+      document.getElementById('noAreUsureBlock').addEventListener('click', () => {document.getElementById('onLogOutPage').style.display = 'none'})
+      break;
+    case 'Save Changes':
+      Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style["pointer-events"] = 'none')
+      event.target.innerText = 'Edit Profile'
+      login = document.getElementById('loginProfile').value
+      email = document.getElementById('emailProfile').value
+      User.updateProfile({
+        displayName: login
+      })
+      User.updateEmail(email).catch((error) => {});
       break; 
   }
 }

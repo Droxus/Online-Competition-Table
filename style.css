@@ -569,9 +569,14 @@ li a:hover {
     align-content: space-around;
     text-align: center;
 }
-#profilePageBlock > div:nth-child(1) > label{
+#profilePageBlock > div:nth-child(1) > input{
     text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+    color: #DDC5AF;
     font-size: 28px;
+    text-align: center;
+    border: none;
+    background: none;
+    pointer-events: none;
 }
 #profilePageBlock > div:nth-child(2){
     background: linear-gradient(90deg, #DCA8AB, #D9C4B0);
@@ -581,6 +586,54 @@ li a:hover {
     flex-wrap: wrap;
     align-content: space-around;
 }
+#onLogOutPage{
+    display: none;
+    backdrop-filter: brightness(0.25) blur(3px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 93% !important;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#onLogOutPage > *{
+    width: 80%;
+    margin: 50px 0px;
+    text-shadow: none !important;
+}
+#onLogOutPage > *:nth-child(1){
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #D8A0A0;
+    font-weight: bold;
+    font-size: 28px;
+    white-space: normal;
+}
+#onLogOutPage > *:nth-child(2){
+    display: flex;
+}
+#onLogOutPage > *:nth-child(3){
+    border-bottom: 4px solid #D8A0A0;
+}
+#onLogOutPage > *:nth-child(2) > button{
+    height: 40px;
+    width: 100%;
+    text-shadow: none !important;
+    border: none;
+    color: #464646;
+    font-size: 18px;
+}
+/* #yesAreUsureBlock{
+    background: #7D8994;
+}
+#noAreUsureBlock{
+    background: #6F7C88;
+} */
 .profileBtns{
     height: 10%;
     font-size: 18px;
