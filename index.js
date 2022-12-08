@@ -23,7 +23,6 @@ const body = document.body;
 const root = document.querySelector(':root');
 const btnSignIn = document.getElementById('btnSignIn');
 const authMenu = Array.from(document.getElementsByClassName('authMenu'));
-const dataEnterSqr = Array.from(document.getElementsByClassName('dataEnterSqr'));
 const noaccLink = document.getElementById('noaccLink');
 const inptUsername = document.getElementById('inptUsername');
 const inptPassword = document.getElementById('inptPassword');
@@ -102,15 +101,15 @@ width = window.innerWidth;
 height = window.innerHeight;
 
 // blackout.style.display = 'block';
-dataEnterSqr.forEach(element => element.style.display = 'none');
+document.getElementById('regBlock').style.display = 'none'
 document.getElementById('butulaMenu').style.display = 'none'
 document.getElementById('butulaTournamentMenu').style.display = 'none'
 //  --- --- --- --- --- ---  Авторизация --- --- --- --- --- --- --- ---
 
 function onNoaccLink(event) {
   isignIn.innerHTML = 'Sign Up';
-  btnSignIn.innerHTML = 'Sign Up';
-  noaccLink.innerHTML = 'Login';
+  btnSignIn.innerHTML = 'Go next';
+  noaccLink.innerHTML = 'Sign In';
   noaccLink.removeEventListener('click', onNoaccLink);
   noaccLink.addEventListener('click', onHasaccLink);
   btnSignIn.removeEventListener('click', onBtnSignIn);
@@ -118,8 +117,8 @@ function onNoaccLink(event) {
 }
 onHasaccLink();
 function onHasaccLink(event) {
-  isignIn.innerHTML = 'Login';
-  btnSignIn.innerHTML = 'Login';
+  isignIn.innerHTML = 'Sign In';
+  btnSignIn.innerHTML = 'Go next';
   noaccLink.innerHTML = 'Sign Up';
   noaccLink.removeEventListener('click', onHasaccLink);
   noaccLink.addEventListener('click', onNoaccLink);
@@ -136,7 +135,7 @@ function onButulaBtn(){
   }
 }
 function clearMenuOfAuth() {
-  dataEnterSqr.forEach(element => element.style.display = 'none');
+  document.getElementById('regBlock').forEach(element => element.style.display = 'none');
   // body.style.background = "none"
 }
 let login;
@@ -179,7 +178,7 @@ function onSignIn() {
 }
 function onSignOut() {
   blackout.style.display = 'none';
-  dataEnterSqr.forEach(element => element.style.display = 'grid');
+  document.getElementById('regBlock').style.display = 'grid'
   mainBlock.style.display = 'none';
   onHasaccLink();
 }

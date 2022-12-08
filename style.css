@@ -80,66 +80,67 @@ input {
     }
 }
 
+#regBlock{
+    display: none;
+}
 .dataEnterSqr {
     position: absolute;
-    display: none;
     grid-template-columns: 100%;
     grid-template-rows: 25% 10% 15% 20% 20%;
-    z-index: -1;
-    border: solid 1px white;
-    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 999;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
     margin: 0;
-    top: 50%;
+    top: 45%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%);
-    border-radius: 100px;
-    width: 500px;
-    height: 650px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 40%;
 }
-#authMnuBtns{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas: 
-    "login login"
-    "signUp googleUp";
+#footerRegBtns{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    height: 75px;
+    width: 100%;
+    transform: translate(0, -75px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#footerRegBtns > *{
+    width: 50%;
+    color: #DDC5AF;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+    background: none;
+    border: none;
+    height: 50px;
+    font-size: 24px;
 }
 #btnSignIn{
     grid-area: login;
 }
-#noaccLink{
-    grid-area: signUp;
-    width: 95%;
-    background-color: rgba(255, 255, 255, 0.7);
-}
-#noaccLink:hover{
-    background-color: rgb(255, 255, 255);
-}
 #gooleSignIn{
-    grid-area: googleUp;
-    background-color: rgba(255, 0, 0, 0.5);
-    width: 95%;
+    width: 50%;
     justify-self: center;
     align-self: center;
 }
-#gooleSignIn:hover{
-    background-color: rgba(255, 0, 0, 0.8);
-}
 div.dataEnterSqr>* {
-    width: 70%;
-    margin-left: 15%;
+    width: 80%;
 }
 
 #isignIn {
-    display: block;
+    display: flex;
     position: relative;
-    font-family: arial;
-    font-size: 50px;
-    color: white;
+    font-size: 36px;
+    color: #DDC5AF;
     text-align: center;
-    padding-top: 50px;
-    margin-bottom: 50px;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+    justify-content: center;
+    align-items: center;
 }
 
 #lblErrorOutput {
@@ -151,34 +152,36 @@ div.dataEnterSqr>* {
 }
 
 .authMenu {
-    position: relative;
-    border-radius: 50px;
     border: none;
     height: 40px;
     font-size: 24px;
-    margin-bottom: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    color: #DDC5AF;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
 }
-
+.authMenu::placeholder{
+    color: #DDC5AF;
+}
 .btnsForm {
     position: relative;
     height: 36px;
     border-radius: 18px;
     border: none;
-    background-color: #c08f5afd;
     color: white;
     text-align: center;
     font-size: 18px;
-}
-
-.btnsForm:hover {
-    background-color: #c78b4ac7;
+    width: 50%;
+    color: #DDC5AF;
+    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+    background: none;
 }
 
 .btnsChangeForm {
     position: relative;
     background-color: white;
     color: #5a5a5a;
-    margin-top: 10%;
 }
 
 .authMenu::placeholder {
@@ -577,6 +580,7 @@ li a:hover {
     border: none;
     background: none;
     pointer-events: none;
+    width: 100%;
 }
 #profilePageBlock > div:nth-child(2){
     background: linear-gradient(90deg, #DCA8AB, #D9C4B0);
@@ -2091,6 +2095,9 @@ margin: 10px;
     #tournamentNameInfo {
         font-size: 28px;
     }
+    .dataEnterSqr{
+        width: 90%;
+    }
     @media screen and (min-device-width: 600px) {
         #mainBlock {
             /* grid-template-rows: 100px 1fr; */
@@ -2215,6 +2222,9 @@ margin: 10px;
 
         #tournamentNameInfo {
             font-size: 34px;
+        }
+        .dataEnterSqr{
+            width: 400px;
         }
         @media screen and (min-device-width: 1100px) {
             .profile {
