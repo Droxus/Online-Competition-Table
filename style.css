@@ -632,6 +632,55 @@ li a:hover {
     color: #464646;
     font-size: 18px;
 }
+#mailBlock {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-auto-flow: row;
+    grid-auto-rows: max-content;
+    gap: 25px;
+    margin: 0 5%;
+    height: 95%;
+    width: 90%;
+}
+.message{
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    height: max-content;
+}
+.message > label{
+    font-size: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: break-spaces;
+    text-align: center;
+}
+.message > div{
+    display: flex;
+    height: 35px;
+}
+.message > div > div{
+    width: 100%;
+    display: flex;
+    padding-left: 20px;
+    align-items: center;
+}
+.message > div > div > label{
+    margin-left: 10px;
+    color: #DDC5AF;
+    font-size: 20px;
+    text-shadow: none;
+}
+#mailBtnMenu > label{
+    position: absolute;
+    top: 2%;
+    left: 13%;
+    font-size: 18px;
+    color: #d8a0a0;
+    text-shadow: none;
+}
 /* #yesAreUsureBlock{
     background: #7D8994;
 }
