@@ -224,7 +224,6 @@ function getFirebaseUserJT() {
   })
 }
 function onbtnHome(event) {
-  console.log('aaaaa')
   document.getElementById('mainMenuHeader').style.display = 'grid'
   document.getElementById('defaultHeader').style.display = 'none'
   blackout.style.display = 'none';
@@ -240,7 +239,7 @@ function onbtnHome(event) {
 }
 function showTournaments() {
   let trnsToShow;
-  trnsToShow = firebaseTournaments;
+  trnsToShow = firebaseTournaments.filter(e => e.type !== 'closed');
   for (let i = 0; i < trnsToShow.length; i++) {
     console.log(trnsToShow[i].id)
     document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].ID}">             
@@ -373,18 +372,44 @@ function onTournamentCreateBtn() {
         })
 }
 function onJTbtn(event) {
-  firebaseUser.push(tournamentID)
-  db.collection("users_info").doc(uid).set({
-    joined_tournaments: firebaseUser
-  }).then(() => {
-    db.collection("global_tournaments").doc(tournamentID).update({
-      participants: firebase.firestore.FieldValue.arrayUnion({
-        ID: uid,
-        login: login,
-        data: []
-      }) 
-    }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); })
-  })
+  let thisTrn = firebaseTournaments.find(e => e.ID == tournamentID)
+  switch (thisTrn.type) {
+    case 'opened':
+       firebaseUser.push(tournamentID)
+        db.collection("users_info").doc(uid).set({
+          joined_tournaments: firebaseUser
+        }).then(() => {
+          db.collection("global_tournaments").doc(tournamentID).update({
+            participants: firebase.firestore.FieldValue.arrayUnion({
+              ID: uid,
+              login: login,
+              data: []
+            }) 
+          }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); })
+        })
+      break;
+    case 'invited':
+      db.collection("users_info").doc(`${thisTrn.creator.ID}`).get().then((doc) => {
+        let thisUserData = doc.data()
+        if (thisUserData.mail == undefined){
+          thisUserData.mail = []
+        }
+        thisUserData.mail.push({
+          isRead: false,
+          message: `${login} want to join your ${thisTrn.name} tournamnet`,
+          trnName: thisTrn.name,
+          trnID: thisTrn.ID,
+          login: login,
+          uid: uid,
+          type: 'approve'
+        })
+        db.collection("users_info").doc(`${thisTrn.creator.ID}`).set(JSON.parse(JSON.stringify(thisUserData))).then(() => { onbtnHome() })
+      })
+      break;
+    default:
+      break;
+  }
+ 
 }
 function onTournamentJoin(event) {
   // tournamentInfo.style.display = 'none';
@@ -998,16 +1023,47 @@ function checkUserMail(){
     firebaseMail = doc.data().mail
     if (doc.exists) {
       console.log(firebaseMail);
-      if (firebaseMail[0].msg == 'Welcome In Butula'){
+      if (firebaseMail[0].message == 'Welcome In Butula'){
         firebaseMail.reverse()
       }
       if (firebaseMail.length < 0){
         firebaseMail[0] = {
-          isRead: true,
+          isRead: false,
           message: 'Welcome In Butula',
-          type: text
+          type: 'text'
         }
       }
+      let trnsOfUser = []
+      firebaseUser.forEach(e => trnsOfUser.push(firebaseTournaments.filter(trn => trn.ID == e)[0]))
+      console.log(trnsOfUser)
+      trnsOfUser.forEach(trn => {
+        let thisSeasonNumber = Math.floor((Date.now() - trn.start) / 1000 / 60 / 60 / 24 / 30)
+        let userData = trn.participants.find(e => e.ID == uid)
+        console.log(userData)
+        if (userData.data !== undefined){
+          if (userData.data.findIndex(e => e.season == thisSeasonNumber) < 0){
+            let textsMail = firebaseMail.forEach(e => e.message)
+            console.log(textsMail)
+            if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
+              firebaseMail.push({
+                isRead: false,
+                message: `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`,
+                type: 'text'
+              })
+            }
+          }
+        } else {
+          let textsMail = firebaseMail.map(e => e.message)
+            console.log(textsMail)
+            if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
+              firebaseMail.push({
+                isRead: false,
+                message: `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`,
+                type: 'text'
+              })
+            }
+        }
+      })
       document.getElementById('numOfUnreadMsg').innerText = firebaseMail.filter(e => e.isRead == false).length < 1 ? '' : firebaseMail.filter(e => e.isRead == false).length
     }
   })
@@ -1056,6 +1112,14 @@ function onChooseUserVerdict(){
     db.collection("users_info").doc(`${firebaseMail[indexOfMsg].uid}`).get().then((doc) => {
       let thisUserData = doc.data()
       thisUserData.joined_tournaments.push(`${firebaseMail[indexOfMsg].trnID}`)
+      if (thisUserData.mail == undefined){
+        thisUserData.mail = []
+      }
+      thisUserData.mail.push({
+        isRead: false,
+        message: `You have been accepted to the ${firebaseMail[indexOfMsg].trnName} tournament`,
+        type: 'text'
+      })
       db.collection("users_info").doc(`${firebaseMail[indexOfMsg].uid}`).set(JSON.parse(JSON.stringify(thisUserData))).then(() => {
         db.collection("global_tournaments").doc(`${firebaseMail[indexOfMsg].trnID}`).update({
           participants: firebase.firestore.FieldValue.arrayUnion({
@@ -1074,13 +1138,22 @@ function onChooseUserVerdict(){
       })
   })
   } else {
+    db.collection("users_info").doc(`${firebaseMail[indexOfMsg].uid}`).get().then((doc) => {
+      let thisUserData = doc.data()
+      thisUserData.mail.push({
+        isRead: false,
+        message: `You dont't have been accepted to the ${firebaseMail[indexOfMsg].trnName} tournament`,
+        type: 'text'
+      })
+      db.collection("users_info").doc(`${firebaseMail[indexOfMsg].uid}`).set(JSON.parse(JSON.stringify(thisUserData)))
+    })
   document.getElementById('numOfUnreadMsg').innerText = firebaseMail.filter(e => e.isRead == false).length < 1 ? '' : firebaseMail.filter(e => e.isRead == false).length
   firebaseMail.splice(indexOfMsg, 1)
   console.log(firebaseMail)
   userInfo.mail = firebaseMail
   db.collection("users_info").doc(`${uid}`).set(userInfo)
   Array.from(document.getElementsByClassName('message'))[indexOfMsg].remove()
-    
+  
   }
 }
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---

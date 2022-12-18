@@ -639,18 +639,20 @@ li a:hover {
     grid-auto-rows: max-content;
     gap: 25px;
     margin: 0 5%;
-    height: 95%;
-    width: 90%;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 .message{
     background: rgba(255, 255, 255, 0.1);
     box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
-    width: 100%;
+    width: 90%;
     height: max-content;
 }
 .message > label{
     font-size: 20px;
-    padding: 10px;
+    padding: 10px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
