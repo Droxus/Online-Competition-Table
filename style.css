@@ -683,6 +683,33 @@ li a:hover {
     color: #d8a0a0;
     text-shadow: none;
 }
+#archiveBlock{
+    display: grid;
+    grid-template-columns: 100%;
+    grid-auto-flow: row;
+    grid-auto-rows: max-content;
+    gap: 25px;
+    margin: 0 5%;
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.fileArchive{
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    height: max-content;
+}
+.fileArchive > label{
+    font-size: 20px;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: break-spaces;
+    text-align: center;
+}
 /* #yesAreUsureBlock{
     background: #7D8994;
 }
@@ -752,7 +779,12 @@ li a:hover {
     word-break: break-all;
     width: 100%;
 }
-
+.tournament > div:nth-child(1){
+    overflow: hidden;
+    white-space: nowrap;
+    width: 80%;
+    text-align: center;
+}
 .tournamentLikeBtn {
     justify-self: center;
     align-self: center;

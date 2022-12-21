@@ -241,7 +241,6 @@ function showTournaments() {
   let trnsToShow;
   trnsToShow = firebaseTournaments.filter(e => e.type !== 'closed');
   for (let i = 0; i < trnsToShow.length; i++) {
-    console.log(trnsToShow[i].id)
     document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].ID}">             
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
           <textarea id="tournamentTargetsBlock" readonly rows="2">${trnsToShow[i].targets.map(e => e.name)}</textarea>
@@ -270,13 +269,9 @@ function onTournament(event) {
       break;
     }
   }
-  console.log(tournamentID)
-  console.log(firebaseTournaments[num].name)
   docName = this.firstElementChild.innerText;
-  console.log(firebaseUser)
   for (let i = 0; i < firebaseUser.length; i++) {
     if (firebaseUser[i] == firebaseTournaments[num].ID) {
-      console.log(firebaseTournaments[num].ID)
       return onTournamentJoin();
     }
   }
@@ -964,7 +959,7 @@ function onProfileBtns(event){
       
       break
     case 'Archive':
-      
+      showArchive()
       break;
     case 'Mail':
       showMail()
@@ -1022,7 +1017,6 @@ function checkUserMail(){
     userInfo = doc.data()
     firebaseMail = doc.data().mail
     if (doc.exists) {
-      console.log(firebaseMail);
       if (firebaseMail[0].message == 'Welcome In Butula'){
         firebaseMail.reverse()
       }
@@ -1035,15 +1029,12 @@ function checkUserMail(){
       }
       let trnsOfUser = []
       firebaseUser.forEach(e => trnsOfUser.push(firebaseTournaments.filter(trn => trn.ID == e)[0]))
-      console.log(trnsOfUser)
       trnsOfUser.forEach(trn => {
         let thisSeasonNumber = Math.floor((Date.now() - trn.start) / 1000 / 60 / 60 / 24 / 30)
         let userData = trn.participants.find(e => e.ID == uid)
-        console.log(userData)
         if (userData.data !== undefined){
           if (userData.data.findIndex(e => e.season == thisSeasonNumber) < 0){
             let textsMail = firebaseMail.forEach(e => e.message)
-            console.log(textsMail)
             if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
               firebaseMail.push({
                 isRead: false,
@@ -1054,7 +1045,6 @@ function checkUserMail(){
           }
         } else {
           let textsMail = firebaseMail.map(e => e.message)
-            console.log(textsMail)
             if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
               firebaseMail.push({
                 isRead: false,
@@ -1154,6 +1144,59 @@ function onChooseUserVerdict(){
   db.collection("users_info").doc(`${uid}`).set(userInfo)
   Array.from(document.getElementsByClassName('message'))[indexOfMsg].remove()
   
+  }
+}
+function showArchive(){
+  while (document.getElementById('content').firstElementChild) {
+    document.getElementById('content').firstElementChild.remove()
+  }
+  document.getElementById('content').appendChild(document.getElementById('archive').content.cloneNode(true));
+  document.getElementById('mainMenuHeader').style.display = 'none'
+  document.getElementById('defaultHeader').style.display = 'grid'
+  let trnsOfUser = []
+  firebaseUser.forEach(e => trnsOfUser.push(firebaseTournaments.filter(trn => trn.ID == e)[0]))
+  let allSeasonsNum = trnsOfUser.map(e => Math.floor((Date.now() - e.start) / 1000 / 60 / 60 / 24 / 30))
+  let maxSeason = Math.max.apply(null, allSeasonsNum)
+  for (let i = 0; i < maxSeason+1; i++){
+    trnsOfUser.forEach(trn => {
+      let usersPoints = []
+      trn.participants.forEach(user => {
+        usersPoints.push({
+          ID: user.ID,
+          login: user.login,
+          points: 0
+        })
+        if (user.data !== undefined){
+          let userData = user.data.filter(e => e.season == i)
+          userData.forEach(round => {
+            for (let j = 0; j < Object.values(round.data).length; j++){
+              usersPoints[usersPoints.length-1].points += Object.values(round.data)[j].reduce((accumulator, currentValue) => {accumulator + currentValue}) * trn.targets.find(e => e.name == Object.keys(round.data)[j]).points
+            }
+          }) 
+        }
+      })
+      usersPoints.sort((a, b) => {
+        if (a.points > b.points) { return -1 }
+        if (a.points < b.points) { return 1 }
+        return 0
+      })
+      let place = Number(usersPoints.findIndex(e => e.ID == uid)+1)
+      switch (place) {
+        case 1:
+          place = place + 'st'
+          break;
+        case 2:
+          place = place + 'nd'
+          break;
+        case 3:
+          place = place + 'rd'
+          break;
+        default:
+        place = place + 'th'
+          break;
+      }
+      document.getElementById('archiveBlock').insertAdjacentHTML('afterbegin', `<div class="fileArchive"><label>Tournament ${trn.name}, season ${i+1} - ${place} place, ${usersPoints.find(e => e.ID == uid).points} points</label></div>`)
+    })
   }
 }
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
