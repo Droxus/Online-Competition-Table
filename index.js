@@ -226,6 +226,7 @@ function getFirebaseUserJT() {
 function onbtnHome(event) {
   document.getElementById('mainMenuHeader').style.display = 'grid'
   document.getElementById('defaultHeader').style.display = 'none'
+  document.getElementById('midleBtnHeader').innerText = ''
   blackout.style.display = 'none';
   num = null; tournamentID = null
   document.getElementById('butulaBtn').innerText = 'Butula'
@@ -506,11 +507,13 @@ function onChangeTargetOfGraphic(event){
   let pointsForTarget = firebaseTournaments[num].targets[targetIndex].points
   let userIndex = firebaseTournaments[num].participants.findIndex(e => e.ID == uid)
   let data = []
-  for (let i = 0; i < firebaseTournaments[num].participants[userIndex].data.length; i++){
-    data[i] = {
-      data: firebaseTournaments[num].participants[userIndex].data[i].data[event.target.innerText].reduce((acc, e) => acc + e * pointsForTarget),
-      round: firebaseTournaments[num].participants[userIndex].data[i].round,
-      season: firebaseTournaments[num].participants[userIndex].data[i].season
+  if (firebaseTournaments[num].participants[userIndex].data !== undefined){
+    for (let i = 0; i < firebaseTournaments[num].participants[userIndex].data.length; i++){
+      data[i] = {
+        data: firebaseTournaments[num].participants[userIndex].data[i].data[event.target.innerText].reduce((acc, e) => acc + e * pointsForTarget),
+        round: firebaseTournaments[num].participants[userIndex].data[i].round,
+        season: firebaseTournaments[num].participants[userIndex].data[i].season
+      }
     }
   }
   buildDiagramsGraphic(data)
@@ -953,6 +956,8 @@ function onProfileBtns(event){
   switch (event.target.innerText) {
     case 'Edit Profile':
       Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style["pointer-events"] = 'visible')
+      Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style["box-shadow"] = '4px 2px 4px rgba(0, 0, 0, 0.25)')
+      Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style.background = 'rgba(255, 255, 255, 0.1)')
       event.target.innerText = 'Save Changes'
       break;
     case 'Created Tournaments':
@@ -971,6 +976,8 @@ function onProfileBtns(event){
       break;
     case 'Save Changes':
       Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style["pointer-events"] = 'none')
+      Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style["box-shadow"] = 'none')
+      Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style.background = 'none')
       event.target.innerText = 'Edit Profile'
       login = document.getElementById('loginProfile').value
       email = document.getElementById('emailProfile').value
@@ -1195,8 +1202,54 @@ function showArchive(){
         place = place + 'th'
           break;
       }
-      document.getElementById('archiveBlock').insertAdjacentHTML('afterbegin', `<div class="fileArchive"><label>Tournament ${trn.name}, season ${i+1} - ${place} place, ${usersPoints.find(e => e.ID == uid).points} points</label></div>`)
+      document.getElementById('archiveBlock').insertAdjacentHTML('afterbegin', `<div class="fileArchive" trnId="${trn.ID}" season="${i}"><label>Tournament ${trn.name}, season ${i+1} - ${place} place, ${usersPoints.find(e => e.ID == uid).points} points</label></div>`)
     })
+  }
+  Array.from(document.getElementsByClassName('fileArchive')).forEach(e => e.addEventListener('click', onFileArchive))
+}
+function onFileArchive(){
+  document.getElementById('archiveBlock').style.display = 'none'
+  document.getElementById('leaderAndStatOfArchive').style.display = 'grid'
+  document.getElementById('midleBtnHeader').addEventListener('click', onMidleBtnHeader)
+  num = firebaseTournaments.findIndex(e => e.ID == this.getAttribute('trnId'))
+  seasonNumber = this.getAttribute('season')
+  document.getElementById('midleBtnHeader').click()
+} 
+function onMidleBtnHeader(){
+  console.log(document.getElementById('content').firstElementChild.getAttribute('id'))
+  switch (document.getElementById('content').firstElementChild.getAttribute('id')) {
+    case 'archiveBlock':
+      document.getElementById('midleBtnHeader').innerText = document.getElementById('midleBtnHeader').innerText == 'leader board' ? 'statistics' : 'leader board'
+      if (document.getElementById('midleBtnHeader').innerText == 'leader board'){
+        document.getElementById('statisticsPageJT').style.display = 'none'
+        document.getElementById('leadersPageJT').style.display = 'grid'
+        while (document.getElementById('dataLeadersTable').firstElementChild){
+          document.getElementById('dataLeadersTable').firstElementChild.remove()
+        }
+        let participantsSorted = firebaseTournaments[num].participants.sort((a, b) => {
+          if (a.points > b.points) { return -1 }
+          if (a.points < b.points) { return 1 }
+          return 0 })
+        for (const participant in participantsSorted){
+          let bgColor = participantsSorted[participant].ID == uid ? '#737B8B' : 'transparent'
+          document.getElementById('dataLeadersTable').insertAdjacentHTML('beforeend', `
+          <div style="background:${bgColor};"><label>${Number(participant)+1}.</label><label>${participantsSorted[participant].login}</label><label>${Number(participantsSorted[participant].points) || 0}</label></div>
+          `)
+        }
+      } else {
+        document.getElementById('leadersPageJT').style.display = 'none'
+        document.getElementById('statisticsPageJT').style.display = 'grid'
+        while (document.getElementById('targetSwitch').firstElementChild){
+          document.getElementById('targetSwitch').firstElementChild.remove()
+        }
+        firebaseTournaments[num].targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label class="targetsSwitchLbl">${e.name}</label>`))
+        Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphic))
+        Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+      }
+      break;
+    // case value:
+      
+    //   break;
   }
 }
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
