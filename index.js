@@ -236,11 +236,10 @@ function onbtnHome(event) {
   }
   document.getElementById('content').appendChild(document.getElementById('homePage').content.cloneNode(true));
 
-  showTournaments();
+  showTournaments(firebaseTournaments.filter(e => e.type !== 'closed'));
 }
-function showTournaments() {
-  let trnsToShow;
-  trnsToShow = firebaseTournaments.filter(e => e.type !== 'closed');
+function showTournaments(trnsToShow) {
+  if (!trnsToShow){ trnsToShow = firebaseTournaments.filter(e => e.type !== 'closed') }
   for (let i = 0; i < trnsToShow.length; i++) {
     document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].ID}">             
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
@@ -264,18 +263,9 @@ function showTournaments() {
 let num;
 function onTournament(event) {
   tournamentID = this.getAttribute('id')
-  for (let i = 0; i < firebaseTournaments.length; i++) {
-    if (firebaseTournaments[i].ID == tournamentID) {
-      num = i; 
-      break;
-    }
-  }
-  docName = this.firstElementChild.innerText;
-  for (let i = 0; i < firebaseUser.length; i++) {
-    if (firebaseUser[i] == firebaseTournaments[num].ID) {
-      return onTournamentJoin();
-    }
-  }
+  num = firebaseTournaments.findIndex(trn => trn.ID == tournamentID)
+  docName = firebaseTournaments[num].name;
+  if (firebaseTournaments[num].participants.findIndex(e => e.ID == uid) >= 0) return onTournamentJoin()
   return onTournamentInfo();
 }
 let escapeFuseSpam = false;
@@ -913,11 +903,9 @@ function onButulaMenuBtns(){
       })
       document.getElementById('yesAreUsureBlock').addEventListener('click', onTournamentCreateBtn)
       document.getElementById('goNextTC').addEventListener('click', onbtnHome)
-      // document.getElementById('tournamentCreateBtn').addEventListener('click', onTournamentCreateBtn);
-      // Array.from(document.getElementsByClassName('tournamentTargetsInputAtCreatePanel'))[0].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
       break;
     case 'favoritesPage':
-      showTournaments();
+      showTournaments(firebaseTournaments.filter(trn => trn.participants.findIndex(e => e.ID == uid) >= 0));
       break;  
   }
 }
@@ -961,7 +949,7 @@ function onProfileBtns(event){
       event.target.innerText = 'Save Changes'
       break;
     case 'Created Tournaments':
-      
+      showCreatedTrns()
       break
     case 'Archive':
       showArchive()
@@ -1251,6 +1239,69 @@ function onMidleBtnHeader(){
       
     //   break;
   }
+}
+function showCreatedTrns(){
+  while (document.getElementById('content').firstElementChild) {
+    document.getElementById('content').firstElementChild.remove()
+  }
+  document.getElementById('content').appendChild(document.getElementById('createdTrnsProfile').content.cloneNode(true));
+  document.getElementById('mainMenuHeader').style.display = 'none'
+  document.getElementById('defaultHeader').style.display = 'grid'
+  let createdTrns = firebaseTournaments.filter(trn => trn.creator.ID == uid)
+  showTournaments(createdTrns)
+  Array.from(document.getElementsByClassName('tournament')).forEach(element => element.removeEventListener('click', onTournament));
+  Array.from(document.getElementsByClassName('tournament')).forEach(element => element.addEventListener('click', onCreatedTournament));
+}
+function onCreatedTournament(){
+  tournamentID = this.getAttribute('id')
+  num = firebaseTournaments.findIndex(trn => trn.ID == tournamentID)
+  docName = firebaseTournaments[num].name;
+  while (document.getElementById('content').firstElementChild) {
+    document.getElementById('content').firstElementChild.remove()
+  }
+  document.getElementById('content').appendChild(document.getElementById('tournamentCreatePanel').content.cloneNode(true));
+  Array.from(document.getElementsByClassName('switchPageBtn')).forEach(e => e.addEventListener('click', onSwitchPageBtn))
+    Array.from(document.getElementsByClassName('trnAccessBtn')).forEach(e => e.addEventListener('click', onTrnAccessBtn))
+    document.getElementById('targetsBlock').appendChild(document.getElementById('targetCT').content.cloneNode(true));
+    Array.from(document.getElementsByClassName('targetsName')).forEach(e => e.addEventListener('change', onTargetsName))
+    document.getElementById('noAreUsureBlock').addEventListener('click', () => {
+      document.getElementById('areUsureBlock').style.display = 'none'
+    })
+    document.getElementById('yesAreUsureBlock').addEventListener('click', onTournamentUpdateBtn)
+    document.getElementById('goNextTC').addEventListener('click', onbtnHome)
+    document.getElementById('trnNameInput').value = docName
+    let thisType = Array.from(document.getElementsByClassName('trnAccessBtn')).find(e => e.innerText.toLowerCase() == firebaseTournaments[num].type)
+    Array.from(document.getElementsByClassName('trnAccessBtn')).forEach(e => e.style.background = '#6F7C88')
+    thisType.style.background = '#7D8994'
+    firebaseTournaments[num].targets.forEach((target, index) => {
+      document.getElementById('targetsBlock').appendChild(document.getElementById('targetCT').content.cloneNode(true))
+      Array.from(document.getElementsByClassName('targetsName'))[index].value = target.name
+      Array.from(document.getElementsByClassName('pointsOfTargetCT'))[index].value = target.points
+      Array.from(document.getElementsByClassName('typeOfTargetCT'))[index].value = target.type
+      Array.from(document.getElementsByClassName('amountOfTargetCT'))[index].value = target.approach
+    })
+    Array.from(document.getElementsByClassName('targetsName')).forEach(e => e.addEventListener('change', onTargetsName))
+    document.getElementById('areUsureBlock').getElementsByTagName('label')[0].innerText = 'Are you sure you want to update this tournament?'
+}
+function onTournamentUpdateBtn(){
+  console.log('Loading...')
+  firebaseTournaments[num].targets = []
+  for (const targetBlock in Array.from(document.getElementsByClassName('targetBlock'))){
+    firebaseTournaments[num].targets.push({
+      name: document.getElementsByClassName('targetsName')[targetBlock].value,
+      approach: Math.abs(Math.floor(Number(document.getElementsByClassName('amountOfTargetCT')[targetBlock].value))),
+      type: document.getElementsByClassName('typeOfTargetCT')[targetBlock].value,
+      points: Math.max(Math.floor(Number(document.getElementsByClassName('pointsOfTargetCT')[targetBlock].value)), 1)
+    })
+  }
+  firebaseTournaments[num].targets.pop()
+  docName = document.getElementById('trnNameInput').value;
+  firebaseTournaments[num].name = docName
+  firebaseTournaments[num].type = (Array.from(document.getElementsByClassName('trnAccessBtn')).find(e => getComputedStyle(e).backgroundColor == 'rgb(125, 137, 148)').innerText).toLowerCase()
+  db.collection("global_tournaments").doc(`${firebaseTournaments[num].ID}`).set(firebaseTournaments[num]).then(() => {
+    document.getElementById('areUsureBlock').style.display = 'none'
+    document.getElementById('trnCreatedBlock').style.display = 'flex'
+  })
 }
 //--- --- --- --- --- ---  firebase --- --- --- --- --- --- --- ---
 
