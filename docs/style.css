@@ -751,11 +751,13 @@ li a:hover {
 }
 
 #statisticPageBlock {
+    margin: 0 5%;
+    height: 95%;
+    width: 90%;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 2px 4px rgb(0 0 0 / 25%);
     display: grid;
-    grid-template-rows: 1fr 50px;
-    margin: 0px;
-    width: 100%;
-    height: 100%;
+    grid-template-rows: 15% 85%;
 }
 
 .tournament {

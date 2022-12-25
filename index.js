@@ -509,11 +509,13 @@ function onChangeTargetOfGraphic(event){
   buildDiagramsGraphic(data)
 }
 function buildDiagramsGraphic(data){
+  console.log(data)
   let label = 'round'
   while (document.getElementById('diagramsBlock').firstChild) {
     document.getElementById('diagramsBlock').removeChild(document.getElementById('diagramsBlock').firstChild);
   }
   if (label == 'round') { data = data.filter(e => e.season == seasonNumber) }
+  console.log(seasonNumber)
   let maxData = Math.max.apply(null, data.map(e => e.data))
   data.forEach((e, i) => {
     let ratioToMax = e.data / maxData * 80
@@ -907,7 +909,36 @@ function onButulaMenuBtns(){
     case 'favoritesPage':
       showTournaments(firebaseTournaments.filter(trn => trn.participants.findIndex(e => e.ID == uid) >= 0));
       break;  
+    case 'statisticPage':
+      createdTrns = firebaseTournaments.filter(trn => trn.creator.ID == uid)
+      createdTrns.forEach(trn => trn.targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label trnID="${trn.ID}" class="targetsSwitchLbl">${e.name}</label>`)))
+      Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphicMaimPage))
+      Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+
+      break;
   }
+}
+let createdTrns
+function onChangeTargetOfGraphicMaimPage(event){
+  Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.style.background = 'transparent')
+  event.target.style.background = '#7D8994'
+  let thisTrn = createdTrns.find(trn => trn.ID == event.target.getAttribute('trnID'))
+  let allTargetsOfTrn = thisTrn.targets.map(e => e.name)
+  let targetIndex = allTargetsOfTrn.findIndex(e => e == event.target.innerText)
+  let pointsForTarget = thisTrn.targets[targetIndex].points
+  let userIndex = thisTrn.participants.findIndex(e => e.ID == uid)
+  let data = []
+  if (thisTrn.participants[userIndex].data !== undefined){
+    for (let i = 0; i < thisTrn.participants[userIndex].data.length; i++){
+      data[i] = {
+        data: thisTrn.participants[userIndex].data[i].data[event.target.innerText].reduce((acc, e) => acc + e * pointsForTarget),
+        round: thisTrn.participants[userIndex].data[i].round,
+        season: thisTrn.participants[userIndex].data[i].season
+      }
+    }
+  }
+  seasonNumber = Math.floor((Date.now() - thisTrn.start) / 1000 / 60 / 60 / 24 / 30)
+  buildDiagramsGraphic(data)
 }
 function onButulaTournmanetMenuBtns(){
     document.getElementById('butulaTournamentMenu').style.display = 'none'
