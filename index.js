@@ -468,6 +468,7 @@ function getTournamentTime() {
   document.getElementById('creator').innerText = `Creator ${firebaseTournaments[num].creator.login}`
   Array.from(document.getElementsByClassName('timerDataJT')).forEach(element => {
     element.innerText = `${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
+    document.getElementById('midleBtnHeader').innerText = `${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
   });
   clearInterval(timerToNextRound);
   timerToNextRound = setInterval(() => {
@@ -479,6 +480,9 @@ function getTournamentTime() {
     if (hoursToNextRound < 0)  { onNavPanelJTmain() }
     Array.from(document.getElementsByClassName('timerDataJT')).forEach(element => {
       element.innerText = `${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
+      if (document.getElementById('statisticsPageJT').style.display == 'none'){
+        document.getElementById('midleBtnHeader').innerText = `${String(hoursToNextRound).padStart(2, '0')}:${String(minutesToNextRound).padStart(2, '0')}:${String(secondsToNextRound).padStart(2, '0')}`;
+      }
     });
   }, 1000);
 }
@@ -487,7 +491,9 @@ function onNavPanelJTstatistics(event) {
   document.getElementById('statisticsPageJT').style.display = 'grid';
   firebaseTournaments[num].targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label class="targetsSwitchLbl">${e.name}</label>`))
   Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphic))
+  document.getElementById('midleBtnHeader').innerText = 'round'
   Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+  document.getElementById('midleBtnHeader').addEventListener('click', onMidleBtnHeader)
 }
 function onChangeTargetOfGraphic(event){
   Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.style.background = 'transparent')
@@ -509,11 +515,20 @@ function onChangeTargetOfGraphic(event){
   buildDiagramsGraphic(data)
 }
 function buildDiagramsGraphic(data){
-  let label = 'round'
   while (document.getElementById('diagramsBlock').firstChild) {
     document.getElementById('diagramsBlock').removeChild(document.getElementById('diagramsBlock').firstChild);
   }
-  if (label == 'round') { data = data.filter(e => e.season == seasonNumber) }
+  if (document.getElementById('midleBtnHeader').innerText == 'season'){
+    let sesasons = data.map(e => e.season)
+    sesasons = [...new Set(sesasons)]
+    let newData = []
+    sesasons.forEach(season => {
+      let thisSeasonData = data.filter(e => e.season == season)
+      let dataValue = thisSeasonData.reduce((accumulator, currentValue) => accumulator + Number(currentValue.data), 0)
+      newData.push({data: Math.round(dataValue / thisSeasonData.length), season: season})
+    })
+    data = newData
+  } else { data = data.filter(e => e.season == seasonNumber) } 
   let maxData = Math.max.apply(null, data.map(e => e.data))
   data.forEach((e, i) => {
     let ratioToMax = e.data / maxData * 80
@@ -547,27 +562,21 @@ function onNavPanelJTdata() {
     joinedTrn.forEach(trn => {
       let thisLocalData = JSON.parse((localStorage.getItem(trn.ID)))
       if (thisLocalData !== undefined){
-        console.log(thisLocalData)
         dateDiff = (Date.now() - trn.start)
         seasonNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24 / 30)
         dateDiff -= seasonNumber * 30 * 24 * 60 * 60 * 1000
         roundNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24)
-        console.log(seasonNumber, roundNumber)
         if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
-          console.log(localData)
           if (localData.data == undefined){
             localData.data = {}
           }
           localData.data = Object.assign(localData.data, thisLocalData.data)
-          console.log(localData)
           localTargets.push(trn.targets)
         }
       }
     })
     localTargets = localTargets.flat()
   }
-  console.log(localTargets)
-  console.log(dataBlock)
   while (dataBlock.firstElementChild) {
     dataBlock.firstElementChild.remove()
   }
@@ -1278,6 +1287,10 @@ function onMidleBtnHeader(){
         Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphic))
         Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
       }
+      break;
+    case 'joinedTournament':
+      document.getElementById('midleBtnHeader').innerText = document.getElementById('midleBtnHeader').innerText == 'season' ? 'round' : 'season'
+      Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
       break;
     // case value:
       

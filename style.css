@@ -225,6 +225,7 @@ div.dataEnterSqr>* {
     color: #D9A9AC;
     text-shadow: none;
     font-weight: bold;
+    overflow: inherit;
 }
 #mainMenuHeader{
     display: grid;
