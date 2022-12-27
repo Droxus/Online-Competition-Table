@@ -28,8 +28,8 @@
                     </div>
                     <div>
                         <div id="searchMainBlock">
-                            <input type="search" autocomplete="off" placeholder="Search...">
-                            <div>
+                            <input id="searchTournamentInput" type="search" autocomplete="off" value="" placeholder="Search..." onfocus="this.removeAttribute('readonly');" readonly>
+                            <div id="searchTournamentBtn">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <rect width="20" height="20" fill="url(#pattern3)"/>
                                     <defs>
@@ -60,7 +60,7 @@
                         
                 </div>
                 <div id="defaultHeader">
-                    <button>&lt Back</button>
+                    <button id="backBtn">&lt Back</button>
                     <button id="midleBtnHeader"></button>
                     <button id="mainMenuBtn">Main ></button>
                 </div>

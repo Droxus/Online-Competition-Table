@@ -18,9 +18,6 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-
-const body = document.body;
-const root = document.querySelector(':root');
 const btnSignIn = document.getElementById('btnSignIn');
 const authMenu = Array.from(document.getElementsByClassName('authMenu'));
 const noaccLink = document.getElementById('noaccLink');
@@ -29,79 +26,23 @@ const inptPassword = document.getElementById('inptPassword');
 const mainBlock = document.getElementById('mainBlock');
 const nickForLabel = document.getElementById('nickForLabel');
 const btnHome = document.getElementById('btnHome');
-const btnFavorites = document.getElementById('btnFavorites');
-const btnData = document.getElementById('btnData');
-const btnStatistics = document.getElementById('btnStatistics');
-const contentBlock = document.getElementById('contentBlock');
-const contentBlockClass = Array.from(document.getElementsByClassName('contentBlock'));
-const labelUnity = document.getElementById('labelUnity');
-const navigationPanel = document.getElementById('navigationPanel');
-const profile = document.getElementById('profile');
-const headerBlock = document.getElementById('headerBlock');
-const profIcon = document.getElementById('profIcon');
-const mobileNavPanel = document.getElementById('mobileNavPanel');
-const btnMobHome = document.getElementById('btnMobHome');
-const btnMobFav = document.getElementById('btnMobFav');
-const btnMobData = document.getElementById('btnMobData');
-const btnMobStat = document.getElementById('btnMobStat');
-const btnMobProf = document.getElementById('btnMobProf');
-const lblErrorOutput = document.getElementById('lblErrorOutput');
-// const createTournament = Array.from(document.getElementsByClassName('createTournament'));
-const blackout = document.getElementById('blackout');
-const tournamentInfo = document.getElementById('tournamentInfo');
-const crossIcon = document.getElementById('crossIcon');
-const tournamentNameInfo = document.getElementById('tournamentNameInfo');
-const tournamentsTargetInfo = document.getElementById('tournamentsTargetInfo');
-const tournamentMembersInfo = document.getElementById('tournamentMembersInfo');
-const tournamentBtnsInfo = document.getElementById('tournamentBtnsInfo');
-const tournamentMembersLabelInfo = document.getElementById('tournamentMembersLabelInfo');
-const tournamentAdminLabelInfo = document.getElementById('tournamentAdminLabelInfo');
-const tournamentReqInfo = document.getElementById('tournamentReqInfo');
-const tournamentAdminInfo = document.getElementById('tournamentAdminInfo');
-const tournamentReqLabelInfo = document.getElementById('tournamentReqLabelInfo');
-const tournamentLikeBtn = Array.from(document.getElementsByClassName('tournamentLikeBtn'));
-let crossIcononCreate = document.getElementById('crossIcononCreate');
-const prewPageTurn = Array.from(document.getElementsByClassName('prewPageTurn'));
-const nextPagTurn = Array.from(document.getElementsByClassName('nextPagTurn'));
-const tournamentCreatePanel = document.getElementById('tournamentCreatePanel');
-let numsOfTrnsOnthePage = Array.from(document.getElementsByClassName('numsOfTrnsOnthePage'));
-let numsOfTrnsOnthePageOpt = Array.from(document.getElementsByClassName('numsOfTrnsOnthePageOpt'));
-let likeButton = Array.from(document.getElementsByClassName("heart-like-button"));
-let tournamentsPanel = Array.from(document.getElementsByClassName('tournamentsPanel'));
 let trnType = 'opened';
-let tournamentGoalsLabelInfo = document.getElementById('tournamentGoalsLabelInfo');
-let tournamentTargetsInputAtCreatePanel, tournamentSwitchPageBtn;
-let tournamentRequirementsLblAtCreatePanel;
-let creatingTournamentLbl;
-let tournamentTargetsBlockAtCreatePanel;
-let tournamentRequirementsBlockAtCreatePanel;
-let tournamentRequirementsInputAtCreatePanel;
-const NavPanelBtns = [btnHome, btnFavorites, btnData, btnStatistics, profile];
-const mobileNavPanelBtns = [btnMobHome, btnMobFav, btnMobData, btnMobStat, btnMobProf];
-let password, email, width, height, temporaryElementsTI, docName, tournamentID, nowDate, dateDiff;
+let password, email, docName, tournamentID, nowDate, dateDiff, pageHistory = []
 inptUsername.addEventListener('click', onClearError);
 inptPassword.addEventListener('click', onClearError);
 btnHome.addEventListener('click', onbtnHome);
 document.getElementById('profileBtnMenu').addEventListener('click', onProfile);
 document.getElementById('mailBtnMenu').addEventListener('click', showMail);
-// createTournament.forEach(element => element.addEventListener('click', showCreateTournamentBlock));
-// crossIcon.addEventListener('click', onCrossTournamentInfo);
-// document.getElementById('btnLogout').addEventListener('click', onBtnSignOut);
 document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
-// document.getElementById('btnLeaveTrn').addEventListener('click', onLeaveTrn);
-// document.getElementById('btnNavJT').addEventListener('click', onBtnNavJT);
-// document.getElementById('navPanelJTclose').addEventListener('click', onNavPanelJTclose);
-// document.getElementById('btnResetJTdata').addEventListener('click', onResetTournamentDate);
 
 document.getElementById('butulaBtn').addEventListener('click', onButulaBtn)
 Array.from(document.getElementsByClassName('butulaMenuBtns')).forEach(element => element.addEventListener('click', onButulaMenuBtns))
 Array.from(document.getElementsByClassName('butulaTournmanetMenuBtns')).forEach(element => element.addEventListener('click', onButulaTournmanetMenuBtns))
 document.getElementById('mainMenuBtn').addEventListener('click', onbtnHome)
+document.getElementById('backBtn').addEventListener('click', onBackBtn)
+document.getElementById('searchTournamentInput').addEventListener('input', onSearchTournamentInput)
+document.getElementById('searchTournamentBtn').addEventListener('click', () => document.getElementById('searchTournamentBtn').focus())
 
-width = window.innerWidth;
-height = window.innerHeight;
-
-// blackout.style.display = 'block';
 document.getElementById('regBlock').style.display = 'none'
 document.getElementById('butulaMenu').style.display = 'none'
 document.getElementById('butulaTournamentMenu').style.display = 'none'
@@ -135,7 +76,7 @@ function onButulaBtn(){
     document.getElementById(butulaMenu).style.display = 'none'
   }
 }
-let login;
+let login
 function getNickName() {
   if (User.displayName == null) {
     login = email;
@@ -148,25 +89,16 @@ function getNickName() {
     User.updateProfile({
       displayName: login
     })
-      .then(() => console.log(User.displayName));
 
   } else {
     login = User.displayName;
     nickForLabel.innerHTML = login;
-  }
-  let nick = db.collection("users_info").doc(uid).nickName;
-
-  if (((nick == null) || (nick == undefined)) || (nick == '')) {
-    db.collection("users_info").doc(uid).update({
-      nickName: login
-    });
   }
 }
 function onSignIn() {
   password = null;
   getFirebaseData();
   getFirebaseUserJT()
-  checkUserMail()
   document.getElementById('regBlock').style.display = 'none';
   mainBlock.style.display = 'grid';
   blackout.style.display = 'none';
@@ -199,10 +131,11 @@ let firebaseUserData = [];
 let from = 0;
 function getFirebaseData() {
   firebaseTournaments = [];
-  // blackout.style.display = 'block';
   db.collection("global_tournaments").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
-      firebaseTournaments.push(doc.data());
+      if (doc.data().type !== 'closed' || doc.data().participants.findIndex(e => e.ID == uid) !== -1){
+        firebaseTournaments.push(doc.data());
+      }
     });
     while (querySnapshot.docs.length < firebaseTournaments.length) {
       firebaseTournaments.pop();
@@ -212,7 +145,7 @@ function getFirebaseData() {
       querySnapshot.forEach((doc) => {
         firebaseUserData.push(doc.data());
       });
-    }).then(() => {onbtnHome()});
+    }).then(() => {onbtnHome(); checkUserMail()});
   });
 }
 function getFirebaseUserJT() {
@@ -220,8 +153,48 @@ function getFirebaseUserJT() {
   db.collection("users_info").doc(uid).get().then((doc) => {
     if (doc.exists) {
       firebaseUser = doc.data().joined_tournaments;
+      if (!firebaseUser){
+        firebaseUser = []
+      }
     }
   })
+}
+function onSearchTournamentInput(){
+  if (firebaseTournaments.length > 0){
+    showTournaments(firebaseTournaments.filter(trn => trn.name.toLowerCase().includes(String(this.value).toLowerCase())));
+  }
+}
+function onBackBtn(){
+  pageHistory.pop()
+  switch (pageHistory[pageHistory.length-1]) {
+    case 'tournamentInfoBlock':
+      onTournamentInfo()
+      break;
+    case 'joinedTournamentBlock':
+      onTournamentJoin()
+      break;
+    case 'tournamentCreatePanel' || 'favoritesPage' || 'statisticPage' || 'dataPage':
+      onButulaMenuBtns(pageHistory[pageHistory.length-1])
+      break;
+    case 'profilePage':
+      onProfile()
+      break;
+    case 'mail':
+      showMail()
+      break;
+    case 'archive':
+      showArchive()
+      break;
+    case 'createdTrnsProfile':
+      showCreatedTrns()
+      break;
+    case 'tournamentCreatePanel':
+      showCreatedTrns()
+      break;
+    default:
+    onbtnHome()
+      break;
+  }
 }
 function onbtnHome(event) {
   document.getElementById('mainMenuHeader').style.display = 'grid'
@@ -235,11 +208,16 @@ function onbtnHome(event) {
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('homePage').content.cloneNode(true));
-
-  showTournaments(firebaseTournaments.filter(e => e.type !== 'closed'));
+  if (pageHistory[pageHistory.length-1] !== 'homePage'){
+    pageHistory.push('homePage')
+  }
+  showTournaments(firebaseTournaments);
 }
 function showTournaments(trnsToShow) {
-  if (!trnsToShow){ trnsToShow = firebaseTournaments.filter(e => e.type !== 'closed') }
+  while (document.getElementsByClassName('tournamentsPanel')[0].firstElementChild) {
+    document.getElementsByClassName('tournamentsPanel')[0].firstElementChild.remove()
+  }
+  if (!trnsToShow){ trnsToShow = firebaseTournaments }
   for (let i = 0; i < trnsToShow.length; i++) {
     document.getElementsByClassName('tournamentsPanel')[0].insertAdjacentHTML('beforeend', `<div class="tournament" id="${trnsToShow[i].ID}">             
           <div id="tournamentNameBlock"><label class="tournamentName" for="tournamentName">${trnsToShow[i].name}</label></div>
@@ -270,13 +248,15 @@ function onTournament(event) {
 }
 let escapeFuseSpam = false;
 function onTournamentInfo() {
-  // tournamentInfo.style.display = 'grid';
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('tournamentInfoBlock').content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== 'tournamentInfoBlock'){
+    pageHistory.push('tournamentInfoBlock')
+  }
   document.getElementById('tournamentNameInfo').innerText = firebaseTournaments[num].name;
   document.getElementById('numsOfParticipants').innerText = firebaseTournaments[num].participants.length + ' participants';
   document.getElementById('targets').innerText = 'Targets: ' + firebaseTournaments[num].targets.map(e => e.name);
@@ -312,7 +292,6 @@ function ontournamentTargetsInputAtCreatePanel(event) {
     tournamentTargetsInputAtCreatePanel[tournamentTargetsInputAtCreatePanel.length - 1].addEventListener('input', ontournamentTargetsInputAtCreatePanel);
 }
 function onTournamentCreateBtn() {
-  console.log('Loading...')
   let trnTargets = [];
   let targetBlocks = Array.from(document.getElementsByClassName('targetBlock'))
           for (const targetBlock in targetBlocks){
@@ -329,7 +308,6 @@ function onTournamentCreateBtn() {
     }
     do {
       id = Number(String(Math.pow(10, 12) * Math.random()).replace('.', 0).slice(0, 12))
-      console.log(id)
     } while (allId.has(id))
     allId.add(id)
       trnTargets.pop();
@@ -346,7 +324,6 @@ function onTournamentCreateBtn() {
           participants: [{login: login, ID: uid, data: []}],
           start: Date.now()
         };
-        console.log(createdTrn);
         firebaseUser.push(id);
         db.collection("global_tournaments").doc(`${id}`).set(createdTrn).then(() => {
           db.collection("users_info").doc(uid).set({
@@ -369,7 +346,8 @@ function onJTbtn(event) {
             participants: firebase.firestore.FieldValue.arrayUnion({
               ID: uid,
               login: login,
-              data: []
+              data: [],
+              points: 0
             }) 
           }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); })
         })
@@ -398,14 +376,15 @@ function onJTbtn(event) {
  
 }
 function onTournamentJoin(event) {
-  // tournamentInfo.style.display = 'none';
-  // document.getElementById('joinedTournament').style.display = 'grid';
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('joinedTournamentBlock').content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== 'joinedTournamentBlock'){
+    pageHistory.push('joinedTournamentBlock')
+  }
   document.getElementById('nameJT').innerText = docName;
   onNavPanelJTmain();
 }
@@ -492,7 +471,9 @@ function onNavPanelJTstatistics(event) {
   firebaseTournaments[num].targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label class="targetsSwitchLbl">${e.name}</label>`))
   Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphic))
   document.getElementById('midleBtnHeader').innerText = 'round'
-  Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+  if (Array.from(document.getElementsByClassName('targetsSwitchLbl')).length > 0){
+    Array.from(document.getElementsByClassName('targetsSwitchLbl'))[0].click()
+  }
   document.getElementById('midleBtnHeader').addEventListener('click', onMidleBtnHeader)
 }
 function onChangeTargetOfGraphic(event){
@@ -550,8 +531,10 @@ function onNavPanelJTdata() {
     allTargets = firebaseTournaments[num].targets
     allTargets.forEach(target => target.trnID = firebaseTournaments[num].ID)
     let thisLocalData = JSON.parse((localStorage.getItem(tournamentID)))
-    if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
-      localData = thisLocalData
+    if (thisLocalData !== undefined){
+      if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
+        localData = thisLocalData
+      }
     }
     localTargets = allTargets
   } else {
@@ -755,7 +738,6 @@ function onNavPanelJTdata() {
           }
       }
     }
-    console.log(Array.from(dataJTinputs).findIndex(e => e == dataJTinputs[nowAproach]))
       if (dataJTinputs.length - nowAproach-1 > 0){
         event.target.parentElement.parentElement.getElementsByClassName('nowApproach')[0].innerText = (nowAproach + 2);
         dataJTinputs[nowAproach].classList.remove('moveFromRightDateInput');
@@ -802,7 +784,6 @@ function onAnimationInputMoveLeft(event) {
 function onDataInputsChange(event){
   let data = {}, targetsOnSave
   targetsOnSave = allTargets
-  console.log(targetsOnSave)
   if (document.getElementById('content').firstElementChild.getAttribute('id') !== 'joinedTournament'){
     tournamentID = event.target.tagName == 'DIV' ? event.target.parentElement.parentElement.parentElement.parentElement.getAttribute('trnid') : event.target.parentElement.parentElement.parentElement.getAttribute('trnid')
     targetsOnSave = targetsOnSave.filter(target => target.trnID == tournamentID)
@@ -812,15 +793,10 @@ function onDataInputsChange(event){
     dateDiff -= seasonNumber * 30 * 24 * 60 * 60 * 1000
     roundNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24)
   }
-  console.log(targetsOnSave)
   for (const target in targetsOnSave){
     if (targetsOnSave[target].type == "clicker"){
-      // data[targetsOnSave[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('btnDataCounter'))
-      // .reduce((partialSum, e) => partialSum + Number(e.innerText) * targetsOnSave[target].points, 0)
       data[targetsOnSave[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('btnDataCounter')).map(e => Number(e.innerText))
     } else {
-      // data[targetsOnSave[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('dataJTinputs'))
-      // .reduce((partialSum, e) => partialSum + e.value * targetsOnSave[target].points, 0)
       data[targetsOnSave[target].name] = Array.from(document.getElementsByClassName('dataBlockJT')[target].getElementsByClassName('dataJTinputs')).map(e => Number(e.value))
     }
   }
@@ -829,9 +805,7 @@ function onDataInputsChange(event){
     round: roundNumber,
     data: data
   }
-  console.log('transaction: ' + transaction)
   localStorage.setItem(tournamentID, JSON.stringify(transaction));
-  console.log(JSON.parse((localStorage.getItem(tournamentID))))
   document.getElementById('butulaBtn').innerText = 'Save'
 }
 function saveTournament(){
@@ -857,14 +831,9 @@ function saveTournament(){
         }
       }
       db.collection("global_tournaments").doc(tournamentID).set(firebaseTournaments[num]).then(() => {
-        console.log('Saved');
       });
-    } else {
-      console.log('error')
     }
-  }).catch((error) => {
-    console.log("Error getting document:", error);
-});
+  })
 }
 let timerToNextRound;
 function onNavPanelJTleaders(event) {
@@ -904,15 +873,21 @@ function onResetTournamentDate() {
     }
   });
 }
-function onButulaMenuBtns(){
+function onButulaMenuBtns(page){
+  if (typeof page == 'object'){
+    page = this.getAttribute('page')
+  }
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   document.getElementById('butulaMenu').style.display = 'none'
   while (document.getElementById('content').firstElementChild) {
     document.getElementById('content').firstElementChild.remove()
   }
-  document.getElementById('content').appendChild(document.getElementById(this.getAttribute('page')).content.cloneNode(true));
-  switch (this.getAttribute('page')) {
+  document.getElementById('content').appendChild(document.getElementById(page).content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== page){
+    pageHistory.push(page)
+  }
+  switch (page) {
     case 'tournamentCreatePanel':
       Array.from(document.getElementsByClassName('switchPageBtn')).forEach(e => e.addEventListener('click', onSwitchPageBtn))
       Array.from(document.getElementsByClassName('trnAccessBtn')).forEach(e => e.addEventListener('click', onTrnAccessBtn))
@@ -928,10 +903,12 @@ function onButulaMenuBtns(){
       showTournaments(firebaseTournaments.filter(trn => trn.participants.findIndex(e => e.ID == uid) >= 0));
       break;  
     case 'statisticPage':
-      createdTrns = firebaseTournaments.filter(trn => trn.creator.ID == uid)
+      createdTrns = firebaseTournaments.filter(trn => trn.participants.findIndex(e => e.ID == uid) !== -1)
       createdTrns.forEach(trn => trn.targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label trnID="${trn.ID}" class="targetsSwitchLbl">${e.name}</label>`)))
       Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphicMaimPage))
-      Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+      if (Array.from(document.getElementsByClassName('targetsSwitchLbl')).length > 0){
+        Array.from(document.getElementsByClassName('targetsSwitchLbl'))[0].click()
+      }
       break;
     case 'dataPage':
       onNavPanelJTdata()
@@ -984,6 +961,9 @@ function onProfile(event) {
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('profilePage').content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== 'profilePage'){
+    pageHistory.push('profilePage')
+  }
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   document.getElementById('loginProfile').value = login
@@ -991,7 +971,6 @@ function onProfile(event) {
   Array.from(document.getElementsByClassName('profileBtns')).forEach(e => e.addEventListener('click', onProfileBtns))
 }
 function onProfileBtns(event){
-  console.log(event.target.innerText)
   switch (event.target.innerText) {
     case 'Edit Profile':
       Array.from(document.getElementsByClassName('profileInputs')).forEach(e => e.style["pointer-events"] = 'visible')
@@ -1027,13 +1006,6 @@ function onProfileBtns(event){
       break; 
   }
 }
-function oncrossIcononCreate(event) {
-  // while (tournamentCreatePanel.firstChild) {
-  //   tournamentCreatePanel.removeChild(tournamentCreatePanel.firstChild);
-  // }
-  // tournamentCreatePanel.style.display = 'none';
-  mainBlock.style.display = 'grid';
-}
 function onSwitchPageBtn(event){
   let nextPageDiff = event.target.innerText == 'Go next' ? 1 : -1
   let nowPageIndex = Array.from(document.getElementsByClassName('trnCreatePages')).findIndex(e => e.style.display !== 'none')
@@ -1051,37 +1023,46 @@ function onTrnAccessBtn(event){
 function onTargetsName(event){
   let targetBlock = Array.from(event.target.parentElement.parentElement.getElementsByClassName('targetBlock'))
   let indexOfThisTarget = targetBlock.findIndex(e => e == event.target.parentElement)
-  console.log(indexOfThisTarget)
   if (targetBlock.length - indexOfThisTarget < 2){
     document.getElementById('targetsBlock').appendChild(document.getElementById('targetCT').content.cloneNode(true));
   }
   Array.from(document.getElementsByClassName('targetsName')).forEach(e => e.addEventListener('change', onTargetsName))
 }
-let firebaseMail, userInfo
+let firebaseMail = [], userInfo
 function checkUserMail(){
   db.collection("users_info").doc(`${uid}`).get().then((doc) => {
     userInfo = doc.data()
     firebaseMail = doc.data().mail
     if (doc.exists) {
-      if (firebaseMail[0].message == 'Welcome In Butula'){
-        firebaseMail.reverse()
-      }
-      if (firebaseMail.length < 0){
-        firebaseMail[0] = {
+      if (firebaseMail){
+        if (firebaseMail.length < 0){
+          firebaseMail[0] = {
+            isRead: false,
+            message: 'Welcome In Butula',
+            type: 'text'
+          }
+        } else if (firebaseMail[0].message == 'Welcome In Butula'){
+              firebaseMail.reverse()
+        }
+      } else {
+        firebaseMail = [{
           isRead: false,
           message: 'Welcome In Butula',
           type: 'text'
-        }
+        }]
       }
+      
       let trnsOfUser = []
-      firebaseUser.forEach(e => trnsOfUser.push(firebaseTournaments.filter(trn => trn.ID == e)[0]))
+      if (firebaseUser){
+        firebaseUser.forEach(e => trnsOfUser.push(firebaseTournaments.filter(trn => trn.ID == e)[0]))
+      }
       if (trnsOfUser.length > 0){
         trnsOfUser.forEach(trn => {
           let thisSeasonNumber = Math.floor((Date.now() - trn.start) / 1000 / 60 / 60 / 24 / 30)
           let userData = trn.participants.find(e => e.ID == uid)
           if (userData.data !== undefined){
             if (userData.data.findIndex(e => e.season == thisSeasonNumber) < 0){
-              let textsMail = firebaseMail.forEach(e => e.message)
+              let textsMail = firebaseMail.map(e => e.message)
               if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
                 firebaseMail.push({
                   isRead: false,
@@ -1111,6 +1092,9 @@ function showMail(){
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('mail').content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== 'mail'){
+    pageHistory.push('mail')
+  }
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   firebaseMail.forEach(msg => {
@@ -1168,7 +1152,6 @@ function onChooseUserVerdict(){
         }).then(() => {
           document.getElementById('numOfUnreadMsg').innerText = firebaseMail.filter(e => e.isRead == false).length < 1 ? '' : firebaseMail.filter(e => e.isRead == false).length
           firebaseMail.splice(indexOfMsg, 1)
-          console.log(firebaseMail)
           userInfo.mail = firebaseMail
           db.collection("users_info").doc(`${uid}`).set(userInfo)
           Array.from(document.getElementsByClassName('message'))[indexOfMsg].remove()
@@ -1187,7 +1170,6 @@ function onChooseUserVerdict(){
     })
   document.getElementById('numOfUnreadMsg').innerText = firebaseMail.filter(e => e.isRead == false).length < 1 ? '' : firebaseMail.filter(e => e.isRead == false).length
   firebaseMail.splice(indexOfMsg, 1)
-  console.log(firebaseMail)
   userInfo.mail = firebaseMail
   db.collection("users_info").doc(`${uid}`).set(userInfo)
   Array.from(document.getElementsByClassName('message'))[indexOfMsg].remove()
@@ -1199,10 +1181,15 @@ function showArchive(){
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('archive').content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== 'archive'){
+    pageHistory.push('archive')
+  }
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   let trnsOfUser = []
-  firebaseUser.forEach(e => trnsOfUser.push(firebaseTournaments.filter(trn => trn.ID == e)[0]))
+  if (firebaseUser){
+    firebaseUser.forEach(e => trnsOfUser.push(firebaseTournaments.filter(trn => trn.ID == e)[0]))
+  }
   let allSeasonsNum = trnsOfUser.map(e => Math.floor((Date.now() - e.start) / 1000 / 60 / 60 / 24 / 30))
   let maxSeason = Math.max.apply(null, allSeasonsNum)
   for (let i = 0; i < maxSeason+1; i++){
@@ -1257,7 +1244,6 @@ function onFileArchive(){
   document.getElementById('midleBtnHeader').click()
 } 
 function onMidleBtnHeader(){
-  console.log(document.getElementById('content').firstElementChild.getAttribute('id'))
   switch (document.getElementById('content').firstElementChild.getAttribute('id')) {
     case 'archiveBlock':
       document.getElementById('midleBtnHeader').innerText = document.getElementById('midleBtnHeader').innerText == 'leader board' ? 'statistics' : 'leader board'
@@ -1285,16 +1271,17 @@ function onMidleBtnHeader(){
         }
         firebaseTournaments[num].targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label class="targetsSwitchLbl">${e.name}</label>`))
         Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphic))
-        Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+        if (Array.from(document.getElementsByClassName('targetsSwitchLbl')).length > 0){
+          Array.from(document.getElementsByClassName('targetsSwitchLbl'))[0].click()
+        }
       }
       break;
     case 'joinedTournament':
       document.getElementById('midleBtnHeader').innerText = document.getElementById('midleBtnHeader').innerText == 'season' ? 'round' : 'season'
-      Array.from(document.getElementsByClassName('targetsSwitchLbl'))[1].click()
+      if (Array.from(document.getElementsByClassName('targetsSwitchLbl')).length > 0){
+        Array.from(document.getElementsByClassName('targetsSwitchLbl'))[0].click()
+      }
       break;
-    // case value:
-      
-    //   break;
   }
 }
 function showCreatedTrns(){
@@ -1302,6 +1289,9 @@ function showCreatedTrns(){
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('createdTrnsProfile').content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== 'createdTrnsProfile'){
+    pageHistory.push('createdTrnsProfile')
+  }
   document.getElementById('mainMenuHeader').style.display = 'none'
   document.getElementById('defaultHeader').style.display = 'grid'
   let createdTrns = firebaseTournaments.filter(trn => trn.creator.ID == uid)
@@ -1317,6 +1307,9 @@ function onCreatedTournament(){
     document.getElementById('content').firstElementChild.remove()
   }
   document.getElementById('content').appendChild(document.getElementById('tournamentCreatePanel').content.cloneNode(true));
+  if (pageHistory[pageHistory.length-1] !== 'tournamentCreatePanel'){
+    pageHistory.push('tournamentCreatePanel')
+  }
   Array.from(document.getElementsByClassName('switchPageBtn')).forEach(e => e.addEventListener('click', onSwitchPageBtn))
     Array.from(document.getElementsByClassName('trnAccessBtn')).forEach(e => e.addEventListener('click', onTrnAccessBtn))
     document.getElementById('targetsBlock').appendChild(document.getElementById('targetCT').content.cloneNode(true));
@@ -1341,7 +1334,6 @@ function onCreatedTournament(){
     document.getElementById('areUsureBlock').getElementsByTagName('label')[0].innerText = 'Are you sure you want to update this tournament?'
 }
 function onTournamentUpdateBtn(){
-  console.log('Loading...')
   firebaseTournaments[num].targets = []
   for (const targetBlock in Array.from(document.getElementsByClassName('targetBlock'))){
     firebaseTournaments[num].targets.push({
@@ -1403,9 +1395,7 @@ function onBtnSignIn(event) {
 function onBtnSignOut(event) {
   firebase.auth().signOut().then(() => {
     onSignOut();
-  }).catch((error) => {
-    console.error('sign out fail');
-  });
+  })
 }
 var provider = new firebase.auth.GoogleAuthProvider();
 function onGoogleAuth(event) {
@@ -1420,7 +1410,6 @@ function onGoogleAuth(event) {
     }).catch((error) => {
       var errorCode = error.code;
       var errorMessage = error.message;
-      console.error(errorCode, errorMessage);
       var email = error.email;
       var credential = error.credential;
     });
