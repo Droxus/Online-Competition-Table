@@ -1,9 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari&display=swap');
-/* @font-face {
-    font-family: IBMPlexSansDevanagari-Regular;
-    src: url('./fonts/IBMPlexSansDevanagari-Regular.ttf');
-    font-weight: normal;
-  } */
 html {
     height: 100vh;
     width: 100vw;
@@ -17,7 +12,7 @@ html {
     font-style: normal;
     font-weight: 400;
     font-size: 32px;
-    /* line-height: 49px; */
+    background: linear-gradient(0deg,#D7A0A0, #6D7F8F);
 }
 
 body {
@@ -102,23 +97,22 @@ input {
 }
 #footerRegBtns{
     position: absolute;
-    top: 100%;
-    left: 0;
+    top: 0;
+    left: 50%;
     height: 75px;
-    width: 100%;
-    transform: translate(0, -75px);
+    width: 300px;
+    transform: translate(-50%, 0);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 #footerRegBtns > *{
     width: 50%;
-    color: #DDC5AF;
-    text-shadow: 0.5px 0.5px 2px #d9a9ac, -0.5px -0.5px 2px #d9a9ac, 4px 2px 4px rgb(0, 0, 0, 0.25);
+    color: #D9A9AC;
     background: none;
     border: none;
     height: 50px;
-    font-size: 24px;
+    font-size: 20px;
 }
 #btnSignIn{
     grid-area: login;
@@ -214,7 +208,7 @@ div.dataEnterSqr>* {
     display: none;
     place-items: center;
     grid-template-rows: 100%;
-    grid-template-columns: 20% 60% 20%;
+    grid-template-columns: 25% 50% 25%;
     height: 80%;
 }
 #defaultHeader > button{
@@ -226,6 +220,14 @@ div.dataEnterSqr>* {
     text-shadow: none;
     font-weight: bold;
     overflow: inherit;
+}
+#mainMenuBtn{
+    text-align: right;
+    padding-right: 10%;
+}
+#backBtn{
+    text-align: left;
+    padding-left: 10%;
 }
 #mainMenuHeader{
     display: grid;
