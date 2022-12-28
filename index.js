@@ -537,8 +537,10 @@ function onNavPanelJTdata() {
     allTargets.forEach(target => target.trnID = firebaseTournaments[num].ID)
     let thisLocalData = JSON.parse((localStorage.getItem(tournamentID)))
     if (!thisLocalData){
-      if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
-        localData = thisLocalData
+      if (thisLocalData.round !== undefined && thisLocalData.season !== undefined && roundNumber !== undefined){
+        if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
+          localData = thisLocalData
+        }
       }
     }
     localTargets = allTargets
@@ -554,12 +556,14 @@ function onNavPanelJTdata() {
         seasonNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24 / 30)
         dateDiff -= seasonNumber * 30 * 24 * 60 * 60 * 1000
         roundNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24)
-        if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
-          if (localData.data == undefined){
-            localData.data = {}
+        if (thisLocalData.round !== undefined && thisLocalData.season !== undefined && roundNumber !== undefined){
+          if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
+            if (localData.data == undefined){
+              localData.data = {}
+            }
+            localData.data = Object.assign(localData.data, thisLocalData.data)
+            localTargets.push(trn.targets)
           }
-          localData.data = Object.assign(localData.data, thisLocalData.data)
-          localTargets.push(trn.targets)
         }
       }
     })
