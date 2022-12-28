@@ -346,13 +346,14 @@ function onJTbtn(event) {
         db.collection("users_info").doc(uid).set({
           joined_tournaments: firebaseUser
         }).then(() => {
+          firebaseTournaments[num].participants.push({
+            ID: uid,
+            login: login,
+            data: [],
+            points: 0
+          })
           db.collection("global_tournaments").doc(tournamentID).update({
-            participants: firebase.firestore.FieldValue.arrayUnion({
-              ID: uid,
-              login: login,
-              data: [],
-              points: 0
-            }) 
+            participants: firebase.firestore.FieldValue.arrayUnion(firebaseTournaments[num].participants[firebaseTournaments[num].participants.length-1]) 
           }).then(() => { onTournamentJoin(); getFirebaseUserJT(); getFirebaseData(); })
         })
       break;
@@ -472,6 +473,9 @@ function getTournamentTime() {
 function onNavPanelJTstatistics(event) {
   Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
   document.getElementById('statisticsPageJT').style.display = 'grid';
+  while (document.getElementById('targetSwitch').firstElementChild){
+    document.getElementById('targetSwitch').firstElementChild.remove()
+  }
   firebaseTournaments[num].targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label class="targetsSwitchLbl">${e.name}</label>`))
   Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphic))
   document.getElementById('midleBtnHeader').innerText = 'round'
@@ -537,7 +541,7 @@ function onNavPanelJTdata() {
     allTargets.forEach(target => target.trnID = firebaseTournaments[num].ID)
     let thisLocalData = JSON.parse((localStorage.getItem(tournamentID)))
     if (!thisLocalData){
-      if (thisLocalData.round !== undefined && thisLocalData.season !== undefined && roundNumber !== undefined){
+      if (!thisLocalData.round && !thisLocalData.season && !roundNumber){
         if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
           localData = thisLocalData
         }
@@ -556,7 +560,7 @@ function onNavPanelJTdata() {
         seasonNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24 / 30)
         dateDiff -= seasonNumber * 30 * 24 * 60 * 60 * 1000
         roundNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24)
-        if (thisLocalData.round !== undefined && thisLocalData.season !== undefined && roundNumber !== undefined){
+        if (!thisLocalData.round && !thisLocalData.season && !roundNumber){
           if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
             if (localData.data == undefined){
               localData.data = {}
@@ -913,6 +917,9 @@ function onButulaMenuBtns(page){
       break;  
     case 'statisticPage':
       createdTrns = firebaseTournaments.filter(trn => trn.participants.findIndex(e => e.ID == uid) !== -1)
+      while (document.getElementById('targetSwitch').firstElementChild){
+        document.getElementById('targetSwitch').firstElementChild.remove()
+      }
       createdTrns.forEach(trn => trn.targets.forEach(e => document.getElementById('targetSwitch').insertAdjacentHTML('beforeend', `<label trnID="${trn.ID}" class="targetsSwitchLbl">${e.name}</label>`)))
       Array.from(document.getElementsByClassName('targetsSwitchLbl')).forEach(e => e.addEventListener('click', onChangeTargetOfGraphicMaimPage))
       if (Array.from(document.getElementsByClassName('targetsSwitchLbl')).length > 0){
@@ -1037,14 +1044,15 @@ function onTargetsName(event){
   }
   Array.from(document.getElementsByClassName('targetsName')).forEach(e => e.addEventListener('change', onTargetsName))
 }
-let firebaseMail = [], userInfo
+let firebaseMail = [], userInfo = {}
 function checkUserMail(){
   db.collection("users_info").doc(`${uid}`).get().then((doc) => {
-    userInfo = doc.data()
-    firebaseMail = doc.data().mail
-    if (doc.exists) {
+    if (doc.data()){
+      userInfo = doc.data()
+      firebaseMail = doc.data().mail
+    }
       if (firebaseMail){
-        if (firebaseMail.length < 0){
+        if (firebaseMail.length < 1){
           firebaseMail[0] = {
             isRead: false,
             message: 'Welcome In Butula',
@@ -1095,7 +1103,6 @@ function checkUserMail(){
         })
       }
       document.getElementById('numOfUnreadMsg').innerText = firebaseMail.filter(e => e.isRead == false).length < 1 ? '' : firebaseMail.filter(e => e.isRead == false).length
-    }
   })
 }
 function showMail(){
