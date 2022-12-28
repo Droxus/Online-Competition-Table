@@ -35,6 +35,10 @@ document.getElementById('profileBtnMenu').addEventListener('click', onProfile);
 document.getElementById('mailBtnMenu').addEventListener('click', showMail);
 document.getElementById('gooleSignIn').addEventListener('click', onGoogleAuth);
 
+window.addEventListener("selectstart", function(event) {
+  event.preventDefault();
+});
+
 document.getElementById('butulaBtn').addEventListener('click', onButulaBtn)
 Array.from(document.getElementsByClassName('butulaMenuBtns')).forEach(element => element.addEventListener('click', onButulaMenuBtns))
 Array.from(document.getElementsByClassName('butulaTournmanetMenuBtns')).forEach(element => element.addEventListener('click', onButulaTournmanetMenuBtns))
@@ -516,14 +520,15 @@ function buildDiagramsGraphic(data){
     document.getElementById('diagramsBlock').insertAdjacentHTML('beforeend', `<div class="diagrams" style="height:calc(${ratioToMax || 0}% + 80px)"><label>${e.data}</label><div><label>${i+1}</label></div><div>`)
   })
 }
-let approachLength, valueInput, allTargets = [], joinedTrn = []
+let approachLength, valueInput, allTargets = [], joinedTrn = [], localData = {}, localTargets = []
 function onNavPanelJTdata() {
   allTargets = []
   if (document.getElementById('content').firstElementChild.getAttribute('id') == 'joinedTournament'){
     getTournamentTime();
     Array.from(document.getElementsByClassName('pagesJT')).forEach(element => element.style.display = 'none');
   }
-  let dataBlock, localData = {}, localTargets = []
+  let dataBlock
+  localData = {}, localTargets = []
   joinedTrn = firebaseTournaments.filter(trn => trn.participants.findIndex(e => e.ID == uid) !== -1)
   if (document.getElementById('content').firstElementChild.getAttribute('id') == 'joinedTournament'){
     document.getElementById('dataPageJT').style.display = 'grid';
@@ -531,7 +536,7 @@ function onNavPanelJTdata() {
     allTargets = firebaseTournaments[num].targets
     allTargets.forEach(target => target.trnID = firebaseTournaments[num].ID)
     let thisLocalData = JSON.parse((localStorage.getItem(tournamentID)))
-    if (thisLocalData !== undefined){
+    if (!thisLocalData){
       if (thisLocalData.round == roundNumber && thisLocalData.season == seasonNumber){
         localData = thisLocalData
       }
@@ -544,7 +549,7 @@ function onNavPanelJTdata() {
     allTargets = allTargets.flat()
     joinedTrn.forEach(trn => {
       let thisLocalData = JSON.parse((localStorage.getItem(trn.ID)))
-      if (thisLocalData !== undefined){
+      if (!thisLocalData){
         dateDiff = (Date.now() - trn.start)
         seasonNumber = Math.floor(dateDiff / 1000 / 60 / 60 / 24 / 30)
         dateDiff -= seasonNumber * 30 * 24 * 60 * 60 * 1000
@@ -703,16 +708,28 @@ function onNavPanelJTdata() {
       if (Number(approachLength) < 1 || Number(approachLength) > nowAproach+1){
         if (type == 'number') {
           let valueInput = ''
-          if (localData.data[localTargets[nowTarget].name].length > nowAproach+1){
-            valueInput = localData.data[localTargets[nowTarget].name][nowAproach+1]
+          if (localData){
+            if (localData.data !== undefined){
+              if (localTargets.includes(allTargets[nowTarget])){
+                if (localData.data[allTargets[nowTarget].name].length > nowAproach+1){
+                  valueInput = localData.data[allTargets[nowTarget].name][nowAproach+1]
+                }
+              }
+            }
           }
           dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" type="${type}" value="${valueInput}" placeholder="try ${nowAproach + 2}"
         style="transform: translate(-150%, 0); width: 35%;"></input>`);
         } else
           if (type == 'submit') {
             let valueInput = ''
-            if (localData.data[localTargets[nowTarget].name].length > nowAproach+1){
-              valueInput = localData.data[localTargets[nowTarget].name][nowAproach+1]
+            if (localData){
+              if (localData.data !== undefined){
+                if (localTargets.includes(allTargets[nowTarget])){
+                  if (localData.data[allTargets[nowTarget].name].length > nowAproach+1){
+                    valueInput = localData.data[allTargets[nowTarget].name][nowAproach+1]
+                  }
+                }
+              }
             }
             dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `
             <button class="dataJTinputs" style="display:flex;">
@@ -727,8 +744,14 @@ function onNavPanelJTdata() {
               element => element.addEventListener('click', (event) => { event.target.parentElement.parentElement.parentElement.getElementsByClassName('btnDataCounter')[nowAproach].innerText++; onDataInputsChange(event) }));
           } else {
             let valueInput = 0
-            if (localData.data[localTargets[nowTarget].name].length > nowAproach+1){
-              valueInput = localData.data[localTargets[nowTarget].name][nowAproach+1]
+            if (localData){
+              if (localData.data !== undefined){
+                if (localTargets.includes(allTargets[nowTarget])){
+                  if (localData.data[allTargets[nowTarget].name].length > nowAproach+1){
+                    valueInput = localData.data[allTargets[nowTarget].name][nowAproach+1]
+                  }
+                }
+              }
             }
             dataJTinputs[nowAproach].insertAdjacentHTML('afterend', `<input class="dataJTinputs" value="${valueInput}" type="${type}" placeholder="try ${nowAproach + 2}"
           style="transform: translate(-150%, 0); width: 35%;"></input>`);
@@ -842,12 +865,10 @@ function onNavPanelJTleaders(event) {
     document.getElementById('dataLeadersTable').firstElementChild.remove()
   }
   let participantsSorted = firebaseTournaments[num].participants.sort((a, b) => {
-    if (a.points > b.points) {
-      return -1;
-    }
-    if (a.points < b.points) {
-      return 1;
-    }
+    if (a.points == undefined) { return 1 }
+    if (b.points == undefined) { return -1 }
+    if (a.points > b.points) { return -1 }
+    if (a.points < b.points) { return 1 }
     return 0;
   })
   for (const participant in participantsSorted){
@@ -856,22 +877,6 @@ function onNavPanelJTleaders(event) {
     <div style="background:${bgColor};"><label>${Number(participant)+1}.</label><label>${participantsSorted[participant].login}</label><label>${Number(participantsSorted[participant].points) || 0}</label></div>
     `)
   }
-}
-function onResetTournamentDate() {
-  Array.from(document.getElementsByClassName('dataJTinputs')).forEach((element) => {
-    if (element.tagName == 'BUTTON') {
-      element.getElementsByClassName('btnDataCounter')[0].innerText = '';
-    } else {
-      if (element.type == 'range') {
-        element.value = 0;
-        Array.from(element.parentElement.parentElement.getElementsByClassName('labelCounter')).forEach((element2) => {
-          element2.innerText = 0;
-        });
-      } else {
-        element.value = '';
-      }
-    }
-  });
 }
 function onButulaMenuBtns(page){
   if (typeof page == 'object'){
@@ -1058,28 +1063,30 @@ function checkUserMail(){
       }
       if (trnsOfUser.length > 0){
         trnsOfUser.forEach(trn => {
-          let thisSeasonNumber = Math.floor((Date.now() - trn.start) / 1000 / 60 / 60 / 24 / 30)
-          let userData = trn.participants.find(e => e.ID == uid)
-          if (userData.data !== undefined){
-            if (userData.data.findIndex(e => e.season == thisSeasonNumber) < 0){
+          if (trn){
+            let thisSeasonNumber = Math.floor((Date.now() - trn.start) / 1000 / 60 / 60 / 24 / 30)
+            let userData = trn.participants.find(e => e.ID == uid)
+            if (userData.data !== undefined){
+              if (userData.data.findIndex(e => e.season == thisSeasonNumber) < 0){
+                let textsMail = firebaseMail.map(e => e.message)
+                if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
+                  firebaseMail.push({
+                    isRead: false,
+                    message: `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`,
+                    type: 'text'
+                  })
+                }
+              }
+            } else {
               let textsMail = firebaseMail.map(e => e.message)
-              if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
-                firebaseMail.push({
-                  isRead: false,
-                  message: `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`,
-                  type: 'text'
-                })
-              }
+                if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
+                  firebaseMail.push({
+                    isRead: false,
+                    message: `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`,
+                    type: 'text'
+                  })
+                }
             }
-          } else {
-            let textsMail = firebaseMail.map(e => e.message)
-              if (textsMail.findIndex(e => e == `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`) < 0){
-                firebaseMail.push({
-                  isRead: false,
-                  message: `Hey! New season number ${thisSeasonNumber+1} of ${trn.name} tournament starting right now!`,
-                  type: 'text'
-                })
-              }
           }
         })
       }
@@ -1211,6 +1218,8 @@ function showArchive(){
         }
       })
       usersPoints.sort((a, b) => {
+        if (a.points == undefined) { return 1 }
+        if (b.points == undefined) { return -1 }
         if (a.points > b.points) { return -1 }
         if (a.points < b.points) { return 1 }
         return 0
@@ -1254,6 +1263,8 @@ function onMidleBtnHeader(){
           document.getElementById('dataLeadersTable').firstElementChild.remove()
         }
         let participantsSorted = firebaseTournaments[num].participants.sort((a, b) => {
+          if (a.points == undefined) { return 1 }
+          if (b.points == undefined) { return -1 }
           if (a.points > b.points) { return -1 }
           if (a.points < b.points) { return 1 }
           return 0 })
